@@ -56,6 +56,8 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
   disabled in `test/flutter_test_config.dart`), tagged `golden`, compared on
   Linux in CI. Regenerate on Linux (`melos run goldens:update`); never commit
   goldens made elsewhere.
+- Goldens are regenerated on Linux through the `goldens-update` workflow
+  (`gh workflow run goldens-update.yml -f ref=<branch>`).
 - Browser or full-platform builds are not run in CI beyond the Pages web build.
 
 ## Git
