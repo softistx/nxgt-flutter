@@ -57,7 +57,9 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
   Linux in CI. Regenerate on Linux (`melos run goldens:update`); never commit
   goldens made elsewhere.
 - Goldens are regenerated on Linux through the `goldens-update` workflow
-  (`gh workflow run goldens-update.yml -f ref=<branch>`).
+  (`gh workflow run goldens-update.yml -f ref=<branch>`), available once it is
+  merged into `develop`. It refuses `develop` and `main`. Its push is made with
+  `GITHUB_TOKEN` and does not trigger CI, so re-run CI on the branch afterwards.
 - Browser or full-platform builds are not run in CI beyond the Pages web build.
 
 ## Git

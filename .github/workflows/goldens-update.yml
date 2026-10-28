@@ -14,12 +14,31 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: goldens-update-${{ inputs.ref }}
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - name: Refuse a bad ref
+        env:
+          REF: ${{ inputs.ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          case "$REF" in
+            ""|develop|main|refs/*)
+              echo "refusing ref '$REF'" >&2
+              exit 1
+              ;;
+          esac
+          git init -q .
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git ls-remote --exit-code --heads origin "refs/heads/$REF" >/dev/null \
+            || { echo "'$REF' is not an existing remote branch" >&2; exit 1; }
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
@@ -42,7 +61,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -A
-            git commit -m "test(nxgt_material): regenerate goldens on linux"
+            git commit -m "test: regenerate goldens on linux"
             git push origin "HEAD:refs/heads/${REF}"
           else
             echo "goldens unchanged"
