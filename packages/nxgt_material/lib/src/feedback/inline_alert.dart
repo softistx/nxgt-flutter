@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/feedback/feedback_tone.dart';
+import 'package:nxgt_material/src/feedback/live_region.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 import 'package:nxgt_material/src/theme/tone_colors.dart';
@@ -120,7 +121,7 @@ class _AlertBody extends StatelessWidget {
     final action = this.action;
     return Semantics(
       container: true,
-      liveRegion: true,
+      liveRegion: liveRegionUnderRole,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 4,

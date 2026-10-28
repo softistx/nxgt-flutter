@@ -34,7 +34,7 @@ InlineAlert(
 A live region with the semantics role `alert` for `warning` and `error`, and
 `status` for `info` and `success`. A screen reader says the tone ("Error",
 "Succès" in French) before the title and the message, so the meaning never
-rests on colour alone. The icon is decorative. The close button is labelled
+rests on colour alone. On the web the role alone is announced, so the live region applies only on the other platforms and the text is spoken once. The icon is decorative. The close button is labelled
 with the localized "Close" and keeps a 48 dp target; the action keeps its own
 button semantics.
 

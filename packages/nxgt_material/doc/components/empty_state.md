@@ -27,7 +27,7 @@ EmptyState(
 
 The heading is a semantics header; the whole block has the semantics role
 `status` and is a live region (on two nested nodes, since Flutter refuses both
-on one), so a list that becomes empty is announced. The icon is decorative and hidden from
+on one), so a list that becomes empty is announced. On the web the role alone is announced, so the live region applies only on the other platforms and the text is spoken once. The icon is decorative and hidden from
 screen readers. The action keeps its own button semantics and 48 dp target.
 
 ## Properties

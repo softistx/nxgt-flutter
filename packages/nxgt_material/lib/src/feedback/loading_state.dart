@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:nxgt_material/src/feedback/live_region.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
 /// What a screen or a list shows while its data loads.
@@ -29,7 +30,7 @@ class LoadingState extends StatelessWidget {
           role: SemanticsRole.status,
           child: Semantics(
             container: true,
-            liveRegion: true,
+            liveRegion: liveRegionUnderRole,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               spacing: 16,
