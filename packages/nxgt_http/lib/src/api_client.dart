@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'package:nxgt_http/src/api_error.dart';
+import 'package:nxgt_http/src/auth_interceptor.dart';
 
 /// Turns a decoded JSON body (`Map`, `List`, scalar or null) into a [T].
 typedef Decode<T> = T Function(Object? json);
@@ -11,12 +12,15 @@ class ApiClient {
   /// Creates a client for [baseUrl].
   ///
   /// [headers] with a null value are left out. [interceptors] run in the
-  /// given order. [adapter] replaces the transport (tests).
+  /// given order, after the auth interceptor. [auth] adds the `Authorization`
+  /// header and renews the token on a 401. [adapter] replaces the transport
+  /// (tests).
   new({
     required Uri baseUrl,
     Map<String, Object?>? headers,
     Duration? connectTimeout,
     Duration? receiveTimeout,
+    AuthOptions? auth,
     List<Interceptor> interceptors = const [],
     HttpClientAdapter? adapter,
   }) : dio = Dio(
@@ -28,6 +32,7 @@ class ApiClient {
          ),
        ) {
     if (adapter != null) dio.httpClientAdapter = adapter;
+    if (auth != null) dio.interceptors.add(AuthInterceptor(auth, dio));
     dio.interceptors.addAll(interceptors);
   }
 

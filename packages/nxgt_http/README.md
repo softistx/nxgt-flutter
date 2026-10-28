@@ -1,6 +1,6 @@
 # nxgt_http
 
-A typed HTTP client for Dart on Dio with sealed errors. Auth, retry and
+A typed HTTP client for Dart on Dio with sealed errors. Retry and
 logging are on the [roadmap](doc/roadmap.md). Pure Dart: it runs on the Dart
 VM, Flutter and the web.
 
@@ -45,8 +45,24 @@ Every failure is thrown as an `ApiError`; there is no result type.
 existing `Dio`, use `ApiClient.wrap(dio)`; the underlying `client.dio` stays
 public.
 
+## Authentication
+
+```dart
+final client = ApiClient(
+  baseUrl: Uri.parse('https://api.example.com/v1/'),
+  auth: AuthOptions(
+    token: () => session.accessToken,
+    refresh: () async => session.renew(),
+  ),
+);
+```
+
+A 401 refreshes the token once, shared by all concurrent calls, and replays the
+request. See the [authentication guide](doc/guide/auth.md).
+
 ## Documentation
 
+- [Authentication](doc/guide/auth.md)
 - [Roadmap](doc/roadmap.md)
 - [Troubleshooting](doc/troubleshooting.md)
 
