@@ -1,5 +1,7 @@
-/// Form scaffolding: sections, validation summary, submit bar.
+/// Form scaffolding: sections and a submit button.
 ///
-/// Components are added here as they ship; each one is exported from this
-/// library.
+/// Built on Flutter's `Form`; the fields themselves are in `fields.dart`.
 library;
+
+export 'src/forms/form_section.dart';
+export 'src/forms/submit_button.dart';

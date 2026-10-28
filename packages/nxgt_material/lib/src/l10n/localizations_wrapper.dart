@@ -50,6 +50,18 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String fieldsMaxLength(int count) => base.fieldsMaxLength(count);
   @override
+  String get fieldsInvalidPhone => base.fieldsInvalidPhone;
+  @override
+  String get fieldsInvalidNumber => base.fieldsInvalidNumber;
+  @override
+  String fieldsMinValue(String min) => base.fieldsMinValue(min);
+  @override
+  String fieldsMaxValue(String max) => base.fieldsMaxValue(max);
+  @override
+  String get fieldsShowPassword => base.fieldsShowPassword;
+  @override
+  String get fieldsHidePassword => base.fieldsHidePassword;
+  @override
   String get feedbackLoading => base.feedbackLoading;
   @override
   String get feedbackEmptyTitle => base.feedbackEmptyTitle;

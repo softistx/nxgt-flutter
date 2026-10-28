@@ -191,6 +191,42 @@ abstract class NxgtMaterialLocalizations {
   /// **'Enter at most {count, plural, =1{1 character} other{{count} characters}}'**
   String fieldsMaxLength(int count);
 
+  /// No description provided for @fieldsInvalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid phone number'**
+  String get fieldsInvalidPhone;
+
+  /// No description provided for @fieldsInvalidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid number'**
+  String get fieldsInvalidNumber;
+
+  /// No description provided for @fieldsMinValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a value of at least {min}'**
+  String fieldsMinValue(String min);
+
+  /// No description provided for @fieldsMaxValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a value of at most {max}'**
+  String fieldsMaxValue(String max);
+
+  /// No description provided for @fieldsShowPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get fieldsShowPassword;
+
+  /// No description provided for @fieldsHidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get fieldsHidePassword;
+
   /// Accessibility label of a progress indicator.
   ///
   /// In en, this message translates to:
