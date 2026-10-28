@@ -1,7 +1,8 @@
 # nxgt_http
 
-A typed HTTP client for Dart on Dio: sealed errors, auth, retry and logging.
-Pure Dart: it runs on the Dart VM, Flutter and the web.
+A typed HTTP client for Dart on Dio with sealed errors. Auth, retry and
+logging are on the [roadmap](doc/roadmap.md). Pure Dart: it runs on the Dart
+VM, Flutter and the web.
 
 ## Install
 
@@ -22,18 +23,25 @@ final client = ApiClient(
 
 try {
   final user = await client.get('/me', decode: User.fromJson);
+  print(user.name);
 } on ApiError catch (error) {
   switch (error) {
-    case StatusError(:final status): // the server answered 4xx or 5xx
-    case TimeoutError(:final stage): // connect, send or receive
-    case NetworkError(): // no answer at all
-    case DecodeError(): // the body is not what `decode` expects
-    case CancelledError(): // not a failure: `isFailure` is false
+    case StatusError(:final status):
+      print('The server answered $status.');
+    case TimeoutError(:final stage):
+      print('Timed out while trying to ${stage.name}.');
+    case NetworkError():
+      print('No answer at all.');
+    case DecodeError():
+      print('The body is not what decode expects.');
+    case CancelledError():
+      print('Cancelled: not a failure.');
   }
 }
 ```
 
-Every failure is thrown as an `ApiError`; there is no result type. To keep an
+Every failure is thrown as an `ApiError`; there is no result type.
+`ApiError.fromDio(DioException)` maps a Dio exception to its typed error. To keep an
 existing `Dio`, use `ApiClient.wrap(dio)`; the underlying `client.dio` stays
 public.
 

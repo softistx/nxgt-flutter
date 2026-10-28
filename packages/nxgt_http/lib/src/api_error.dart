@@ -209,7 +209,7 @@ final class DecodeError extends ApiError {
   String get _name => 'DecodeError';
 }
 
-/// The call was cancelled, through a `CancelToken` or `ApiClient.cancel`.
+/// The call was cancelled, through a `CancelToken`.
 final class CancelledError extends ApiError {
   /// Creates a cancellation.
   const new({
