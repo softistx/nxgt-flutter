@@ -1,6 +1,6 @@
 name: nxgt_http
 description: >-
-  A typed HTTP client for Dart on Dio with sealed errors. Auth, retry and
+  A typed HTTP client for Dart on Dio with sealed errors. Retry and
   logging are on the roadmap.
 version: 0.0.1
 homepage: https://github.com/softistx/nxgt-flutter/tree/develop/packages/nxgt_http

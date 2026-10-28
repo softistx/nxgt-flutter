@@ -18,3 +18,9 @@ Pass a `decode` function for anything other than a raw JSON `Map` or `List`:
 ```dart
 final user = await client.get('/me', decode: User.fromJson);
 ```
+
+## A 401 is thrown even though `refresh` ran
+
+`refresh` ran but `token` returned the same value (or null), so the request was
+not replayed and the 401 is thrown. Make `refresh` store the new token where
+`token` reads it, before it completes.

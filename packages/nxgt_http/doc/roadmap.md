@@ -8,8 +8,9 @@
   [#10](https://github.com/softistx/nxgt-flutter/issues/10).
   - Done on the integration branch: `ApiClient` (base URL, headers, timeouts,
     `wrap(Dio)`, `get`/`post`/`put`/`patch`/`delete` with `decode`) and the
-    sealed `ApiError`.
-  - To come: auth with token refresh, retry, logging, cancellation by group,
+    sealed `ApiError`, auth with a shared token refresh (`AuthOptions`,
+    `AuthInterceptor`).
+  - To come: retry, logging, cancellation by group,
     `send` for status and headers.
 
 ## Next
