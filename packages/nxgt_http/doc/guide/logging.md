@@ -57,7 +57,8 @@ The logger is the first interceptor, then auth, retry and yours. A record holds
 the headers as they were sent, so the `Authorization` header that auth added is
 there, redacted. A request that is refreshed or retried makes one record per
 attempt: a 503 then a 200 gives two records. A cancel during a retry wait ends
-the call without a further record (the failed attempt already has its own).
+the call without a further record (the failed attempt already has its own). A call refused before it is sent (for example a `token`
+callback that throws) produces no record, since nothing was sent.
 
 ## Errors in the sink
 
