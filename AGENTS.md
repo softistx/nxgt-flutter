@@ -42,8 +42,8 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
   the arguments (an empty destination list, an index out of range); a release
   build degrades (clamps, hides) rather than crashes. `FlutterError.reportError`
   for a failed user action or future (an `onPressed` that threw). `throw` only
-  for a missing required ancestor or extension (no `ScaffoldMessenger`, no
-  `Form`). The troubleshooting heading equals the message.
+  for a missing required ancestor or extension that only a call reveals (no
+  `ScaffoldMessenger`); one visible at build time (no `Form`) is asserted. The troubleshooting heading equals the message.
 - **A new component is made with the Mason brick**, never by hand:
   `mason make component --name StatCard --category display` from the root. It
   writes the widget, the Widgetbook use-case, an Alchemist golden test, a

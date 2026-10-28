@@ -15,3 +15,12 @@ void assertShellArguments(List<ShellDestination> destinations, int selected) {
     'AdaptiveShell.selectedIndex is out of range.',
   );
 }
+
+/// The index a shell selects: [selected] clamped to the [count] destinations
+/// (0 when there are none), so a release build still builds.
+int shellIndex(int selected, int count) =>
+    selected.clamp(0, count == 0 ? 0 : count - 1);
+
+/// Whether a shell with [count] destinations shows navigation; below two it
+/// shows the body alone.
+bool shellHasNavigation(int count) => count >= 2;

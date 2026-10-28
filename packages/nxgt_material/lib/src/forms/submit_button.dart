@@ -78,7 +78,7 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(
-      Form.maybeOf(context) != null,
+      context.findAncestorStateOfType<FormState>() != null,
       'SubmitButton was used outside a Form.',
     );
     return AsyncButton(

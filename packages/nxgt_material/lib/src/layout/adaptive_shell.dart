@@ -89,12 +89,10 @@ class AdaptiveShell extends StatefulWidget {
 class _AdaptiveShellState extends State<AdaptiveShell> {
   final _scaffold = GlobalKey<ScaffoldState>();
 
-  bool get _usable => widget.destinations.length >= 2;
+  bool get _usable => shellHasNavigation(widget.destinations.length);
 
-  int get _index => widget.selectedIndex.clamp(
-    0,
-    widget.destinations.isEmpty ? 0 : widget.destinations.length - 1,
-  );
+  int get _index =>
+      shellIndex(widget.selectedIndex, widget.destinations.length);
 
   @override
   void initState() {
