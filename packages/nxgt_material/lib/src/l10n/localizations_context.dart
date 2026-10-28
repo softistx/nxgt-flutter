@@ -8,11 +8,26 @@ extension NxgtMaterialLocalizationsContext on BuildContext {
   ///
   /// Falls back to English when the app did not add
   /// `NxgtMaterialLocalizationsDelegate`, so a component never throws for a
-  /// missing delegate.
-  NxgtMaterialLocalizations get materialL10n =>
-      Localizations.of<NxgtMaterialLocalizations>(
-        this,
-        NxgtMaterialLocalizations,
-      ) ??
-      NxgtMaterialLocalizationsEn();
+  /// missing delegate. In debug builds the first fallback prints one line
+  /// naming the delegate to add.
+  NxgtMaterialLocalizations get materialL10n {
+    final found = Localizations.of<NxgtMaterialLocalizations>(
+      this,
+      NxgtMaterialLocalizations,
+    );
+    if (found != null) return found;
+    assert(() {
+      if (!_warned) {
+        _warned = true;
+        debugPrint(
+          'nxgt_material: no NxgtMaterialLocalizationsDelegate found, '
+          'using English. Add it to localizationsDelegates.',
+        );
+      }
+      return true;
+    }(), '');
+    return NxgtMaterialLocalizationsEn();
+  }
 }
+
+bool _warned = false;

@@ -108,6 +108,19 @@ void main() {
     expect(strings.actionsClose, 'Close');
   });
 
+  testWidgets('a changed reword reloads the strings between pumps', (
+    tester,
+  ) async {
+    final first = await _pump(tester, locale: const Locale('en'));
+    expect(first.actionsRetry, 'Retry');
+    final second = await _pump(
+      tester,
+      locale: const Locale('en'),
+      delegate: const NxgtMaterialLocalizationsDelegate(reword: _Reworded.new),
+    );
+    expect(second.actionsRetry, 'Try again');
+  });
+
   test('the delegate reloads only when the override changes', () {
     const a = NxgtMaterialLocalizationsDelegate();
     expect(a.shouldReload(const NxgtMaterialLocalizationsDelegate()), isFalse);

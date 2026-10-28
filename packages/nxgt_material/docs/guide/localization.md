@@ -32,7 +32,8 @@ Text(context.materialL10n.actionsRetry);
 
 Without the delegate, `context.materialL10n` answers in English instead of
 throwing, so a component never breaks for a missing setup (it is then not
-translated).
+translated). In debug builds it prints one `debugPrint` line the first time it
+falls back, naming the delegate to add.
 
 ## Unsupported locale
 
@@ -58,6 +59,10 @@ class MyStrings extends NxgtMaterialLocalizationsWrapper {
 const NxgtMaterialLocalizationsDelegate(reword: MyStrings.new);
 ```
 
+Give `reword` a constructor tear-off such as `MyStrings.new`, never a closure
+written in `build`: the delegate reloads when `reword` is not identical to the
+previous one, so a fresh closure reloads the strings on every rebuild.
+
 Every other string keeps the package's text, in the locale that was resolved.
 **Why a wrapper and not a map of keys:** a typo in a getter name is a compile
 error, parameterised strings (`fieldsMinLength(count)`) stay typed, and an
@@ -76,5 +81,7 @@ Keys are `<area><Name>` and follow the `material.*` keys of `@nxgt/material`:
    `nxgt_material_fr.arb`.
 2. Run `melos run gen`; the generated files are committed under
    `lib/src/l10n/generated/`.
-3. Forward it in `NxgtMaterialLocalizationsWrapper`; the specs compare English
-   and French and fail on a missing translation.
+3. Forward it in `NxgtMaterialLocalizationsWrapper`. The generated class
+   declares every string abstract, so the build fails until you forward it;
+   the specs also compare English and French and fail on a missing
+   translation.
