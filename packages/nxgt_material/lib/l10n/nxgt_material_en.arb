@@ -41,5 +41,7 @@
   "feedbackToneError": "Error",
   "@feedbackToneError": {"description": "Spoken before the message of an error alert or toast."},
   "layoutOpenNavigation": "Open navigation",
-  "layoutCloseNavigation": "Close navigation"
+  "layoutCloseNavigation": "Close navigation",
+  "layoutNavigation": "Navigation",
+  "@layoutNavigation": {"description": "Label of the navigation region of the adaptive shell (bar, rail or drawer), read by screen readers."}
 }

@@ -251,6 +251,54 @@ Pages: [EmptyState](docs/components/empty_state.md),
 [InlineAlert](docs/components/inline_alert.md),
 [Toast](docs/components/toast.md).
 
+## Layout
+
+`package:nxgt_material/layout.dart`. Built on Flutter's `NavigationBar`,
+`NavigationRail` and `NavigationDrawer`, switched by the Material 3 window size
+classes; no extra package.
+
+| Component | What it adds |
+| --- | --- |
+| `WindowSize`, `Breakpoints`, `context.windowSize` | The Material 3 classes (compact 0, medium 600, expanded 840, large 1200, extraLarge 1600) |
+| `AdaptiveShell` | Bar on compact (or a drawer), rail on medium, standing drawer on expanded and up; safe areas, keyboard focus, hover |
+| `PageBody` | Centred content with a maximum width and gutters per window size |
+| `ResponsiveGrid` | Columns by minimum tile width |
+| `ListDetailLayout` | List and detail side by side, or one at a time under 648 dp |
+
+```dart
+import 'package:nxgt_material/layout.dart';
+
+AdaptiveShell(
+  destinations: const [
+    ShellDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
+    ShellDestination(icon: Icon(Icons.inbox_outlined), label: 'Inbox'),
+  ],
+  selectedIndex: index,
+  onSelected: (i) => setState(() => index = i),
+  body: SingleChildScrollView(
+    child: PageBody(
+      child: ResponsiveGrid(children: [for (final s in stats) StatTile(s)]),
+    ),
+  ),
+)
+
+if (context.windowSize == WindowSize.compact) { /* one column */ }
+
+ListDetailLayout(
+  showDetail: selected != null,
+  onBack: () => setState(() => selected = null),
+  list: InvoiceList(onTap: (i) => setState(() => selected = i)),
+  detail: InvoiceDetail(selected),
+)
+```
+
+Guide: [Adaptive layout](docs/guide/adaptive.md). Pages:
+[WindowSize](docs/components/window_size.md),
+[AdaptiveShell](docs/components/adaptive_shell.md),
+[PageBody](docs/components/page_body.md),
+[ResponsiveGrid](docs/components/responsive_grid.md),
+[ListDetailLayout](docs/components/list_detail_layout.md).
+
 ## Naming rule
 
 - **No `nxgt` prefix.** A component is called by what it is for: `StatCard`,
@@ -264,6 +312,7 @@ Pages: [EmptyState](docs/components/empty_state.md),
 - [Theme](docs/guide/theme.md)
 - [Forms](docs/guide/forms.md)
 - [Localization](docs/guide/localization.md)
+- [Adaptive layout](docs/guide/adaptive.md)
 - [Roadmap](docs/roadmap.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - `docs/components/`: one page per component

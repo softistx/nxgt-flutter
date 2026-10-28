@@ -191,3 +191,43 @@ AsyncView<List<Invoice>>(
   builder: (context, items) => InvoiceList(items),
 )
 ```
+
+## AdaptiveShell needs at least two destinations.
+
+**When:** an `AdaptiveShell` was given fewer than two `destinations`. Reported
+once, from `initState` or when the count changes, through
+`FlutterError.onError`.
+
+**Why:** Material's navigation bar, rail and drawer need two or more places to
+make sense, and `NavigationBar` asserts it. The shell shows only the body
+(and the `title`, if any) until there are two.
+
+**Fix:** pass two or more destinations, or do not use the shell for a
+single-place screen:
+
+```dart
+AdaptiveShell(
+  destinations: const [
+    ShellDestination(icon: Icon(Icons.home), label: 'Home'),
+    ShellDestination(icon: Icon(Icons.inbox), label: 'Inbox'),
+  ],
+  selectedIndex: 0,
+  onSelected: go,
+  body: page,
+)
+```
+
+## AdaptiveShell.selectedIndex is out of range.
+
+**When:** `selectedIndex` is negative or not below the number of
+destinations, for instance after the list shrank. Reported once per change.
+
+**Why:** the index picks the highlighted destination. The shell selects the
+nearest valid one meanwhile, so the screen still builds.
+
+**Fix:** keep the index within `0` to `destinations.length - 1`; clamp it
+where the destinations change:
+
+```dart
+final index = selected.clamp(0, destinations.length - 1);
+```

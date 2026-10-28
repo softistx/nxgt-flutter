@@ -125,4 +125,7 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
 
   @override
   String get layoutCloseNavigation => 'Close navigation';
+
+  @override
+  String get layoutNavigation => 'Navigation';
 }

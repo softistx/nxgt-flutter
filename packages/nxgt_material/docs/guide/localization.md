@@ -90,7 +90,8 @@ Keys are `<area><Name>` and follow the `material.*` keys of `@nxgt/material`:
 with plural, min/max value, show/hide password), `feedback*`
 (loading, empty and error title/message, and the spoken tone words
 `feedbackToneInfo`, `feedbackToneSuccess`, `feedbackToneWarning`,
-`feedbackToneError`), `layout*` (open/close navigation).
+`feedbackToneError`), `layout*` (open/close navigation, `layoutNavigation`, the label of the
+shell's navigation region).
 
 ## Adding a string (contributors)
 
