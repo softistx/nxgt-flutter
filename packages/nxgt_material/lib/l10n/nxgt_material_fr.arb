@@ -1,0 +1,22 @@
+{
+  "@@locale": "fr",
+  "actionsConfirm": "Confirmer",
+  "actionsCancel": "Annuler",
+  "actionsClose": "Fermer",
+  "actionsSave": "Enregistrer",
+  "actionsRetry": "Réessayer",
+  "actionsClear": "Effacer",
+  "actionsShowMore": "Afficher plus",
+  "actionsShowLess": "Afficher moins",
+  "fieldsRequired": "Ce champ est obligatoire",
+  "fieldsInvalidEmail": "Saisissez une adresse e-mail valide",
+  "fieldsMinLength": "Saisissez au moins {count, plural, =1{1 caractère} other{{count} caractères}}",
+  "fieldsMaxLength": "Saisissez au plus {count, plural, =1{1 caractère} other{{count} caractères}}",
+  "feedbackLoading": "Chargement",
+  "feedbackEmptyTitle": "Rien pour l’instant",
+  "feedbackEmptyMessage": "Il n’y a rien à afficher pour le moment.",
+  "feedbackErrorTitle": "Une erreur est survenue",
+  "feedbackErrorMessage": "Une erreur s’est produite. Réessayez dans un instant.",
+  "layoutOpenNavigation": "Ouvrir la navigation",
+  "layoutCloseNavigation": "Fermer la navigation"
+}

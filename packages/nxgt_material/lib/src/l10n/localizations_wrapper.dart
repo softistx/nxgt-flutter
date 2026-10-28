@@ -1,0 +1,60 @@
+import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations.dart';
+
+/// Forwards every string to [base]; subclass it and override the ones an app
+/// words differently.
+///
+/// ```dart
+/// class MyStrings extends NxgtMaterialLocalizationsWrapper {
+///   new(super.base);
+///   @override
+///   String get actionsRetry => 'Try again';
+/// }
+///
+/// NxgtMaterialLocalizationsDelegate(reword: MyStrings.new)
+/// ```
+class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
+  /// Wraps [base], keeping its locale.
+  new(this.base) : super(base.localeName);
+
+  /// The strings every getter falls back to.
+  final NxgtMaterialLocalizations base;
+
+  @override
+  String get actionsConfirm => base.actionsConfirm;
+  @override
+  String get actionsCancel => base.actionsCancel;
+  @override
+  String get actionsClose => base.actionsClose;
+  @override
+  String get actionsSave => base.actionsSave;
+  @override
+  String get actionsRetry => base.actionsRetry;
+  @override
+  String get actionsClear => base.actionsClear;
+  @override
+  String get actionsShowMore => base.actionsShowMore;
+  @override
+  String get actionsShowLess => base.actionsShowLess;
+  @override
+  String get fieldsRequired => base.fieldsRequired;
+  @override
+  String get fieldsInvalidEmail => base.fieldsInvalidEmail;
+  @override
+  String fieldsMinLength(int count) => base.fieldsMinLength(count);
+  @override
+  String fieldsMaxLength(int count) => base.fieldsMaxLength(count);
+  @override
+  String get feedbackLoading => base.feedbackLoading;
+  @override
+  String get feedbackEmptyTitle => base.feedbackEmptyTitle;
+  @override
+  String get feedbackEmptyMessage => base.feedbackEmptyMessage;
+  @override
+  String get feedbackErrorTitle => base.feedbackErrorTitle;
+  @override
+  String get feedbackErrorMessage => base.feedbackErrorMessage;
+  @override
+  String get layoutOpenNavigation => base.layoutOpenNavigation;
+  @override
+  String get layoutCloseNavigation => base.layoutCloseNavigation;
+}

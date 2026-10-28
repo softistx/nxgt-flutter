@@ -59,6 +59,25 @@ final done = context.tones.success; // color, onColor, container, onContainer
 
 See the [theme guide](docs/guide/theme.md).
 
+## Localization
+
+French and English strings for every component. Add one delegate:
+
+```dart
+MaterialApp(
+  localizationsDelegates: const [
+    NxgtMaterialLocalizationsDelegate(),
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: NxgtMaterialLocalizations.supportedLocales,
+);
+```
+
+Any other locale falls back to English; single strings can be overridden. See
+the [localization guide](docs/guide/localization.md).
+
 ## Naming rule
 
 - **No `nxgt` prefix.** A component is called by what it is for: `StatCard`,
@@ -70,6 +89,7 @@ See the [theme guide](docs/guide/theme.md).
 ## Documentation
 
 - [Theme](docs/guide/theme.md)
+- [Localization](docs/guide/localization.md)
 - [Roadmap](docs/roadmap.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - `docs/components/`: one page per component
