@@ -281,4 +281,54 @@ void main() {
       );
     });
   });
+
+  group('send', () {
+    test('returns data, status code and headers', () async {
+      final client = clientWith(
+        FakeAdapter([
+          FakeReply.json(
+            {'name': 'Ada'},
+            status: 201,
+            headers: {
+              'x-total-count': ['42'],
+            },
+          ),
+        ]),
+      );
+
+      final response = await client.send<User>(
+        'post',
+        '/users',
+        data: {'name': 'Ada'},
+        decode: User.fromJson,
+      );
+
+      expect(response.data.name, 'Ada');
+      expect(response.statusCode, 201);
+      expect(response.headers.value('X-Total-Count'), '42');
+    });
+
+    test(
+      'uses the upper-cased method and throws ApiError on failure',
+      () async {
+        final adapter = FakeAdapter([FakeReply.json({}, status: 500)]);
+        final client = clientWith(adapter);
+
+        await expectLater(
+          client.send<Object?>('head', '/x'),
+          throwsA(isA<StatusError>().having((e) => e.status, 'status', 500)),
+        );
+        expect(adapter.requests.single.method, 'HEAD');
+      },
+    );
+
+    test('a decode failure is a DecodeError', () async {
+      final client = clientWith(FakeAdapter([FakeReply.json({})]));
+
+      await expectLater(
+        client.send<User>('GET', '/x', decode: User.fromJson),
+        throwsA(isA<DecodeError>()),
+      );
+    });
+  });
 }

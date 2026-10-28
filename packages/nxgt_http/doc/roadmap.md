@@ -11,7 +11,8 @@
     sealed `ApiError`, auth with a shared token refresh (`AuthOptions`,
     `AuthInterceptor`), retry (`RetryOptions`, `RetryInterceptor`), redacted logging
     (`HttpLogger`), cancellation by group and `latest` key.
-  - To come: `send` for status and headers.
+  - `send` returns an `ApiResponse` with the status and headers; the full
+    README and the getting-started and errors guides.
 
 ## Next
 

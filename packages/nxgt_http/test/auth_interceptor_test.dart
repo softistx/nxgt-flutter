@@ -225,4 +225,66 @@ void main() {
     expect(response.statusCode, 200);
     expect(session.refreshes, 1);
   });
+
+  test(
+    'a 401 while signed out runs refresh and replays once restored',
+    () async {
+      final session = Session()..token = null;
+      final adapter = FakeAdapter([unauthorized(), ok()]);
+      final client = ApiClient(
+        baseUrl: Uri.parse('https://api.test/'),
+        adapter: adapter,
+        auth: AuthOptions(
+          token: () => session.token,
+          refresh: () async {
+            session.refreshes++;
+            session.token = 'restored';
+          },
+        ),
+      );
+
+      await client.get<Object?>('/me');
+
+      expect(authHeader(adapter.requests[0]), isNull);
+      expect(session.refreshes, 1);
+      expect(authHeader(adapter.requests[1]), 'Bearer restored');
+    },
+  );
+
+  test('a signed-out 401 is thrown when refresh does not restore it', () async {
+    final session = Session()
+      ..token = null
+      ..rotate = false;
+    final adapter = FakeAdapter([unauthorized()]);
+
+    await expectLater(
+      clientFor(adapter, session.options).get<Object?>('/me'),
+      throwsA(isA<StatusError>().having((e) => e.status, 'status', 401)),
+    );
+    expect(session.refreshes, 1);
+    expect(adapter.calls, 1);
+  });
+
+  test(
+    'a token callback that throws is a NetworkError with the cause',
+    () async {
+      final adapter = FakeAdapter([ok()]);
+      final client = clientFor(
+        adapter,
+        AuthOptions(token: () => throw StateError('keychain locked')),
+      );
+
+      await expectLater(
+        client.get<Object?>('/me'),
+        throwsA(
+          isA<NetworkError>().having(
+            (e) => e.cause,
+            'cause',
+            isA<StateError>(),
+          ),
+        ),
+      );
+      expect(adapter.calls, 0);
+    },
+  );
 }

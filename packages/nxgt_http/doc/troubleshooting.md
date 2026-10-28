@@ -25,6 +25,32 @@ final user = await client.get('/me', decode: User.fromJson);
 not replayed and the 401 is thrown. Make `refresh` store the new token where
 `token` reads it, before it completes.
 
+## A call fails with `NetworkError` whose `cause` is your own exception
+
+The `token` callback of `AuthOptions` threw (a locked keychain, a storage read
+that failed). The request is never sent: the exception is rejected before the
+network, and it reaches you as a `NetworkError` whose `cause` is what `token`
+threw. Return `null` for "signed out" instead of throwing, and catch the rest
+inside the callback:
+
+```dart
+AuthOptions(
+  token: () async {
+    try {
+      return await storage.read('access');
+    } on Object {
+      return null; // sends no header; a 401 then runs `refresh`
+    }
+  },
+)
+```
+
+## `send` rejects a call with a 3xx or 4xx status
+
+`send`, like `get` and `post`, only returns 2xx replies; every other status is
+thrown as a `StatusError` (`error.status`, `error.data`, `error.response`).
+Redirects are followed by Dio first. Catch the error to read the reply.
+
 ## A request was not retried
 
 Retry only sends again when all of these hold: `retry:` is set; the method is in
