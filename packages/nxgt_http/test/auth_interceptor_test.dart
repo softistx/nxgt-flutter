@@ -287,4 +287,32 @@ void main() {
       expect(adapter.calls, 0);
     },
   );
+
+  test(
+    'a refresh that throws synchronously does not block the next one',
+    () async {
+      var refreshes = 0;
+      var token = 'old';
+      final adapter = FakeAdapter([unauthorized(), unauthorized(), ok()]);
+      final client = clientFor(
+        adapter,
+        AuthOptions(
+          token: () => token,
+          refresh: () {
+            refreshes++;
+            if (refreshes == 1) throw StateError('x');
+            token = 'new$refreshes';
+            return Future<void>.value();
+          },
+        ),
+      );
+
+      await expectLater(client.get<Object?>('/a'), throwsA(isA<StatusError>()));
+      final result = await client.get<Map<String, Object?>>('/b');
+
+      expect(refreshes, 2);
+      expect(result, {'ok': true});
+      expect(authHeader(adapter.requests.last), 'Bearer new2');
+    },
+  );
 }

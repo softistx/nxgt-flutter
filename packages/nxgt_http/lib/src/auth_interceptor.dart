@@ -114,7 +114,7 @@ class AuthInterceptor extends Interceptor {
 
   Future<void> _refresh(Future<void> Function() refresh) async {
     try {
-      await refresh();
+      await Future<void>.sync(refresh);
     } finally {
       _refreshing = null;
     }
