@@ -7,6 +7,7 @@ environment:
 
 workspace:
   - packages/nxgt_material
+  - packages/nxgt_http
   - apps/widgetbook
 
 dev_dependencies:
@@ -44,9 +45,13 @@ melos:
         dirExists: test
 
     test:dart:
-      description: Tests of the pure Dart packages (no Flutter SDK).
+      description: Tests of the pure Dart packages (no Flutter SDK), with coverage.
       exec:
-        command: dart test
+        command: >-
+          rm -rf coverage &&
+          dart test --coverage=coverage &&
+          dart run coverage:format_coverage --lcov --in=coverage
+          --out=coverage/lcov.info --report-on=lib --check-ignore
         concurrency: 1
       packageFilters:
         flutter: false
@@ -54,7 +59,7 @@ melos:
 
     coverage:
       description: Fail when a package's line coverage is below 80 %.
-      run: dart run tool/check_coverage.dart 80 packages/nxgt_material
+      run: dart run tool/check_coverage.dart 80 packages/nxgt_material packages/nxgt_http
 
     goldens:
       description: Alchemist goldens (CI variant, run on Linux).

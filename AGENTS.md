@@ -8,6 +8,7 @@ The owner's global rules (worktrees, commits, merges, sessions) are in
 
 ```
 packages/nxgt_material/   the component package (publishable): lib/, test/, doc/
+packages/nxgt_http/       typed Dio HTTP client (pure Dart, publishable): lib/, test/, doc/
 apps/widgetbook/          Widgetbook catalogue (not published; GitHub Pages)
 bricks/                   Mason bricks: package, component
 tool/                     Dart scripts used by Melos scripts
