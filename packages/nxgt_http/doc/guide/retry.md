@@ -45,6 +45,8 @@ The wait ends as soon as the request's `CancelToken` is cancelled, and the call
 throws a `CancelledError`. Nothing is sent after that.
 
 ```dart
+import 'package:dio/dio.dart'; // CancelToken
+
 final token = CancelToken();
 final call = client.get<Object?>('/slow', cancelToken: token);
 token.cancel('screen closed'); // also stops a pending wait
@@ -60,6 +62,10 @@ like any request, so a 503 after a refresh is retried too. Retry never retries a
 ## On a plain Dio
 
 ```dart
+import 'package:dio/dio.dart';
+import 'package:nxgt_http/nxgt_http.dart';
+
+final dio = Dio();
 dio.interceptors.add(RetryInterceptor(const RetryOptions(), dio));
 ```
 
