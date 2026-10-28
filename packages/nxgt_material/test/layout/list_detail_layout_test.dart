@@ -149,10 +149,10 @@ void main() {
   });
 
   group('the hidden pane', () {
-    Widget fields() => ListDetailLayout(
+    Widget fields() => const ListDetailLayout(
       showDetail: false,
-      list: const TextField(key: Key('list-field')),
-      detail: const Column(
+      list: TextField(key: Key('list-field')),
+      detail: Column(
         children: [
           Text('Hidden detail'),
           TextField(key: Key('detail-field')),
