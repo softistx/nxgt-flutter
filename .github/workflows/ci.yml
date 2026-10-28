@@ -1,0 +1,41 @@
+name: ci
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: .fvmrc
+          channel: stable
+          cache: true
+      - name: Install melos and resolve the workspace
+        run: |
+          dart pub get
+          dart run melos bootstrap
+      - name: Analyze
+        run: dart run melos run analyze
+      - name: Format check
+        run: dart run melos run format
+      - name: Test (with coverage)
+        run: dart run melos run test
+      - name: Coverage threshold
+        run: dart run melos run coverage
+      # Alchemist CI goldens are rendered on Linux only, so they are compared
+      # here and nowhere else.
+      - name: Goldens
+        run: dart run melos run goldens

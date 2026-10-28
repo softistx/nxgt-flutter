@@ -1,0 +1,81 @@
+name: nxgt_flutter_workspace
+description: Workspace root of the nxgt-flutter monorepo (not published).
+publish_to: none
+
+environment:
+  sdk: ^3.13.0
+
+workspace:
+  - packages/nxgt_material
+  - apps/widgetbook
+
+dev_dependencies:
+  melos: ^8.10.0
+  very_good_analysis: ^11.0.0
+
+melos:
+  repository: https://github.com/softistx/nxgt-flutter
+  sdkPath: auto
+
+  command:
+    version:
+      branch: develop
+      linkToCommits: true
+      workspaceChangelog: false
+
+  scripts:
+    analyze:
+      description: Static analysis of every package; infos are fatal.
+      exec:
+        command: flutter analyze --fatal-infos
+        concurrency: 1
+
+    format:
+      description: Check formatting (writes nothing); `dart format .` fixes it.
+      run: dart format --output=none --set-exit-if-changed packages apps tool
+
+    test:
+      description: Unit and widget tests per package, with coverage.
+      exec:
+        command: flutter test --coverage --exclude-tags golden
+        concurrency: 1
+      packageFilters:
+        dirExists: test
+
+    coverage:
+      description: Fail when a package's line coverage is below 80 %.
+      run: dart run tool/check_coverage.dart 80 packages/nxgt_material
+
+    goldens:
+      description: Alchemist goldens (CI variant, run on Linux).
+      exec:
+        command: flutter test --tags golden
+        concurrency: 1
+      packageFilters:
+        dirExists: test
+
+    goldens:update:
+      description: Regenerate the goldens. Run on Linux (or in Docker) so CI matches.
+      exec:
+        command: flutter test --tags golden --update-goldens
+        concurrency: 1
+      packageFilters:
+        dirExists: test
+
+    gen:
+      description: build_runner, then gen-l10n, in the packages that use them.
+      steps:
+        - gen:build_runner
+        - gen:l10n
+
+    gen:build_runner:
+      description: dart run build_runner build in packages that depend on it.
+      exec: dart run build_runner build --delete-conflicting-outputs
+      packageFilters:
+        dependsOn: build_runner
+
+    gen:l10n:
+      description: flutter gen-l10n in packages that have an l10n.yaml.
+      exec: flutter gen-l10n
+      packageFilters:
+        fileExists: l10n.yaml

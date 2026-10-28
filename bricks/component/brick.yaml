@@ -1,0 +1,33 @@
+name: component
+description: >-
+  A nxgt_material component with everything a component ships with: the
+  widget, its Widgetbook use-case, an Alchemist golden test, a widget and
+  semantics test, and its docs page. Run from the repository root.
+version: 0.1.0+1
+
+environment:
+  mason: ">=0.1.0 <0.2.0"
+
+vars:
+  name:
+    type: string
+    description: The component's intent name in PascalCase, without a nxgt prefix and never an M3 widget name (StatCard, EmailField).
+    prompt: Component name (PascalCase, e.g. StatCard)?
+  category:
+    type: enum
+    description: The category library the component belongs to.
+    prompt: Category?
+    default: display
+    values:
+      - actions
+      - collections
+      - dates
+      - display
+      - feedback
+      - fields
+      - forms
+      - layout
+      - media
+      - overlays
+      - selection
+      - theme

@@ -1,0 +1,5 @@
+bricks:
+  package:
+    path: bricks/package
+  component:
+    path: bricks/component

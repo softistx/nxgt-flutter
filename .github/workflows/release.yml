@@ -1,0 +1,48 @@
+name: release
+
+# Publishes one package to pub.dev when a tag `<package>-v<version>` is pushed,
+# for example `nxgt_material-v0.1.0` (`melos version` creates these tags).
+# Authentication is pub.dev's GitHub OIDC; no secret is stored. A package must
+# have been published once by hand, and its automated-publishing settings on
+# pub.dev must name this repository, the tag pattern `{{package}}-v{{version}}`
+# and the GitHub environment `pub-dev`.
+# https://dart.dev/tools/pub/automated-publishing
+
+on:
+  push:
+    tags:
+      - "*-v[0-9]*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pub-dev
+    permissions:
+      contents: read
+      id-token: write # pub.dev OIDC
+    steps:
+      - uses: actions/checkout@v4
+      # setup-dart exchanges the job's OIDC token for a pub.dev credential;
+      # Flutter is installed after it so its bundled Dart is the one on PATH.
+      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: .fvmrc
+          channel: stable
+          cache: true
+      - name: Resolve the package from the tag
+        run: |
+          package="${GITHUB_REF_NAME%-v*}"
+          test -d "packages/$package" || { echo "no packages/$package"; exit 1; }
+          echo "PACKAGE=$package" >> "$GITHUB_ENV"
+      - name: Resolve the workspace
+        run: dart pub get
+      - name: Dry run
+        working-directory: packages/${{ env.PACKAGE }}
+        run: flutter pub publish --dry-run
+      - name: Publish
+        working-directory: packages/${{ env.PACKAGE }}
+        run: flutter pub publish --force

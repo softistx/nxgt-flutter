@@ -1,0 +1,29 @@
+name: {{name.snakeCase()}}
+description: >-
+  {{{description}}}
+version: 0.0.1
+homepage: https://github.com/softistx/nxgt-flutter/tree/develop/packages/{{name.snakeCase()}}
+repository: https://github.com/softistx/nxgt-flutter
+issue_tracker: https://github.com/softistx/nxgt-flutter/issues
+
+platforms:
+  android:
+  ios:
+  web:
+  macos:
+  windows:
+  linux:
+
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
