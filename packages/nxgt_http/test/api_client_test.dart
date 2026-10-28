@@ -119,11 +119,8 @@ void main() {
       );
 
       expect(adapter.requests.single.headers['x-call'], '1');
-      // The call runs on its own token, which follows the caller's.
+      // The call runs on its own token (see cancellation_test.dart).
       expect(adapter.requests.single.cancelToken, isNotNull);
-      token.cancel('later');
-      await Future<void>.delayed(Duration.zero);
-      expect(adapter.requests.single.cancelToken!.isCancelled, isTrue);
     });
 
     test('decode turns the JSON body into a value', () async {

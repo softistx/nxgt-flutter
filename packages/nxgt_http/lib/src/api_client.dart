@@ -1,9 +1,8 @@
-import 'dart:async';
-
 import 'package:dio/dio.dart';
 
 import 'package:nxgt_http/src/api_error.dart';
 import 'package:nxgt_http/src/auth_interceptor.dart';
+import 'package:nxgt_http/src/call_scope.dart';
 import 'package:nxgt_http/src/http_logger.dart';
 import 'package:nxgt_http/src/retry_interceptor.dart';
 
@@ -40,7 +39,7 @@ class ApiClient {
            receiveTimeout: receiveTimeout,
          ),
        ),
-       _scope = _Scope(null) {
+       _scope = CallScope(null) {
     if (adapter != null) dio.httpClientAdapter = adapter;
     if (logger != null) dio.interceptors.add(logger);
     if (auth != null) dio.interceptors.add(AuthInterceptor(auth, dio));
@@ -49,11 +48,11 @@ class ApiClient {
   }
 
   /// Uses an already configured [dio] as is.
-  new wrap(this.dio) : _scope = _Scope(null);
+  new wrap(this.dio) : _scope = CallScope(null);
 
   new _group(this.dio, this._scope);
 
-  final _Scope _scope;
+  final CallScope _scope;
 
   /// The underlying Dio, public on purpose: add interceptors or reach options
   /// this client does not wrap.
@@ -67,7 +66,7 @@ class ApiClient {
   /// the root stops everything in flight. A group stays usable after [cancel]:
   /// the next call starts normally. Groups are not registered anywhere, so a
   /// dropped group is simply garbage collected.
-  ApiClient group() => ApiClient._group(dio, _Scope(_scope));
+  ApiClient group() => ApiClient._group(dio, CallScope(_scope));
 
   /// Cancels every call in flight on this client and its groups. Each throws
   /// a `CancelledError` carrying [reason]; nothing is retried or refreshed
@@ -180,44 +179,4 @@ class ApiClient {
     for (final entry in (source ?? const <String, Object?>{}).entries)
       if (entry.value != null) entry.key: entry.value,
   };
-}
-
-/// The in-flight calls of one client or group, and its ancestors' view of
-/// them. Tokens are removed when their call ends, so nothing accumulates.
-class _Scope {
-  new(this.parent);
-
-  final _Scope? parent;
-  final Set<CancelToken> tokens = {};
-  final Map<String, CancelToken> latest = {};
-
-  CancelToken start(CancelToken? user, String? key) {
-    final token = CancelToken();
-    if (user != null) {
-      if (user.isCancelled) {
-        token.cancel(user.cancelError?.error);
-      } else {
-        unawaited(
-          user.whenCancel.then((e) {
-            if (!token.isCancelled) token.cancel(e.error);
-          }),
-        );
-      }
-    }
-    if (key != null) latest.remove(key)?.cancel(_superseded);
-    if (key != null) latest[key] = token;
-    for (_Scope? s = this; s != null; s = s.parent) {
-      s.tokens.add(token);
-    }
-    return token;
-  }
-
-  void finish(CancelToken token, String? key) {
-    if (key != null && identical(latest[key], token)) latest.remove(key);
-    for (_Scope? s = this; s != null; s = s.parent) {
-      s.tokens.remove(token);
-    }
-  }
-
-  static const _superseded = 'superseded by a newer call';
 }

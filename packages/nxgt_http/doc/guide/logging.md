@@ -27,20 +27,19 @@ final dio = Dio()..interceptors.add(HttpLogger(sink: myLogger.info));
 | `method`, `url` | The request, with its query string. |
 | `status` | The response status, null when nothing came back. |
 | `duration` | From sending the request to the answer or the failure. |
-| `errorType` | A `DioExceptionType` when the attempt failed (`badResponse` for a non-2xx answer, `connectionError`, `connectionTimeout`, `cancel`...), else null. `isError` is the short form. |
+| `error` | The typed `ApiError` the attempt would throw (`StatusError` for a non-2xx answer, `NetworkError`, `TimeoutError`, `CancelledError`...), else null. `isError` is the short form. |
 | `requestHeaders`, `responseHeaders` | One string per header (several values are joined with `, `). |
 | `requestBody`, `responseBody` | Null unless `bodies: true`. |
 
 ## Redaction
 
-`authorization`, `cookie` and `set-cookie` are replaced by `[redacted]` in both
-request and response headers, whatever their case. `redact` replaces that set:
+`authorization`, `proxy-authorization`, `cookie`, `set-cookie` and `x-api-key`
+are always replaced by `[redacted]` in request and response headers, whatever
+their case (`HttpLogger.defaultRedact`). `redact` adds names to that set; it
+never removes one:
 
 ```dart
-HttpLogger(
-  sink: print,
-  redact: {'authorization', 'cookie', 'set-cookie', 'x-api-key'},
-);
+HttpLogger(sink: print, redact: {'x-session-token'});
 ```
 
 Redaction covers headers only. Keep secrets out of the URL: the query string is
@@ -54,9 +53,18 @@ record; do it in development only, or filter in your `sink`.
 
 ## Order and retries
 
-The logger is the first interceptor, then auth, retry and yours. It sees the
-request as the caller wrote it (the `Authorization` header that auth adds is
-therefore not in the record). A request that is refreshed or retried makes
-one record per attempt: a 503 then a 200 gives two records.
+The logger is the first interceptor, then auth, retry and yours. A record holds
+the headers as they were sent, so the `Authorization` header that auth added is
+there, redacted. A request that is refreshed or retried makes one record per
+attempt: a 503 then a 200 gives two records. A cancel during a retry wait ends
+the call without a further record (the failed attempt already has its own).
 
-A `sink` that throws is ignored; logging never fails a call.
+## Errors in the sink
+
+A `sink` that throws is ignored: logging never fails a call, and nothing is
+printed about it. The `try` is synchronous, so an async sink whose future
+rejects is **not** caught: handle errors inside it.
+
+```dart
+HttpLogger(sink: (record) => unawaited(upload(record).catchError((_) {})));
+```

@@ -82,7 +82,8 @@ final client = ApiClient(
 ```
 
 One record per attempt: method, URL, status, duration and error type. The
-`authorization`, `cookie` and `set-cookie` headers are redacted; bodies are
+`authorization`, `proxy-authorization`, `cookie`, `set-cookie` and `x-api-key`
+headers are always redacted; bodies are
 logged only with `bodies: true`. Interceptors run logger, auth, retry, then
 yours. See the [logging guide](doc/guide/logging.md).
 
@@ -90,15 +91,20 @@ yours. See the [logging guide](doc/guide/logging.md).
 
 ```dart
 final screen = client.group(); // calls of one screen
-screen.get<Object?>('/me');
-screen.get<Object?>('/cities', query: {'q': 'par'}, latest: 'search');
-screen.cancel('page closed'); // all at once; a CancelledError is thrown
+
+final me = screen.get<Object?>('/me');
+final cities = screen.get<Object?>('/cities', query: {'q': 'par'}, latest: 'search');
+
+screen.cancel('page closed'); // all at once
 
 try {
-  await screen.get<Object?>('/slow');
-} on Object catch (error) {
-  if (!isCancelled(error)) rethrow;
+  await me; // the CancelledError lands here
+} on CancelledError catch (error) {
+  print(error.reason); // page closed
 }
+await cities.then<void>((_) {}, onError: (Object e) {
+  if (!isCancelled(e)) throw e;
+});
 ```
 
 `latest: 'key'` cancels the previous call with the same key. See the

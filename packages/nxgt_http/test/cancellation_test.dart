@@ -184,6 +184,21 @@ void main() {
       },
     );
 
+    test(
+      'a finished call is not touched when its caller token cancels',
+      () async {
+        final adapter = FakeAdapter([_ok(Duration.zero)]);
+        final client = _client(adapter);
+        final token = CancelToken();
+
+        await client.get<Object?>('/x', cancelToken: token);
+        token.cancel('late');
+        await Future<void>.delayed(Duration.zero);
+
+        expect(adapter.requests.single.cancelToken!.isCancelled, isFalse);
+      },
+    );
+
     test('an already cancelled caller token cancels at once', () async {
       final adapter = FakeAdapter([_ok()]);
       final client = _client(adapter);

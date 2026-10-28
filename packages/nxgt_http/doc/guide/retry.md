@@ -56,9 +56,8 @@ token.cancel('screen closed'); // also stops a pending wait
 
 Dio runs `onError` in insertion order, and the client adds the logger, then
 auth, then retry. A 401 is therefore refreshed and replayed first; the replay
-goes through retry
-like any request, so a 503 after a refresh is retried too. Retry never retries a
-401.
+goes through retry like any request, so a 503 after a refresh is retried too.
+Retry never retries a 401.
 
 ## On a plain Dio
 

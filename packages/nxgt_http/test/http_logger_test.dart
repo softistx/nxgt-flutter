@@ -33,7 +33,7 @@ void main() {
     expect(record.method, 'GET');
     expect(record.url.toString(), 'https://api.test/v1/things?page=2');
     expect(record.status, 200);
-    expect(record.errorType, isNull);
+    expect(record.error, isNull);
     expect(record.isError, isFalse);
     expect(
       record.duration,
@@ -48,7 +48,7 @@ void main() {
     await expectLater(client.get<Object?>('/x'), throwsA(isA<StatusError>()));
 
     expect(records.single.status, 404);
-    expect(records.single.errorType, DioExceptionType.badResponse);
+    expect(records.single.error, isA<StatusError>());
     expect(records.single.isError, isTrue);
   });
 
@@ -60,7 +60,7 @@ void main() {
     await expectLater(client.get<Object?>('/x'), throwsA(isA<NetworkError>()));
 
     expect(records.single.status, isNull);
-    expect(records.single.errorType, DioExceptionType.connectionError);
+    expect(records.single.error, isA<NetworkError>());
   });
 
   test('redacts the default headers, case-insensitively, both ways', () async {
@@ -101,19 +101,33 @@ void main() {
     expect(record.requestHeaders.toString(), isNot(contains('secret')));
   });
 
-  test('redact replaces the default set', () async {
+  test('redact adds to the default set', () async {
     final client = clientWith(
       FakeAdapter([FakeReply.json({})]),
-      logger: HttpLogger(sink: records.add, redact: {'X-Api-Key'}),
+      logger: HttpLogger(sink: records.add, redact: {'X-Extra'}),
     );
 
     await client.get<Object?>(
       '/x',
-      options: Options(headers: {'x-api-key': 'k', 'authorization': 'visible'}),
+      options: Options(
+        headers: {
+          'x-api-key': 'k',
+          'proxy-authorization': 'p',
+          'authorization': 'a',
+          'x-extra': 'b',
+          'x-ok': 'c',
+        },
+      ),
     );
 
     expect(records.single.requestHeaders['x-api-key'], HttpLogger.redacted);
-    expect(records.single.requestHeaders['authorization'], 'visible');
+    expect(
+      records.single.requestHeaders['proxy-authorization'],
+      HttpLogger.redacted,
+    );
+    expect(records.single.requestHeaders['x-extra'], HttpLogger.redacted);
+    expect(records.single.requestHeaders['x-ok'], 'c');
+    expect(records.single.requestHeaders['authorization'], HttpLogger.redacted);
   });
 
   test('bodies are left out by default', () async {

@@ -52,6 +52,14 @@ try {
 }
 ```
 
+The reason you gave to `cancel` is on the error:
+
+```dart
+} on CancelledError catch (error) {
+  print(error.reason); // 'page closed'
+}
+```
+
 `isCancelled` accepts a `CancelledError` and a raw `DioException` of type
 `cancel`. With `on ApiError`, test `error.isFailure` or switch on
 `CancelledError`.
@@ -60,8 +68,9 @@ try {
 
 Every call method still takes `cancelToken`. The call runs on its own token
 that follows yours, so cancelling yours cancels the call with your reason.
-Prefer `group()` to a token shared by many calls: a long-lived token keeps a
-small listener per call until it is cancelled.
+A tiny listener closure stays on a long-lived token until it is cancelled, but
+it holds no token: it refers to the call's token weakly and does nothing once
+the call has finished.
 
 ## After a cancel
 

@@ -45,6 +45,17 @@ a distinct `latest` key for calls that are not meant to replace each other.
 
 ## A header shows `[redacted]` in the logs
 
-`HttpLogger` replaces the value of `authorization`, `cookie` and `set-cookie`
-(or of the names in `redact`) in request and response headers. Pass your own
-`redact` set to change that; bodies and query strings are never redacted.
+`HttpLogger` always replaces the value of `authorization`,
+`proxy-authorization`, `cookie`, `set-cookie` and `x-api-key` in request and
+response headers. `redact` adds names; the default set cannot be reduced.
+Bodies and query strings are never redacted.
+
+## The logger prints nothing
+
+Errors thrown by the `sink` are swallowed on purpose, so a bug in it looks like
+silence. Call the sink by hand with a record to see the exception, or wrap its
+body in a `try`/`catch` that prints. An async sink whose future rejects is not
+caught and surfaces as an unhandled error instead. Also check that the logger
+is on the Dio that makes the call: `ApiClient(logger: ...)` or
+`dio.interceptors.add(...)`, and that `ApiClient.wrap` was not given a Dio
+without it.
