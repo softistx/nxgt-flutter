@@ -35,9 +35,7 @@ jobs:
               exit 1
               ;;
           esac
-          git init -q .
-          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git ls-remote --exit-code --heads origin "refs/heads/$REF" >/dev/null \
+          gh api "repos/${GITHUB_REPOSITORY}/branches/${REF}" --silent \
             || { echo "'$REF' is not an existing remote branch" >&2; exit 1; }
       - uses: actions/checkout@v4
         with:
