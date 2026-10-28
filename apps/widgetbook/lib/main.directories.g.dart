@@ -11,6 +11,24 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
+import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
+    as _nxgt_widgetbook_theme_token_sheet_usecase;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
 
-final directories = <_widgetbook.WidgetbookNode>[];
+final directories = <_widgetbook.WidgetbookNode>[
+  _widgetbook.WidgetbookCategory(
+    name: 'Theme',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'TokenSheet',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_theme_token_sheet_usecase
+                .buildTokenSheetDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+];
