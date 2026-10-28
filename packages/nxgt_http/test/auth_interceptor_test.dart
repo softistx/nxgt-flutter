@@ -54,6 +54,21 @@ void main() {
     expect(adapter.requests.single.headers['Authorization'], 'Basic x');
   });
 
+  test('a 401 on a caller-set Authorization header is not refreshed', () async {
+    final session = Session();
+    final adapter = FakeAdapter([unauthorized()]);
+
+    await expectLater(
+      clientFor(adapter, session.options).get<Object?>(
+        '/a',
+        options: Options(headers: {'Authorization': 'Basic x'}),
+      ),
+      throwsA(isA<StatusError>()),
+    );
+    expect(session.refreshes, 0);
+    expect(adapter.calls, 1);
+  });
+
   test('a 401 refreshes once and replays with the new token', () async {
     final session = Session();
     final adapter = FakeAdapter([unauthorized(), ok()]);

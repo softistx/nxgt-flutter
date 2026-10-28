@@ -19,7 +19,7 @@ Pass a `decode` function for anything other than a raw JSON `Map` or `List`:
 final user = await client.get('/me', decode: User.fromJson);
 ```
 
-## Every call with a 401 fails once more after a refresh
+## A 401 is thrown even though `refresh` ran
 
 `refresh` ran but `token` returned the same value (or null), so the request was
 not replayed and the 401 is thrown. Make `refresh` store the new token where

@@ -39,6 +39,10 @@ try {
 }
 ```
 
+- A call that carries its own `Authorization` header is never refreshed: its
+  401 is thrown as is.
+- When signed out (`token` returns null) a 401 also runs `refresh`, which can
+  therefore restore a session.
 - Without `refresh`, a 401 is thrown as is.
 - A `FormData` body is cloned for the replay, since a stream is read once.
 
@@ -46,7 +50,12 @@ try {
 
 ```dart
 final dio = Dio(BaseOptions(baseUrl: 'https://api.example.com/'));
-dio.interceptors.add(AuthInterceptor(options, dio));
+dio.interceptors.add(
+  AuthInterceptor(
+    AuthOptions(token: () => session.accessToken, refresh: session.renew),
+    dio,
+  ),
+);
 ```
 
 `ApiClient` places the auth interceptor first, before the `interceptors` you

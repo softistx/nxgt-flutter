@@ -41,6 +41,8 @@ class AuthInterceptor extends Interceptor {
   /// `RequestOptions.extra` key set on a replayed request.
   static const replayedKey = 'nxgt_http.auth.replayed';
 
+  static const _managedKey = 'nxgt_http.auth.managed';
+
   Future<void>? _refreshing;
 
   @override
@@ -63,6 +65,7 @@ class AuthInterceptor extends Interceptor {
     final token = await options.token();
     if (token != null && token.isNotEmpty) {
       request.headers['authorization'] = '${options.scheme} $token';
+      request.extra[_managedKey] = true;
     }
   }
 
@@ -79,6 +82,10 @@ class AuthInterceptor extends Interceptor {
       return handler.next(err);
     }
     final sent = _header(request, 'authorization');
+    // The caller chose its own credential: not ours to renew.
+    if (sent != null && request.extra[_managedKey] != true) {
+      return handler.next(err);
+    }
     try {
       final before = await options.token();
       final stale = before != null && sent != '${options.scheme} $before';
