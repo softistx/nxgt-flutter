@@ -45,6 +45,16 @@ import 'package:nxgt_widgetbook/forms/form_section.usecase.dart'
     as _nxgt_widgetbook_forms_form_section_usecase;
 import 'package:nxgt_widgetbook/forms/submit_button.usecase.dart'
     as _nxgt_widgetbook_forms_submit_button_usecase;
+import 'package:nxgt_widgetbook/layout/adaptive_shell.usecase.dart'
+    as _nxgt_widgetbook_layout_adaptive_shell_usecase;
+import 'package:nxgt_widgetbook/layout/list_detail_layout.usecase.dart'
+    as _nxgt_widgetbook_layout_list_detail_layout_usecase;
+import 'package:nxgt_widgetbook/layout/page_body.usecase.dart'
+    as _nxgt_widgetbook_layout_page_body_usecase;
+import 'package:nxgt_widgetbook/layout/responsive_grid.usecase.dart'
+    as _nxgt_widgetbook_layout_responsive_grid_usecase;
+import 'package:nxgt_widgetbook/layout/window_size.usecase.dart'
+    as _nxgt_widgetbook_layout_window_size_usecase;
 import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
     as _nxgt_widgetbook_theme_token_sheet_usecase;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
@@ -234,6 +244,61 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_forms_submit_button_usecase
                 .buildSubmitButtonDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Layout',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'AdaptiveShell',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_layout_adaptive_shell_usecase
+                .buildAdaptiveShellDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ListDetailLayout',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_layout_list_detail_layout_usecase
+                .buildListDetailLayoutDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'PageBody',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_layout_page_body_usecase.buildPageBodyDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ResponsiveGrid',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_layout_responsive_grid_usecase
+                .buildResponsiveGridDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'WindowSize',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_layout_window_size_usecase
+                .buildWindowSizeDefault,
           ),
         ],
       ),

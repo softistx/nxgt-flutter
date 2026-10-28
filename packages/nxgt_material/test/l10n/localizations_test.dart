@@ -154,4 +154,5 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.feedbackErrorMessage,
   s.layoutOpenNavigation,
   s.layoutCloseNavigation,
+  s.layoutNavigation,
 ];

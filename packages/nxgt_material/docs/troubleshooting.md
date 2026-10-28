@@ -191,3 +191,73 @@ AsyncView<List<Invoice>>(
   builder: (context, items) => InvoiceList(items),
 )
 ```
+
+## AdaptiveShell needs at least two destinations.
+
+**When:** an `AdaptiveShell` was given fewer than two `destinations`. Reported
+once, from `initState` or when the count changes, through
+`FlutterError.onError`.
+
+**Why:** Material's navigation bar, rail and drawer need two or more places to
+make sense, and `NavigationBar` asserts it. The shell shows only the body
+(and the `title`, if any) until there are two.
+
+**Fix:** pass two or more destinations, or do not use the shell for a
+single-place screen:
+
+```dart
+AdaptiveShell(
+  destinations: const [
+    ShellDestination(icon: Icon(Icons.home), label: 'Home'),
+    ShellDestination(icon: Icon(Icons.inbox), label: 'Inbox'),
+  ],
+  selectedIndex: 0,
+  onSelected: go,
+  body: page,
+)
+```
+
+## AdaptiveShell.selectedIndex is out of range.
+
+**When:** `selectedIndex` is negative or not below the number of
+destinations, for instance after the list shrank. Reported once per change.
+
+**Why:** the index picks the highlighted destination. The shell selects the
+nearest valid one meanwhile, so the screen still builds.
+
+**Fix:** keep the index within `0` to `destinations.length - 1`; clamp it
+where the destinations change:
+
+```dart
+final index = selected.clamp(0, destinations.length - 1);
+```
+
+## LayoutBuilder does not support returning intrinsic dimensions.
+
+**When:** a `ResponsiveGrid` or a `ListDetailLayout` sits under a parent that
+asks for intrinsic sizes: `IntrinsicWidth`, `IntrinsicHeight`, a `Table`, or a
+`DataTable` cell.
+
+**Why:** both read their width with a `LayoutBuilder`, which cannot answer an
+intrinsic-size question.
+
+**Fix:** give them a fixed size from outside, and keep intrinsic parents away
+from them:
+
+```dart
+SizedBox(width: 600, height: 400, child: ListDetailLayout(/* ... */))
+```
+
+## ResponsiveGrid or ListDetailLayout has the wrong number of columns or throws
+
+**When:** a `ResponsiveGrid` is placed in a horizontal scroll view or an
+unbounded `Row`: it lays out one tile width per child instead of following the
+window. A `ListDetailLayout` in the same place throws an unbounded-width
+error.
+
+**Why:** both follow the width they are given, not the window's, so they need
+a bounded width.
+
+**Fix:** wrap them in a bounded width (`Expanded`, `SizedBox(width: ...)`), or
+use `context.windowSize` yourself to pick the layout.
+

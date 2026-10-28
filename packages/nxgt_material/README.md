@@ -5,7 +5,7 @@ adaptive layout, fields and forms, feedback states, themes. Intent-named,
 accessible, French and English.
 
 > Status: pre-0.1. Components are arriving category by category toward 0.1
-> (theme, localization, actions, fields, forms and feedback are in); see the [roadmap](docs/roadmap.md).
+> (theme, localization, actions, fields, forms, feedback and adaptive layout are in); see the [roadmap](docs/roadmap.md).
 
 Runs on Android, iOS, web, macOS, Windows and Linux.
 
@@ -251,6 +251,88 @@ Pages: [EmptyState](docs/components/empty_state.md),
 [InlineAlert](docs/components/inline_alert.md),
 [Toast](docs/components/toast.md).
 
+## Layout
+
+`package:nxgt_material/layout.dart`. Built on Flutter's `NavigationBar`,
+`NavigationRail` and `NavigationDrawer`, switched by the Material 3 window size
+classes; no extra package.
+
+| Component | What it adds |
+| --- | --- |
+| `WindowSize`, `Breakpoints`, `context.windowSize` | The Material 3 classes (compact 0, medium 600, expanded 840, large 1200, extraLarge 1600) |
+| `AdaptiveShell` | Bar on compact (or a drawer), rail on medium, standing drawer on expanded and up; safe areas, keyboard focus, hover |
+| `PageBody` | Centred content with a maximum width and gutters per window size |
+| `ResponsiveGrid` | Columns by minimum tile width |
+| `ListDetailLayout` | List and detail side by side, or one at a time under 648 dp |
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nxgt_material/l10n.dart';
+import 'package:nxgt_material/layout.dart';
+
+void main() => runApp(
+  MaterialApp(
+    localizationsDelegates: const [
+      NxgtMaterialLocalizationsDelegate(),
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: NxgtMaterialLocalizations.supportedLocales,
+    home: const Home(),
+  ),
+);
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return AdaptiveShell(
+      destinations: const [
+        ShellDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
+        ShellDestination(icon: Icon(Icons.inbox_outlined), label: 'Inbox'),
+      ],
+      selectedIndex: index,
+      onSelected: (i) => setState(() => index = i),
+      body: SingleChildScrollView(
+        child: PageBody(
+          child: ResponsiveGrid(
+            children: [
+              for (var i = 0; i < 6; i++)
+                Card(child: SizedBox(height: 80, child: Center(child: Text('Tile $i')))),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+Read the class anywhere with `context.windowSize`
+(`if (context.windowSize == WindowSize.compact) ...`). A list and its detail:
+`ListDetailLayout(showDetail: selected != null, onBack: clear, list: ..., detail: ...)`,
+see [ListDetailLayout](docs/components/list_detail_layout.md). The shell takes
+`title`, `appBar`, `actions`, `floatingActionButton`,
+`floatingActionButtonLocation` and `bottomSheet`, and a screen's own
+`Scaffold` can nest in `body`.
+
+Guide: [Adaptive layout](docs/guide/adaptive.md). Pages:
+[WindowSize](docs/components/window_size.md),
+[AdaptiveShell](docs/components/adaptive_shell.md),
+[PageBody](docs/components/page_body.md),
+[ResponsiveGrid](docs/components/responsive_grid.md),
+[ListDetailLayout](docs/components/list_detail_layout.md).
+
 ## Naming rule
 
 - **No `nxgt` prefix.** A component is called by what it is for: `StatCard`,
@@ -264,6 +346,7 @@ Pages: [EmptyState](docs/components/empty_state.md),
 - [Theme](docs/guide/theme.md)
 - [Forms](docs/guide/forms.md)
 - [Localization](docs/guide/localization.md)
+- [Adaptive layout](docs/guide/adaptive.md)
 - [Roadmap](docs/roadmap.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - `docs/components/`: one page per component

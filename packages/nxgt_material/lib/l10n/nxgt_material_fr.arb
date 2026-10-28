@@ -31,5 +31,6 @@
   "feedbackToneWarning": "Attention",
   "feedbackToneError": "Erreur",
   "layoutOpenNavigation": "Ouvrir la navigation",
-  "layoutCloseNavigation": "Fermer la navigation"
+  "layoutCloseNavigation": "Fermer la navigation",
+  "layoutNavigation": "Navigation"
 }

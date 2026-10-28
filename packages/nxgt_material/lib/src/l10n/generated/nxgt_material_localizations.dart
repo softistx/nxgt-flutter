@@ -292,6 +292,12 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Close navigation'**
   String get layoutCloseNavigation;
+
+  /// Label of the navigation region of the adaptive shell (bar, rail or drawer), read by screen readers.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigation'**
+  String get layoutNavigation;
 }
 
 class _NxgtMaterialLocalizationsDelegate
