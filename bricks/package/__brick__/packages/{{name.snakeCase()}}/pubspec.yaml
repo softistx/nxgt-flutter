@@ -26,8 +26,6 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
-{{/flutter}}{{^flutter}}
+    sdk: flutter{{/flutter}}{{^flutter}}
 dev_dependencies:
-  test: ^1.25.0
-{{/flutter}}
+  test: ^1.25.0{{/flutter}}

@@ -11,7 +11,9 @@ mason make component --name StatCard --category display
 ```
 
 - `package`: a new publishable workspace package (add it to the root
-  `workspace:` list afterwards).
+  `workspace:` list afterwards). `--flutter false` makes a pure Dart package
+  (`package:test`, no platforms list, `dart pub add`), tested with
+  `melos run test:dart`.
 - `component`: widget, Widgetbook use-case, Alchemist golden test, widget and
   semantics test, and doc page for a `nxgt_material` component. The hook
   prints the two steps left (the export line, `melos run gen`); the category's

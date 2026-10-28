@@ -47,7 +47,8 @@ activated globally).
 | --- | --- |
 | `analyze` | `flutter analyze --fatal-infos` in every package |
 | `format` | checks formatting, writes nothing (`dart format .` fixes it) |
-| `test` | `flutter test --coverage` per package, goldens excluded |
+| `test` | `flutter test --coverage` in the Flutter packages only, goldens excluded |
+| `test:dart` | `dart test` in the pure Dart packages (no Flutter SDK) |
 | `coverage` | fails when a package's line coverage is under 80 % (skipped while a package has no code) |
 | `goldens` | Alchemist golden tests |
 | `goldens:update` | regenerates goldens; run on Linux so CI matches |
