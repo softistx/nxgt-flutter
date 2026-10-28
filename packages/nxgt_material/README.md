@@ -40,6 +40,25 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `selection.dart` | Dropdowns, segmented and chip groups |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
+## Theme
+
+A Material 3 theme from a seed colour, with the presets, tones, radius and
+motifs of the React library `@nxgt/material`:
+
+```dart
+import 'package:nxgt_material/theme.dart';
+
+MaterialApp(
+  theme: ThemePresets.ocean.light(),
+  darkTheme: ThemePresets.ocean.dark(),
+);
+
+// anywhere below:
+final done = context.tones.success; // color, onColor, container, onContainer
+```
+
+See the [theme guide](docs/guide/theme.md).
+
 ## Naming rule
 
 - **No `nxgt` prefix.** A component is called by what it is for: `StatCard`,
@@ -50,6 +69,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 
 ## Documentation
 
+- [Theme](docs/guide/theme.md)
 - [Roadmap](docs/roadmap.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - `docs/components/`: one page per component

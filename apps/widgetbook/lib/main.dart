@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nxgt_material/theme.dart';
 import 'package:nxgt_widgetbook/main.directories.g.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
@@ -20,17 +21,16 @@ class WidgetbookApp extends StatelessWidget {
       addons: [
         MaterialThemeAddon(
           themes: [
-            WidgetbookTheme(
-              name: 'Light',
-              data: ThemeData(colorSchemeSeed: Colors.indigo),
-            ),
-            WidgetbookTheme(
-              name: 'Dark',
-              data: ThemeData(
-                colorSchemeSeed: Colors.indigo,
-                brightness: Brightness.dark,
+            for (final preset in ThemePresets.all) ...[
+              WidgetbookTheme(
+                name: '${preset.displayName} light',
+                data: preset.light(),
               ),
-            ),
+              WidgetbookTheme(
+                name: '${preset.displayName} dark',
+                data: preset.dark(),
+              ),
+            ],
           ],
         ),
         ViewportAddon(Viewports.all),
