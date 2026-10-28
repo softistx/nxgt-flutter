@@ -1,9 +1,10 @@
 name: package
 description: >-
   A new publishable package for the workspace (Flutter by default, pure Dart
-  with flutter=false), with the nxgt_material layout: one library per category under lib/, a barrel, tests, README,
-  CHANGELOG and doc/. Run from the repository root; then add the package to
-  the root pubspec.yaml `workspace:` list.
+  with flutter=false), with the nxgt_material layout: one library per category
+  under lib/, a barrel, tests, README, CHANGELOG and doc/. Run from the
+  repository root; then add the package to the root pubspec.yaml `workspace:`
+  list.
 version: 0.1.0+1
 
 environment:

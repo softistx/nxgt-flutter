@@ -44,14 +44,15 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
   build degrades (clamps, hides) rather than crashes. `FlutterError.reportError`
   for a failed user action or future (an `onPressed` that threw). `throw` only
   for a missing required ancestor or extension that only a call reveals (no
-  `ScaffoldMessenger`); one visible at build time (no `Form`) is asserted. The troubleshooting heading equals the message.
+  `ScaffoldMessenger`); one visible at build time (no `Form`) is asserted. The
+  troubleshooting heading equals the message.
 - **A new component is made with the Mason brick**, never by hand:
   `mason make component --name StatCard --category display` from the root. It
   writes the widget, the Widgetbook use-case, an Alchemist golden test, a
   widget + semantics test and the doc page; then add the export line it
-  prints and run `melos run gen`. A new package: `mason make package` (`--flutter false` for a pure
-  Dart package: no Flutter SDK, `package:test`; its tests run with
-  `melos run test:dart`).
+  prints and run `melos run gen`. A new package: `mason make package`
+  (`--flutter false` for a pure Dart package: no Flutter SDK, `package:test`;
+  its tests run with `melos run test:dart`).
 - Theme: `ColorScheme.fromSeed` plus `ThemeExtension`s (tones, radius, motifs),
   same presets and names as `@nxgt/material` `defineTheme`.
 - Icons: Material Symbols. Forms: Flutter `Form`/`FormField`, no form library.
