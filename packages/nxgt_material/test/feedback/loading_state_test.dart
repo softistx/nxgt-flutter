@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/feedback.dart';
 
@@ -49,6 +50,21 @@ void main() {
     expect(
       tester.getSemantics(find.text('Loading')),
       isSemantics(label: 'Loading', isLiveRegion: true),
+    );
+    expect(
+      tester
+          .getSemantics(
+            find.descendant(
+              of: find.byType(LoadingState),
+              matching: find.byWidgetPredicate(
+                (w) =>
+                    w is Semantics && w.properties.role == SemanticsRole.status,
+              ),
+            ),
+          )
+          .getSemanticsData()
+          .role,
+      SemanticsRole.status,
     );
     handle.dispose();
   });

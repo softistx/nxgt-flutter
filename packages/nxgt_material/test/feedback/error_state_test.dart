@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/actions.dart';
 import 'package:nxgt_material/feedback.dart';
@@ -77,6 +78,29 @@ void main() {
   });
 
   group('semantics', () {
+    testWidgets('the block has the alert role', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpApp(themedHost(const ErrorState()));
+
+      expect(
+        tester
+            .getSemantics(
+              find.descendant(
+                of: find.byType(ErrorState),
+                matching: find.byWidgetPredicate(
+                  (w) =>
+                      w is Semantics &&
+                      w.properties.role == SemanticsRole.alert,
+                ),
+              ),
+            )
+            .getSemanticsData()
+            .role,
+        SemanticsRole.alert,
+      );
+      handle.dispose();
+    });
+
     testWidgets('a live region with a heading', (tester) async {
       final handle = tester.ensureSemantics();
       await tester.pumpApp(themedHost(const ErrorState()));

@@ -99,7 +99,7 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
   @override
   void initState() {
     super.initState();
-    reportShellProblems(widget.destinations, widget.selectedIndex);
+    assertShellArguments(widget.destinations, widget.selectedIndex);
   }
 
   @override
@@ -107,7 +107,7 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.destinations.length != widget.destinations.length ||
         oldWidget.selectedIndex != widget.selectedIndex) {
-      reportShellProblems(widget.destinations, widget.selectedIndex);
+      assertShellArguments(widget.destinations, widget.selectedIndex);
     }
   }
 

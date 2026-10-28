@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:nxgt_material/src/fields/number_parse.dart';
 import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
@@ -35,21 +36,7 @@ class Validators {
     '[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?'
     r'(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$',
   );
-  static final _number = RegExp(r'^-?\d+([.,]\d+)?$|^-?[.,]\d+$');
   static final _phone = RegExp(r'^\+?[\d\s().\-]+$');
-
-  /// Parses what a user typed in a number field.
-  ///
-  /// A comma or a point is the decimal separator (French keyboards have a
-  /// comma); there are no thousands separators, so `1,234` is 1.234 and
-  /// `1,234.5` is malformed. Surrounding spaces are ignored. Hexadecimal and
-  /// exponent forms (`0x1A`, `1e3`) are rejected. Returns `null` for an empty
-  /// or malformed text.
-  static num? parseNumber(String? text) {
-    final trimmed = text?.trim();
-    if (trimmed == null || !_number.hasMatch(trimmed)) return null;
-    return num.tryParse(trimmed.replaceAll(',', '.'));
-  }
 
   /// Fails when the value is `null` or blank.
   FormFieldValidator<String> required() =>
@@ -91,7 +78,7 @@ class Validators {
   };
 
   /// Fails when a non-empty value is not a number, or is outside
-  /// [min]..[max] when given. See [parseNumber].
+  /// [min]..[max] when given. The text is read as `NumberField.parse` reads it.
   FormFieldValidator<String> number({num? min, num? max}) => (value) {
     if (value == null || value.trim().isEmpty) return null;
     final parsed = parseNumber(value);

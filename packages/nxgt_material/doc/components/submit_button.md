@@ -6,7 +6,7 @@ The button that submits the enclosing `Form`, built on `AsyncButton`.
 
 ## When to use it
 
-Instead of wiring `validate`, `save` and a busy state by hand. Pressing it validates the form; if valid it saves and awaits `onSubmit`, showing the spinner so the form cannot be sent twice; if invalid nothing is sent, the fields show their errors and focus moves to the first invalid one. It must be inside a `Form` (a descendant) (see troubleshooting).
+Instead of wiring `validate`, `save` and a busy state by hand. Pressing it validates the form; if valid it saves and awaits `onSubmit`, showing the spinner so the form cannot be sent twice; if invalid nothing is sent, the fields show their errors, and it scrolls to the first invalid field and focuses it. It must be inside a `Form` (a descendant; see [troubleshooting](../troubleshooting.md#submitbutton-was-used-outside-a-form)).
 
 ## Example
 

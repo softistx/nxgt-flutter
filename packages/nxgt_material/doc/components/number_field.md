@@ -8,6 +8,8 @@ A text field for a number with an optional range, built on `TextFormField`.
 
 For a quantity, an age, a price. It refuses any character that is not part of a number and accepts a comma as the decimal separator. Read the value with `NumberField.parse`, never `num.parse`.
 
+The rule is strict: a comma or a point is the decimal separator, there are no thousands separators (`1,234` is 1.234), and hexadecimal and exponent forms (`0x1A`, `1e3`) are refused. See the [forms guide](../guide/forms.md).
+
 ## Example
 
 ```dart

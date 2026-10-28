@@ -45,6 +45,6 @@ button semantics.
 | `message` | `String` | The text of the alert. |
 | `title` | `String?` | Bold first line. |
 | `tone` | `FeedbackTone` | Colours, icon and announcement; defaults to `info`. |
-| `icon` | `IconData?` | Replaces the tone's icon. |
+| `icon` | `Widget?` | Replaces the tone's icon, usually an `Icon`. It is wrapped in an `IconTheme` (24 dp, the tone's text colour), so it needs no colour or size. |
 | `action` | `Widget?` | Under the text, usually a `TextButton`. |
 | `onDismiss` | `VoidCallback?` | Shows a close button; the alert does not hide itself. |

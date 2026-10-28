@@ -26,7 +26,7 @@ void main() {
     final mid = a.lerp(b, 0.25);
 
     expect(
-      mid['maths'].color,
+      mid['maths']!.color,
       Color.lerp(light.info.color, dark.info.color, 0.25),
     );
     expect(mid['only-a'], light.info);
@@ -41,8 +41,8 @@ void main() {
     expect(changed.copyWith(), changed);
   });
 
-  test('an unknown tone throws', () {
-    expect(() => light['nope'], throwsArgumentError);
+  test('an unknown tone is null', () {
+    expect(light['nope'], isNull);
   });
 
   test('the eight named tones come first, in order', () {

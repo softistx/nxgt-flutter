@@ -67,7 +67,7 @@ Container(
   child: Text('Saved', style: TextStyle(color: tones.success.onContainer)),
 );
 
-final maths = tones['maths']; // an app tone, by name
+final maths = tones['maths']; // an app tone, by name; null when unknown
 ```
 
 - **App tones** go in `ThemeSpec.tones`, by name. The name cannot be one the
@@ -82,15 +82,18 @@ final maths = tones['maths']; // an app tone, by name
 
 ## Under a plain theme
 
-Components of this package read `context.tones` and `context.radii`, and work
-under a plain `ThemeData` too:
+Components of this package read `context.tones`, `context.radii`,
+`context.fonts` and `context.motif`, and work under a plain `ThemeData` too:
 
 - `context.radii` falls back to the Material 3 Expressive scale
   (`RadiusScale()`).
 - `context.tones` falls back to `Tones.fromScheme(Theme.of(context).colorScheme)`:
   the same AA-solved status tones a `ThemeSpec` generates, with primary, error
   and neutral read from the colour scheme. It is cached per `ColorScheme`.
-- `context.fonts` and `context.motif` still throw (see Troubleshooting).
+- `context.fonts` falls back to `const ThemeFonts()` and `context.motif` to
+  `ThemeMotif.none`, the `ThemeSpec` defaults.
+- `Tones[name]` returns `null` for a name that is neither a named tone nor an
+  app tone.
 
 ## Radius, fonts, motif
 
@@ -137,10 +140,3 @@ Theme(data: school.dark(), child: const TokenSheet());
   shared "night" for dark.
 - The `tokens` override and `extends` object are replaced by `copyWith`.
 - Backgrounds are described, not drawn.
-
-## Troubleshooting
-
-`The theme has no ThemeFonts.` (or `ThemeMotif`) means the `Theme` above the
-widget was not built from a `ThemeSpec`. Use `spec.light()` / `spec.dark()`, or
-add the extensions to your own `ThemeData.extensions`. `context.tones` and
-`context.radii` never throw: see the next section.

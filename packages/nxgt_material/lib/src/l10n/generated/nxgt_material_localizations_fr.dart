@@ -10,28 +10,13 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
   NxgtMaterialLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get actionsConfirm => 'Confirmer';
-
-  @override
-  String get actionsCancel => 'Annuler';
-
-  @override
   String get actionsClose => 'Fermer';
-
-  @override
-  String get actionsSave => 'Enregistrer';
 
   @override
   String get actionsRetry => 'Réessayer';
 
   @override
-  String get actionsClear => 'Effacer';
-
-  @override
   String get actionsShowMore => 'Afficher plus';
-
-  @override
-  String get actionsShowLess => 'Afficher moins';
 
   @override
   String get actionsCopy => 'Copier';
@@ -78,12 +63,12 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
 
   @override
   String fieldsMinValue(String min) {
-    return 'Saisissez une valeur d\'au moins $min';
+    return 'Saisissez une valeur d’au moins $min';
   }
 
   @override
   String fieldsMaxValue(String max) {
-    return 'Saisissez une valeur d\'au plus $max';
+    return 'Saisissez une valeur d’au plus $max';
   }
 
   @override

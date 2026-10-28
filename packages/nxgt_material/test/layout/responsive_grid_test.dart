@@ -33,11 +33,23 @@ int _columns(WidgetTester tester, int count) {
 }
 
 void main() {
-  test('columnsFor counts the tiles that fit with their spacing', () {
-    expect(ResponsiveGrid.columnsFor(199, 200, 10), 1);
-    expect(ResponsiveGrid.columnsFor(410, 200, 10), 2);
-    expect(ResponsiveGrid.columnsFor(409, 200, 10), 1);
-    expect(ResponsiveGrid.columnsFor(double.infinity, 200, 10), 1);
+  testWidgets('counts the tiles that fit with their spacing', (tester) async {
+    // 200 wide tiles, 10 spacing: two columns need 410, one fits below.
+    await _pump(tester, 409, _grid());
+    expect(_columns(tester, 6), 1);
+    await _pump(tester, 410, _grid());
+    expect(_columns(tester, 6), 2);
+    await _pump(tester, 199, _grid());
+    expect(_columns(tester, 6), 1);
+  });
+
+  testWidgets('gives tiles their minimum width when unbounded', (tester) async {
+    await _pump(
+      tester,
+      800,
+      SingleChildScrollView(scrollDirection: Axis.horizontal, child: _grid()),
+    );
+    expect(tester.getSize(find.byKey(const ValueKey(0))).width, 200);
   });
 
   final widths = <double, int>{200: 1, 420: 2, 640: 3, 860: 4};

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
 /// What a screen or a list shows while its data loads.
@@ -21,33 +22,39 @@ class LoadingState extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
+        // The role and the live region sit on two nodes: Flutter refuses
+        // both on one.
         child: Semantics(
           container: true,
-          liveRegion: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 16,
-            children: [
-              ExcludeSemantics(
-                child: reduced
-                    ? Icon(
-                        Icons.hourglass_top,
-                        size: 40,
-                        color: theme.colorScheme.primary,
-                      )
-                    : const SizedBox.square(
-                        dimension: 40,
-                        child: CircularProgressIndicator(),
-                      ),
-              ),
-              Text(
-                message ?? context.materialL10n.feedbackLoading,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+          role: SemanticsRole.status,
+          child: Semantics(
+            container: true,
+            liveRegion: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 16,
+              children: [
+                ExcludeSemantics(
+                  child: reduced
+                      ? Icon(
+                          Icons.hourglass_top,
+                          size: 40,
+                          color: theme.colorScheme.primary,
+                        )
+                      : const SizedBox.square(
+                          dimension: 40,
+                          child: CircularProgressIndicator(),
+                        ),
                 ),
-              ),
-            ],
+                Text(
+                  message ?? context.materialL10n.feedbackLoading,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

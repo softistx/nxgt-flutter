@@ -72,7 +72,7 @@ TextFormField(
 | `compose(list)` | the first of `list` that fails; `null` entries are skipped |
 
 Except `required`, validators accept an empty value, so an optional field is
-valid until something is typed. `Validators.parseNumber(text)` (aliased as `NumberField.parse`) parses a number
+valid until something is typed. `NumberField.parse(text)` (the one public parser, which `Validators.number` also uses) parses a number
 typed with a comma or a point. A comma is the decimal separator and there are
 no thousands separators: `1,234` is 1.234 and `1,234.5` is invalid, as are
 `0x1A` and `1e3`.

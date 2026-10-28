@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:nxgt_material/src/actions/async_button.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
@@ -42,42 +43,52 @@ class ErrorState extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
+        // The role and the live region sit on two nodes: Flutter refuses
+        // both on one.
         child: Semantics(
           container: true,
-          liveRegion: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8,
-            children: [
-              ExcludeSemantics(
-                child: Icon(Icons.error_outline, size: 48, color: colors.error),
-              ),
-              Semantics(
-                header: true,
-                child: Text(
-                  title ?? l10n.feedbackErrorTitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium,
-                ),
-              ),
-              Text(
-                message ?? l10n.feedbackErrorMessage,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colors.onSurfaceVariant,
-                ),
-              ),
-              if (onRetry != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: AsyncButton(
-                    label: retryLabel ?? l10n.actionsRetry,
-                    icon: const Icon(Icons.refresh),
-                    variant: AsyncButtonVariant.tonal,
-                    onPressed: onRetry,
+          role: SemanticsRole.alert,
+          child: Semantics(
+            container: true,
+            liveRegion: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                ExcludeSemantics(
+                  child: Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: colors.error,
                   ),
                 ),
-            ],
+                Semantics(
+                  header: true,
+                  child: Text(
+                    title ?? l10n.feedbackErrorTitle,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+                Text(
+                  message ?? l10n.feedbackErrorMessage,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
+                ),
+                if (onRetry != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: AsyncButton(
+                      label: retryLabel ?? l10n.actionsRetry,
+                      icon: const Icon(Icons.refresh),
+                      variant: AsyncButtonVariant.tonal,
+                      onPressed: onRetry,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

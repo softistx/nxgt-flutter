@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
 /// What a screen or a list shows when there is nothing to show yet.
@@ -32,37 +33,46 @@ class EmptyState extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
+        // The role and the live region sit on two nodes: Flutter refuses
+        // both on one.
         child: Semantics(
           container: true,
-          liveRegion: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8,
-            children: [
-              ExcludeSemantics(
-                child: IconTheme(
-                  data: IconThemeData(size: 48, color: colors.outline),
-                  child: icon ?? const Icon(Icons.inbox_outlined),
+          role: SemanticsRole.status,
+          child: Semantics(
+            container: true,
+            liveRegion: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                ExcludeSemantics(
+                  child: IconTheme(
+                    data: IconThemeData(size: 48, color: colors.outline),
+                    child: icon ?? const Icon(Icons.inbox_outlined),
+                  ),
                 ),
-              ),
-              Semantics(
-                header: true,
-                child: Text(
-                  title ?? l10n.feedbackEmptyTitle,
+                Semantics(
+                  header: true,
+                  child: Text(
+                    title ?? l10n.feedbackEmptyTitle,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+                Text(
+                  message ?? l10n.feedbackEmptyMessage,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
                 ),
-              ),
-              Text(
-                message ?? l10n.feedbackEmptyMessage,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colors.onSurfaceVariant,
-                ),
-              ),
-              if (action != null)
-                Padding(padding: const EdgeInsets.only(top: 8), child: action),
-            ],
+                if (action != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: action,
+                  ),
+              ],
+            ),
           ),
         ),
       ),

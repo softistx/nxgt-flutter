@@ -111,7 +111,7 @@ void main() {
     expect(button.onPressed, isNull);
   });
 
-  testWidgets('outside a Form it reports a FlutterError', (tester) async {
+  testWidgets('outside a Form it asserts', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -120,11 +120,8 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Send'));
-    await tester.pump();
-
     final error = tester.takeException();
-    expect(error, isA<FlutterError>());
+    expect(error, isA<AssertionError>());
     expect(error.toString(), contains('SubmitButton was used outside a Form'));
   });
 

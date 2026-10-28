@@ -4,8 +4,9 @@ Material 3 components for Flutter that fill what the framework leaves out:
 adaptive layout, fields and forms, feedback states, themes. Intent-named,
 accessible, French and English.
 
-> Status: pre-0.1. Components are arriving category by category toward 0.1
-> (theme, localization, actions, fields, forms, feedback and adaptive layout are in); see the [roadmap](docs/roadmap.md).
+> Status: pre-release. The 0.1 content is complete (theme, localization,
+> actions, fields, forms, feedback and adaptive layout); see the
+> [roadmap](doc/roadmap.md) for what comes next.
 
 Runs on Android, iOS, web, macOS, Windows and Linux.
 
@@ -17,7 +18,7 @@ flutter pub add nxgt_material
 
 ## Use
 
-One library per category. Import the one you need, or the barrel:
+One library per category, created with its first component. Import the one you need, or the barrel:
 
 ```dart
 import 'package:nxgt_material/fields.dart';
@@ -28,17 +29,11 @@ import 'package:nxgt_material/nxgt_material.dart';
 | Library | What is in it |
 | --- | --- |
 | `actions.dart` | Buttons and menus that trigger something |
-| `collections.dart` | Lists, tables, grids and trees of records |
-| `dates.dart` | Date, time and range pickers and their formatting |
-| `display.dart` | Cards, stats, badges, avatars |
 | `feedback.dart` | Empty, loading and error states, toasts, banners, progress |
 | `fields.dart` | Single-value inputs built on `FormField` |
 | `forms.dart` | Form scaffolding: sections, validation summary, submit bar |
 | `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
-| `media.dart` | Images, galleries, players, file previews |
-| `overlays.dart` | Dialogs, sheets, popovers, tooltips |
-| `selection.dart` | Dropdowns, segmented and chip groups |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
 ## Theme
@@ -58,7 +53,7 @@ MaterialApp(
 final done = context.tones.success; // color, onColor, container, onContainer
 ```
 
-See the [theme guide](docs/guide/theme.md).
+See the [theme guide](doc/guide/theme.md).
 
 ## Localization
 
@@ -79,7 +74,7 @@ MaterialApp(
 );
 ```
 
-Read a string with `context.materialL10n.actionsConfirm`. Any other locale
+Read a string with `context.materialL10n.actionsRetry`. Any other locale
 falls back to English. Override single strings by subclassing the wrapper:
 
 ```dart
@@ -94,7 +89,7 @@ class MyStrings extends NxgtMaterialLocalizationsWrapper {
 const NxgtMaterialLocalizationsDelegate(reword: MyStrings.new),
 ```
 
-See the [localization guide](docs/guide/localization.md).
+See the [localization guide](doc/guide/localization.md).
 
 ## Actions
 
@@ -129,10 +124,10 @@ SplitButton(
 LoadMoreButton(hasMore: page.hasNext, onPressed: controller.loadNextPage)
 ```
 
-Pages: [AsyncButton](docs/components/async_button.md),
-[CopyButton](docs/components/copy_button.md),
-[SplitButton](docs/components/split_button.md),
-[LoadMoreButton](docs/components/load_more_button.md).
+Pages: [AsyncButton](doc/components/async_button.md),
+[CopyButton](doc/components/copy_button.md),
+[SplitButton](doc/components/split_button.md),
+[LoadMoreButton](doc/components/load_more_button.md).
 
 ## Fields and forms
 
@@ -189,14 +184,14 @@ final v = Validators.of(context);
 TextFormField(validator: v.compose([v.required(), v.minLength(3)]));
 ```
 
-Guide: [Forms](docs/guide/forms.md). Pages:
-[EmailField](docs/components/email_field.md),
-[PasswordField](docs/components/password_field.md),
-[PhoneField](docs/components/phone_field.md),
-[NumberField](docs/components/number_field.md),
-[TextAreaField](docs/components/text_area_field.md),
-[FormSection](docs/components/form_section.md),
-[SubmitButton](docs/components/submit_button.md).
+Guide: [Forms](doc/guide/forms.md). Pages:
+[EmailField](doc/components/email_field.md),
+[PasswordField](doc/components/password_field.md),
+[PhoneField](doc/components/phone_field.md),
+[NumberField](doc/components/number_field.md),
+[TextAreaField](doc/components/text_area_field.md),
+[FormSection](doc/components/form_section.md),
+[SubmitButton](doc/components/submit_button.md).
 
 ## Feedback
 
@@ -244,12 +239,12 @@ context.showToast('Invoice deleted', actionLabel: 'Undo', onAction: restore);
 context.showToast('Saved', tone: FeedbackTone.success);
 ```
 
-Pages: [EmptyState](docs/components/empty_state.md),
-[LoadingState](docs/components/loading_state.md),
-[ErrorState](docs/components/error_state.md),
-[AsyncView](docs/components/async_view.md),
-[InlineAlert](docs/components/inline_alert.md),
-[Toast](docs/components/toast.md).
+Pages: [EmptyState](doc/components/empty_state.md),
+[LoadingState](doc/components/loading_state.md),
+[ErrorState](doc/components/error_state.md),
+[AsyncView](doc/components/async_view.md),
+[InlineAlert](doc/components/inline_alert.md),
+[Toast](doc/components/toast.md).
 
 ## Layout
 
@@ -321,17 +316,17 @@ class _HomeState extends State<Home> {
 Read the class anywhere with `context.windowSize`
 (`if (context.windowSize == WindowSize.compact) ...`). A list and its detail:
 `ListDetailLayout(showDetail: selected != null, onBack: clear, list: ..., detail: ...)`,
-see [ListDetailLayout](docs/components/list_detail_layout.md). The shell takes
+see [ListDetailLayout](doc/components/list_detail_layout.md). The shell takes
 `title`, `appBar`, `actions`, `floatingActionButton`,
 `floatingActionButtonLocation` and `bottomSheet`, and a screen's own
 `Scaffold` can nest in `body`.
 
-Guide: [Adaptive layout](docs/guide/adaptive.md). Pages:
-[WindowSize](docs/components/window_size.md),
-[AdaptiveShell](docs/components/adaptive_shell.md),
-[PageBody](docs/components/page_body.md),
-[ResponsiveGrid](docs/components/responsive_grid.md),
-[ListDetailLayout](docs/components/list_detail_layout.md).
+Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
+[WindowSize](doc/components/window_size.md),
+[AdaptiveShell](doc/components/adaptive_shell.md),
+[PageBody](doc/components/page_body.md),
+[ResponsiveGrid](doc/components/responsive_grid.md),
+[ListDetailLayout](doc/components/list_detail_layout.md).
 
 ## Naming rule
 
@@ -343,13 +338,35 @@ Guide: [Adaptive layout](docs/guide/adaptive.md). Pages:
 
 ## Documentation
 
-- [Theme](docs/guide/theme.md)
-- [Forms](docs/guide/forms.md)
-- [Localization](docs/guide/localization.md)
-- [Adaptive layout](docs/guide/adaptive.md)
-- [Roadmap](docs/roadmap.md)
-- [Troubleshooting](docs/troubleshooting.md)
-- `docs/components/`: one page per component
+- [Theme](doc/guide/theme.md)
+- [Forms](doc/guide/forms.md)
+- [Localization](doc/guide/localization.md)
+- [Adaptive layout](doc/guide/adaptive.md)
+- [Roadmap](doc/roadmap.md)
+- [Troubleshooting](doc/troubleshooting.md)
+- Components, one page each:
+  [AdaptiveShell](doc/components/adaptive_shell.md),
+  [AsyncButton](doc/components/async_button.md),
+  [AsyncView](doc/components/async_view.md),
+  [CopyButton](doc/components/copy_button.md),
+  [EmailField](doc/components/email_field.md),
+  [EmptyState](doc/components/empty_state.md),
+  [ErrorState](doc/components/error_state.md),
+  [FormSection](doc/components/form_section.md),
+  [InlineAlert](doc/components/inline_alert.md),
+  [ListDetailLayout](doc/components/list_detail_layout.md),
+  [LoadMoreButton](doc/components/load_more_button.md),
+  [LoadingState](doc/components/loading_state.md),
+  [NumberField](doc/components/number_field.md),
+  [PageBody](doc/components/page_body.md),
+  [PasswordField](doc/components/password_field.md),
+  [PhoneField](doc/components/phone_field.md),
+  [ResponsiveGrid](doc/components/responsive_grid.md),
+  [SplitButton](doc/components/split_button.md),
+  [SubmitButton](doc/components/submit_button.md),
+  [TextAreaField](doc/components/text_area_field.md),
+  [Toast](doc/components/toast.md),
+  [WindowSize](doc/components/window_size.md).
 - Live catalogue: Widgetbook, published on GitHub Pages from `develop`.
 
 ## License

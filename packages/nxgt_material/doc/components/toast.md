@@ -1,5 +1,7 @@
 # Toast (`context.showToast`)
 
+`showToast` is an extension method on `BuildContext`, named `ToastContext`.
+
 Library: `package:nxgt_material/feedback.dart`
 
 A short message over the screen, as a method on `BuildContext`. It builds on
@@ -9,7 +11,7 @@ Material 3's `SnackBar` and `ScaffoldMessenger` and does not redefine them.
 
 For the outcome of something the user just did ("Saved", "Deleted, Undo").
 A message that must stay belongs in an [InlineAlert](inline_alert.md). A new
-toast replaces the one on screen. It throws without a `ScaffoldMessenger` above the context (any `MaterialApp`
+toast replaces the one on screen. It throws (a missing ancestor) without a `ScaffoldMessenger` above the context (any `MaterialApp`
 provides one).
 
 ## Example

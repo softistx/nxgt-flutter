@@ -139,8 +139,8 @@ class Tones extends ThemeExtension<Tones> {
 
   /// The tone called [name]: a named one or one the app declared.
   ///
-  /// Throws an [ArgumentError] for an unknown name.
-  ToneColors operator [](String name) => switch (name) {
+  /// `null` for an unknown name.
+  ToneColors? operator [](String name) => switch (name) {
     'primary' => primary,
     'secondary' => secondary,
     'tertiary' => tertiary,
@@ -149,8 +149,7 @@ class Tones extends ThemeExtension<Tones> {
     'warning' => warning,
     'error' => error,
     'neutral' => neutral,
-    _ =>
-      custom[name] ?? (throw ArgumentError.value(name, 'name', 'Unknown tone')),
+    _ => custom[name],
   };
 
   /// Every tone with its name, the eight named ones first.

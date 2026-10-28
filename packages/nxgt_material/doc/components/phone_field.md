@@ -6,7 +6,7 @@ A text field for a phone number, built on `TextFormField`.
 
 ## When to use it
 
-Whenever the value is a phone number. It filters to digits, a leading `+`, spaces, dots, dashes and parentheses, and accepts 7 to 15 digits. It does not reformat; use a phone library for E.164.
+Whenever the value is a phone number. It filters to digits, a `+` (only first: anywhere else it is dropped as it is typed), spaces, dots, dashes and parentheses, and accepts 7 to 15 digits. It does not reformat; use a phone library for E.164.
 
 ## Example
 

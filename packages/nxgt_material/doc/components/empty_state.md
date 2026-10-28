@@ -25,8 +25,9 @@ EmptyState(
 
 ## Accessibility
 
-The heading is a semantics header; the whole block is a live region, so a
-list that becomes empty is announced. The icon is decorative and hidden from
+The heading is a semantics header; the whole block has the semantics role
+`status` and is a live region (on two nested nodes, since Flutter refuses both
+on one), so a list that becomes empty is announced. The icon is decorative and hidden from
 screen readers. The action keeps its own button semantics and 48 dp target.
 
 ## Properties

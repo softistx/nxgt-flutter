@@ -10,9 +10,9 @@ import 'package:nxgt_material/src/actions/async_button.dart';
 /// the first error (`SemanticsService` / live region), and the button also
 /// scrolls to the first invalid field, in tree order, and moves focus to it.
 ///
-/// It must be inside a [Form] (a descendant of it); otherwise pressing it
-/// reports a [FlutterError]
-/// (see the troubleshooting page).
+/// It must be inside a [Form] (a descendant of it): debug builds assert it
+/// when the button is built, and a release build reports a [FlutterError] when
+/// it is pressed (see the troubleshooting page).
 class SubmitButton extends StatelessWidget {
   /// Creates a SubmitButton.
   const new({
@@ -77,6 +77,10 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    assert(
+      Form.maybeOf(context) != null,
+      'SubmitButton was used outside a Form.',
+    );
     return AsyncButton(
       label: label,
       icon: icon,

@@ -7,6 +7,11 @@ import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations.dar
 /// the English strings instead of no strings at all. [reword] is applied to
 /// whatever was loaded, so an app can replace single strings without
 /// forking an ARB file; see `NxgtMaterialLocalizationsWrapper`.
+///
+/// Use only this delegate, `context.materialL10n` and
+/// `NxgtMaterialLocalizations.supportedLocales`. The generated
+/// `NxgtMaterialLocalizations.of`, `.delegate` and `.localizationsDelegates`
+/// skip the English fallback and `reword`.
 class NxgtMaterialLocalizationsDelegate
     extends LocalizationsDelegate<NxgtMaterialLocalizations> {
   /// Creates the delegate; give [reword] to replace some strings.
