@@ -30,8 +30,18 @@ With a snapshot:
 AsyncView<int>(snapshot: snapshot, builder: (context, n) => Text('$n'))
 ```
 
-A snapshot with an error shows the `ErrorState` with its default copy: the
-exception is never displayed. A finished snapshot with no data counts as empty
+**Keep the future in state** (`initState`, a controller, a provider), never
+inline in `build`: a new future restarts the load, and is reported again, on
+every rebuild.
+
+An error shows the `ErrorState` with its default copy: the exception is never
+displayed. Pass `errorBuilder` to word it (`(context, error, stack) => ...`);
+`onRetry` only feeds the default `ErrorState`.
+
+**Reporting:** a failed `future` is reported once with
+`FlutterError.reportError` (library `nxgt_material`), from `initState` or
+`didUpdateWidget`; see [troubleshooting](../troubleshooting.md). With a
+`snapshot` the caller owns the reporting: the view only shows the error. A finished snapshot with no data counts as empty
 unless `T` is nullable (`AsyncView<void>` shows `builder` once done).
 
 ## Accessibility
@@ -48,4 +58,5 @@ announced; the content you build is yours to label.
 | `snapshot` | `AsyncSnapshot<T>?` | A snapshot held by the caller. |
 | `isEmpty` | `bool Function(T)?` | Tells whether the data is empty; `null` means never. |
 | `empty` | `Widget?` | Replaces the default `EmptyState`. |
-| `onRetry` | `Future<void> Function()?` | Retry of the `ErrorState`; `null` hides the button. |
+| `errorBuilder` | `Widget Function(BuildContext, Object, StackTrace?)?` | Builds the failure state; defaults to `ErrorState(onRetry:)`. |
+| `onRetry` | `Future<void> Function()?` | Retry of the default `ErrorState`; `null` hides the button. |

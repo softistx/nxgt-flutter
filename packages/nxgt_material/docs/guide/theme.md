@@ -80,6 +80,18 @@ final maths = tones['maths']; // an app tone, by name
 - **Secondary and tertiary** seeds also replace the colour scheme's, so
   `colorScheme.secondary` and `context.tones.secondary` are the same colour.
 
+## Under a plain theme
+
+Components of this package read `context.tones` and `context.radii`, and work
+under a plain `ThemeData` too:
+
+- `context.radii` falls back to the Material 3 Expressive scale
+  (`RadiusScale()`).
+- `context.tones` falls back to `Tones.fromScheme(Theme.of(context).colorScheme)`:
+  the same AA-solved status tones a `ThemeSpec` generates, with primary, error
+  and neutral read from the colour scheme. It is cached per `ColorScheme`.
+- `context.fonts` and `context.motif` still throw (see Troubleshooting).
+
 ## Radius, fonts, motif
 
 ```dart
@@ -128,6 +140,7 @@ Theme(data: school.dark(), child: const TokenSheet());
 
 ## Troubleshooting
 
-`The theme has no Tones.` means the `Theme` above the widget was not built from
-a `ThemeSpec`. Use `spec.light()` / `spec.dark()`, or add the extensions to
-your own `ThemeData.extensions`.
+`The theme has no ThemeFonts.` (or `ThemeMotif`) means the `Theme` above the
+widget was not built from a `ThemeSpec`. Use `spec.light()` / `spec.dark()`, or
+add the extensions to your own `ThemeData.extensions`. `context.tones` and
+`context.radii` never throw: see the next section.

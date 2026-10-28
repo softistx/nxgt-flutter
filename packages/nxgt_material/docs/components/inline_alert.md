@@ -13,9 +13,9 @@ For the outcome of an action that fades away use a toast
 [EmptyState](empty_state.md) or [ErrorState](error_state.md). It is neither a
 `SnackBar` nor a `MaterialBanner`.
 
-It reads `context.tones`, so the theme must be built from a `ThemeSpec` or a
-`ThemePresets` entry; otherwise it throws a `FlutterError` saying so. Tone
-colours are AA-solved pairs (container on on-container).
+It reads `context.tones`: the theme's tones under a `ThemeSpec`, tones
+generated from the colour scheme under a plain `ThemeData`. Tone colours are
+AA-solved pairs (container on on-container).
 
 ## Example
 

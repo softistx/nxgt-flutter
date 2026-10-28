@@ -231,7 +231,7 @@ EmptyState(
 const LoadingState()
 ErrorState(onRetry: reload)
 
-// An in-page message; needs a ThemeSpec theme for the tone colours.
+// An in-page message; tone colours come from the theme (or its colour scheme).
 InlineAlert(
   tone: FeedbackTone.warning,
   title: 'Check the address',

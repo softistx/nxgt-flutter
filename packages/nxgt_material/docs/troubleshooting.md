@@ -117,17 +117,17 @@ nothing recomputes it when the locale changes.
 `formKey.currentState?.validate()`, or use
 `AutovalidateMode.onUserInteraction` so the next edit refreshes it.
 
-## The theme has no Tones.
+## The theme has no ThemeFonts.
 
-**When:** an `InlineAlert`, or `context.showToast` with a `tone`, is built
-under a `ThemeData` that did not come from `ThemeSpec`. Thrown as a
-`FlutterError` while building.
+**When:** `context.fonts` (or `context.motif`, with `ThemeMotif`) is read under
+a `ThemeData` that did not come from `ThemeSpec`. Thrown as a `FlutterError`
+while building.
 
-**Why:** the tone colours (success, info, warning) are AA-solved by the theme's
-`Tones` extension. A plain `ThemeData` has none, and guessing colours here would
-break contrast silently.
+**Why:** fonts and motifs are the app's own choices; there is nothing sensible
+to guess. `context.tones` and `context.radii` do not throw: they fall back to
+tones generated from the colour scheme and to the Material 3 Expressive radii.
 
-**Fix:** build the theme with `ThemeSpec` or a preset, or add `Tones` to
+**Fix:** build the theme with `ThemeSpec` or a preset, or add the extension to
 `ThemeData.extensions`:
 
 ```dart
@@ -136,9 +136,6 @@ MaterialApp(
   darkTheme: ThemePresets.ocean.dark(),
 );
 ```
-
-A toast without a `tone` and the `EmptyState`, `LoadingState`, `ErrorState` and
-`AsyncView` components work under any theme.
 
 ## showToast: actionLabel and onAction go together.
 
@@ -170,15 +167,27 @@ neither. An assertion in debug builds.
 
 **Fix:** pass `future`, or `snapshot`, not both.
 
-## The ErrorState of an AsyncView shows no details
+## while loading the data of an AsyncView
 
-**When:** a future or snapshot fails and the view shows only "Something went
-wrong".
+**When:** the `future` given to an `AsyncView` failed. The text is the `context`
+of the report in the console. Reported once per future.
 
-**Why:** the exception is deliberately not displayed: it is rarely a sentence a
-user can act on and may expose internals. It is not reported either, because
-`FutureBuilder` hands it to the view without raising it.
+**Why:** the view shows an `ErrorState` (never the exception) and reports the
+error to `FlutterError.onError` once, from `initState` or `didUpdateWidget`,
+not from `build`. A failure of a `snapshot` is not reported: the caller owns
+it. A future replaced before it failed is not reported either.
 
-**Fix:** log it where you create the future (`future.catchError`, or the
-repository). For a specific message, check the snapshot yourself and build an
-`ErrorState(message: ...)` instead of using `AsyncView`.
+**Fix:** handle the error where the future is made if it is expected, or word
+the message with `errorBuilder`. Keep the future in state; a future created
+inline in `build` restarts, and is reported again, on every rebuild:
+
+```dart
+late final Future<List<Invoice>> invoices = repository.invoices();
+
+AsyncView<List<Invoice>>(
+  future: invoices,
+  errorBuilder: (context, error, stack) =>
+      ErrorState(message: error is Offline ? 'You are offline.' : null),
+  builder: (context, items) => InvoiceList(items),
+)
+```

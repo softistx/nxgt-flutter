@@ -6,6 +6,15 @@ import 'package:nxgt_material/feedback.dart';
 
 import '../support/host.dart';
 
+/// Collects what the view reports instead of failing the test on it.
+List<FlutterErrorDetails> captureReports() {
+  final reported = <FlutterErrorDetails>[];
+  final previous = FlutterError.onError;
+  FlutterError.onError = reported.add;
+  addTearDown(() => FlutterError.onError = previous);
+  return reported;
+}
+
 void main() {
   Widget view(
     Future<List<String>> future, {
@@ -50,6 +59,7 @@ void main() {
   testWidgets('shows the ErrorState and retries through the handler', (
     tester,
   ) async {
+    captureReports();
     var retried = 0;
     final failing = Completer<List<String>>();
     await tester.pumpApp(view(failing.future, onRetry: () async => retried++));
@@ -129,6 +139,65 @@ void main() {
       ),
       throwsAssertionError,
     );
+  });
+
+  testWidgets('reports a failed future once, never from build', (tester) async {
+    final reported = captureReports();
+    final failing = Completer<List<String>>();
+    await tester.pumpApp(view(failing.future));
+
+    failing.completeError('boom');
+    await tester.pump();
+    await tester.pumpApp(view(failing.future));
+    await tester.pump();
+
+    expect(reported, hasLength(1));
+    expect(reported.single.exception, 'boom');
+    expect(reported.single.library, 'nxgt_material');
+    expect(
+      reported.single.context.toString(),
+      'while loading the data of an AsyncView',
+    );
+  });
+
+  testWidgets('a snapshot error is shown, not reported', (tester) async {
+    final reported = captureReports();
+
+    await tester.pumpApp(
+      themedHost(
+        AsyncView<int>(
+          snapshot: const AsyncSnapshot.withError(ConnectionState.done, 'x'),
+          builder: (context, value) => const SizedBox(),
+        ),
+      ),
+    );
+
+    expect(find.byType(ErrorState), findsOneWidget);
+    expect(reported, isEmpty);
+  });
+
+  testWidgets('errorBuilder replaces the ErrorState', (tester) async {
+    captureReports();
+    final failing = Completer<List<String>>();
+    Object? seen;
+    await tester.pumpApp(
+      themedHost(
+        AsyncView<List<String>>(
+          future: failing.future,
+          errorBuilder: (context, error, stack) {
+            seen = error;
+            return Text('custom: $error');
+          },
+          builder: (context, items) => const SizedBox(),
+        ),
+      ),
+    );
+    failing.completeError('boom');
+    await tester.pump();
+
+    expect(find.text('custom: boom'), findsOneWidget);
+    expect(find.byType(ErrorState), findsNothing);
+    expect(seen, 'boom');
   });
 
   testWidgets('semantics: each state is a live region', (tester) async {

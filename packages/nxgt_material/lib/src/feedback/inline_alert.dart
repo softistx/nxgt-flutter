@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/feedback/feedback_tone.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
+import 'package:nxgt_material/src/theme/tone_colors.dart';
 
 /// A message that stays in the page, next to what it is about: a form error
 /// summary, a warning above a table, a confirmation under a button.
 ///
 /// Four tones ([FeedbackTone]) with an icon and AA-solved colours from
-/// `context.tones`, so it needs a theme built from a `ThemeSpec`. It is a
-/// live region with the semantics role `alert` for a warning or an error and
-/// `status` otherwise, and a screen reader says the tone before the text. It
-/// is not a `SnackBar` (that is `context.showToast`) nor a `MaterialBanner`
+/// `context.tones` (generated from the colour scheme under a plain theme). It
+/// is a live region with the semantics role `alert` for a warning or an error
+/// and `status` otherwise, and a screen reader says the tone before the text.
+/// It is not a `SnackBar` (that is `context.showToast`) nor a `MaterialBanner`
 /// (a screen-level strip with actions).
 class InlineAlert extends StatelessWidget {
   /// Creates an InlineAlert.
@@ -44,7 +45,6 @@ class InlineAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = context.materialL10n;
     final colors = tone.colors(context.tones);
     final title = this.title;
@@ -73,43 +73,12 @@ class InlineAlert extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Semantics(
-                  container: true,
-                  liveRegion: true,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 4,
-                    children: [
-                      Semantics(
-                        label: tone.label(l10n),
-                        child: const SizedBox.shrink(),
-                      ),
-                      if (title != null)
-                        Text(
-                          title,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            color: colors.onContainer,
-                          ),
-                        ),
-                      Text(
-                        message,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colors.onContainer,
-                        ),
-                      ),
-                      if (action != null)
-                        Theme(
-                          data: theme.copyWith(
-                            textButtonTheme: TextButtonThemeData(
-                              style: TextButton.styleFrom(
-                                foregroundColor: colors.onContainer,
-                              ),
-                            ),
-                          ),
-                          child: action!,
-                        ),
-                    ],
-                  ),
+                child: _AlertBody(
+                  tone: tone,
+                  colors: colors,
+                  title: title,
+                  message: message,
+                  action: action,
                 ),
               ),
               if (onDismiss != null)
@@ -122,6 +91,69 @@ class InlineAlert extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The announced part of an [InlineAlert]: the tone word, the title, the
+/// message and the action, in one live region.
+class _AlertBody extends StatelessWidget {
+  const new({
+    required this.tone,
+    required this.colors,
+    required this.message,
+    this.title,
+    this.action,
+  });
+
+  final FeedbackTone tone;
+  final ToneColors colors;
+  final String? title;
+  final String message;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final title = this.title;
+    final action = this.action;
+    return Semantics(
+      container: true,
+      liveRegion: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 4,
+        children: [
+          Semantics(
+            label: tone.label(context.materialL10n),
+            child: const SizedBox.shrink(),
+          ),
+          if (title != null)
+            Text(
+              title,
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: colors.onContainer,
+              ),
+            ),
+          Text(
+            message,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colors.onContainer,
+            ),
+          ),
+          if (action != null)
+            Theme(
+              data: theme.copyWith(
+                textButtonTheme: TextButtonThemeData(
+                  style: TextButton.styleFrom(
+                    foregroundColor: colors.onContainer,
+                  ),
+                ),
+              ),
+              child: action,
+            ),
+        ],
       ),
     );
   }

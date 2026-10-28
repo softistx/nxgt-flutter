@@ -10,10 +10,12 @@ extension Toast on BuildContext {
   /// controller.
   ///
   /// Without a [tone] it is the theme's plain snackbar. With one it is tinted
-  /// with the theme's `Tones` (which needs a theme built from a `ThemeSpec`),
+  /// with the theme's `Tones`,
   /// drawn with the tone's icon, and read as "tone: message", since colour
   /// alone says nothing to a screen reader. A `SnackBar` is itself a live
   /// region, so the message is announced when it appears.
+  ///
+  /// Throws without a `ScaffoldMessenger` (any `MaterialApp` provides one).
   ///
   /// [actionLabel] with [onAction] adds a snackbar action ("Undo"). The toast
   /// closes by itself after [duration], and has a close button when

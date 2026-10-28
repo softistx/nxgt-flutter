@@ -263,19 +263,19 @@ abstract class NxgtMaterialLocalizations {
   /// **'Information'**
   String get feedbackToneInfo;
 
-  /// No description provided for @feedbackToneSuccess.
+  /// Spoken before the message of a success alert or toast.
   ///
   /// In en, this message translates to:
   /// **'Success'**
   String get feedbackToneSuccess;
 
-  /// No description provided for @feedbackToneWarning.
+  /// Spoken before the message of a warning alert or toast.
   ///
   /// In en, this message translates to:
   /// **'Warning'**
   String get feedbackToneWarning;
 
-  /// No description provided for @feedbackToneError.
+  /// Spoken before the message of an error alert or toast.
   ///
   /// In en, this message translates to:
   /// **'Error'**

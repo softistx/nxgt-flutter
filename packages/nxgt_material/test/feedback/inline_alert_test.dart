@@ -160,16 +160,26 @@ void main() {
     });
   });
 
-  testWidgets('needs a theme with Tones and says how to get one', (
+  testWidgets('works under a bare MaterialApp, with tones from the scheme', (
     tester,
   ) async {
     await tester.pumpApp(
       const MaterialApp(
-        home: Scaffold(body: InlineAlert(message: 'm')),
+        home: Scaffold(
+          body: InlineAlert(tone: FeedbackTone.warning, message: 'm'),
+        ),
       ),
     );
 
-    expect(tester.takeException(), isA<FlutterError>());
+    expect(tester.takeException(), isNull);
+    final context = tester.element(find.byType(InlineAlert));
+    final material = tester.widget<Material>(
+      find.descendant(
+        of: find.byType(InlineAlert),
+        matching: find.byType(Material),
+      ),
+    );
+    expect(material.color, context.tones.warning.container);
   });
 }
 

@@ -9,8 +9,8 @@ Material 3's `SnackBar` and `ScaffoldMessenger` and does not redefine them.
 
 For the outcome of something the user just did ("Saved", "Deleted, Undo").
 A message that must stay belongs in an [InlineAlert](inline_alert.md). A new
-toast replaces the one on screen. It needs a `Scaffold` and a
-`ScaffoldMessenger` above the context (a `MaterialApp` has both).
+toast replaces the one on screen. It throws without a `ScaffoldMessenger` above the context (any `MaterialApp`
+provides one).
 
 ## Example
 
@@ -21,8 +21,8 @@ context.showToast('Saved', tone: FeedbackTone.success);
 ```
 
 Without a `tone` it is the theme's plain snackbar. With one it is tinted with
-`context.tones` (a `ThemeSpec` theme is required) and drawn with the tone's
-icon. It returns the `ScaffoldFeatureController`, so `.close()` and `.closed`
+`context.tones` (generated from the colour scheme under a plain theme) and
+drawn with the tone's icon. It returns the `ScaffoldFeatureController`, so `.close()` and `.closed`
 work as for any snackbar.
 
 ## Accessibility

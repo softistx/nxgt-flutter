@@ -6,12 +6,21 @@ import 'package:nxgt_material/src/theme/tones.dart';
 
 /// Reads the extensions of the nearest [Theme].
 ///
-/// Each getter except [radii] throws a [FlutterError] naming the fix when the
-/// theme was not built from a `ThemeSpec`; [radii] falls back to the Material 3
-/// Expressive defaults, so a component can use it under any theme.
+/// [tones] and [radii] fall back when the theme was not built from a
+/// `ThemeSpec`, so a component can use them under any theme: [tones] are
+/// generated from the theme's colour scheme (the same AA-solved tones a
+/// `ThemeSpec` would give for that scheme), [radii] are the Material 3
+/// Expressive defaults. [fonts] and [motif] throw a [FlutterError] naming the
+/// fix, since there is nothing sensible to guess.
 extension ThemeSpecContext on BuildContext {
   /// The tones of the theme.
-  Tones get tones => _read<Tones>(this);
+  ///
+  /// Without a `Tones` extension they are generated from the theme's
+  /// [ColorScheme] and cached per scheme, so reading them in `build` is cheap.
+  Tones get tones {
+    final theme = Theme.of(this);
+    return theme.extension<Tones>() ?? _fallbackTones(theme.colorScheme);
+  }
 
   /// The corner radii of the theme.
   RadiusScale get radii =>
@@ -35,3 +44,8 @@ T _read<T extends ThemeExtension<T>>(BuildContext context) {
     ),
   ]);
 }
+
+final _fallbackCache = Expando<Tones>('nxgt_material fallback tones');
+
+Tones _fallbackTones(ColorScheme scheme) =>
+    _fallbackCache[scheme] ??= Tones.fromScheme(scheme);

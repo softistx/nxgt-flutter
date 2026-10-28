@@ -45,6 +45,29 @@ void main() {
     expect(find.byIcon(Icons.check_circle_outline), findsOneWidget);
   });
 
+  testWidgets('a tone works under a bare MaterialApp', (tester) async {
+    await tester.pumpApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => context.showToast('x', tone: FeedbackTone.error),
+              child: const Text('go'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await open(tester);
+
+    expect(tester.takeException(), isNull);
+    final context = tester.element(find.byType(SnackBar));
+    expect(
+      tester.widget<SnackBar>(find.byType(SnackBar)).backgroundColor,
+      context.tones.error.container,
+    );
+  });
+
   testWidgets('a new toast replaces the one on screen', (tester) async {
     await tester.pumpApp(
       host((c) {
