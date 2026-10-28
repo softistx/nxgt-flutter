@@ -25,7 +25,8 @@ and log the error elsewhere.
 ## Accessibility
 
 The heading is a semantics header and the block has the semantics role `alert`
-and is a live region (on two nested nodes), so the failure is announced. On the web the role alone is announced, so the live region applies only on the other platforms and the text is spoken once. The retry button is a labelled button with a 48 dp target; if
+and, outside the web, is a live region (on two nested nodes; on the web the
+role alone speaks), so the failure is announced. The retry button is a labelled button with a 48 dp target; if
 `onRetry` throws, the error is reported through `FlutterError.reportError` (see
 [troubleshooting](../troubleshooting.md)).
 
