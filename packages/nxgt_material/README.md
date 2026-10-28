@@ -34,6 +34,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `feedback.dart` | Empty, loading and error states, toasts, banners, progress |
 | `fields.dart` | Single-value inputs built on `FormField` |
 | `forms.dart` | Form scaffolding: sections, validation summary, submit bar |
+| `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
 | `media.dart` | Images, galleries, players, file previews |
 | `overlays.dart` | Dialogs, sheets, popovers, tooltips |
@@ -64,6 +65,9 @@ See the [theme guide](docs/guide/theme.md).
 French and English strings for every component. Add one delegate:
 
 ```dart
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nxgt_material/l10n.dart';
+
 MaterialApp(
   localizationsDelegates: const [
     NxgtMaterialLocalizationsDelegate(),
@@ -75,8 +79,22 @@ MaterialApp(
 );
 ```
 
-Any other locale falls back to English; single strings can be overridden. See
-the [localization guide](docs/guide/localization.md).
+Read a string with `context.materialL10n.actionsConfirm`. Any other locale
+falls back to English. Override single strings by subclassing the wrapper:
+
+```dart
+class MyStrings extends NxgtMaterialLocalizationsWrapper {
+  new(super.base);
+
+  @override
+  String get actionsRetry => 'Try again';
+}
+
+// in localizationsDelegates:
+const NxgtMaterialLocalizationsDelegate(reword: MyStrings.new),
+```
+
+See the [localization guide](docs/guide/localization.md).
 
 ## Naming rule
 

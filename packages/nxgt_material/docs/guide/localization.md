@@ -56,8 +56,21 @@ class MyStrings extends NxgtMaterialLocalizationsWrapper {
   };
 }
 
-const NxgtMaterialLocalizationsDelegate(reword: MyStrings.new);
+MaterialApp(
+  localizationsDelegates: const [
+    NxgtMaterialLocalizationsDelegate(reword: MyStrings.new),
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: NxgtMaterialLocalizations.supportedLocales,
+);
 ```
+
+The snippet needs `package:flutter_localizations/flutter_localizations.dart`
+and `package:nxgt_material/l10n.dart`. The barrel `nxgt_material.dart` exports
+the same names, so either import works. The package depends on `intl`, which
+`gen-l10n` needs; the app does not have to add it.
 
 Give `reword` a constructor tear-off such as `MyStrings.new`, never a closure
 written in `build`: the delegate reloads when `reword` is not identical to the
