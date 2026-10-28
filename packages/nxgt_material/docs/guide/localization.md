@@ -88,7 +88,9 @@ Keys are `<area><Name>` and follow the `material.*` keys of `@nxgt/material`:
 `actionsCopy`, `actionsCopied`, `actionsMoreOptions`),
 `fields*` (required, invalid email, invalid phone, invalid number, min/max length
 with plural, min/max value, show/hide password), `feedback*`
-(loading, empty and error title/message), `layout*` (open/close navigation).
+(loading, empty and error title/message, and the spoken tone words
+`feedbackToneInfo`, `feedbackToneSuccess`, `feedbackToneWarning`,
+`feedbackToneError`), `layout*` (open/close navigation).
 
 ## Adding a string (contributors)
 

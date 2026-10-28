@@ -72,6 +72,14 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String get feedbackErrorMessage => base.feedbackErrorMessage;
   @override
+  String get feedbackToneInfo => base.feedbackToneInfo;
+  @override
+  String get feedbackToneSuccess => base.feedbackToneSuccess;
+  @override
+  String get feedbackToneWarning => base.feedbackToneWarning;
+  @override
+  String get feedbackToneError => base.feedbackToneError;
+  @override
   String get layoutOpenNavigation => base.layoutOpenNavigation;
   @override
   String get layoutCloseNavigation => base.layoutCloseNavigation;

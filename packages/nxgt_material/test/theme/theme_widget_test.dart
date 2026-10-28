@@ -68,6 +68,32 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('tones fall back to the colour scheme, cached per scheme', (
+    tester,
+  ) async {
+    late Tones first;
+    late Tones second;
+    final theme = ThemeData(colorSchemeSeed: Colors.indigo);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        home: Builder(
+          builder: (context) {
+            first = context.tones;
+            second = context.tones;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(identical(first, second), isTrue);
+    expect(first.primary.color, theme.colorScheme.primary);
+    expect(first.error.color, theme.colorScheme.error);
+    expect(first, Tones.fromScheme(theme.colorScheme));
+  });
+
   testWidgets('a theme without the extensions explains the fix', (
     tester,
   ) async {
@@ -76,7 +102,7 @@ void main() {
         theme: ThemeData(),
         home: Builder(
           builder: (context) {
-            context.tones;
+            context.fonts;
             return const SizedBox();
           },
         ),
@@ -85,7 +111,7 @@ void main() {
 
     final error = tester.takeException();
     expect(error, isA<FlutterError>());
-    expect(error.toString(), contains('ThemeSpec'));
+    expect(error.toString(), contains('ThemeFonts'));
   });
 
   testWidgets('TokenSheet swatches are labelled with tone and role', (
