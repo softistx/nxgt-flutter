@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'package:nxgt_http/src/api_error.dart';
 import 'package:nxgt_http/src/auth_interceptor.dart';
+import 'package:nxgt_http/src/retry_interceptor.dart';
 
 /// Turns a decoded JSON body (`Map`, `List`, scalar or null) into a [T].
 typedef Decode<T> = T Function(Object? json);
@@ -12,15 +13,18 @@ class ApiClient {
   /// Creates a client for [baseUrl].
   ///
   /// [headers] with a null value are left out. [interceptors] run in the
-  /// given order, after the auth interceptor. [auth] adds the `Authorization`
-  /// header and renews the token on a 401. [adapter] replaces the transport
-  /// (tests).
+  /// given order, after the auth and retry interceptors. [auth] adds the
+  /// `Authorization` header and renews the token on a 401; [retry] sends
+  /// failed repeatable requests again. Dio runs `onError` in insertion order,
+  /// so a 401 is refreshed before a retry is considered. [adapter] replaces
+  /// the transport (tests).
   new({
     required Uri baseUrl,
     Map<String, Object?>? headers,
     Duration? connectTimeout,
     Duration? receiveTimeout,
     AuthOptions? auth,
+    RetryOptions? retry,
     List<Interceptor> interceptors = const [],
     HttpClientAdapter? adapter,
   }) : dio = Dio(
@@ -33,6 +37,7 @@ class ApiClient {
        ) {
     if (adapter != null) dio.httpClientAdapter = adapter;
     if (auth != null) dio.interceptors.add(AuthInterceptor(auth, dio));
+    if (retry != null) dio.interceptors.add(RetryInterceptor(retry, dio));
     dio.interceptors.addAll(interceptors);
   }
 
