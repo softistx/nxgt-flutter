@@ -4,6 +4,7 @@ library;
 
 export 'src/api_client.dart';
 export 'src/api_error.dart';
+export 'src/api_response.dart';
 export 'src/auth_interceptor.dart';
 export 'src/http_logger.dart';
 export 'src/retry_interceptor.dart';

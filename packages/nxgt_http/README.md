@@ -1,7 +1,7 @@
 # nxgt_http
 
 A typed HTTP client for Dart on Dio with sealed errors, token refresh, retry,
-redacted logging and cancellation. Pure Dart: it runs on the Dart VM, Flutter and the web.
+redacted logging and cancellation. Pure Dart: it runs on the Dart VM, Flutter and the web. Only `dio` is required.
 
 ## Install
 
@@ -43,6 +43,36 @@ Every failure is thrown as an `ApiError`; there is no result type.
 `ApiError.fromDio(DioException)` maps a Dio exception to its typed error. To keep an
 existing `Dio`, use `ApiClient.wrap(dio)`; the underlying `client.dio` stays
 public.
+
+## Typed responses
+
+`get`, `post` and the others return the body. When you also need the status or
+a header, use `send`:
+
+```dart
+final response = await client.send<List<User>>(
+  'GET',
+  '/users',
+  query: {'page': 1},
+  decode: (json) => [
+    for (final item in json! as List) User.fromJson(item),
+  ],
+);
+
+print(response.statusCode); // 200
+print(response.headers.value('x-total-count')); // case-insensitive
+print(response.data.length);
+```
+
+`ApiResponse<T>` holds `data`, `statusCode` and `headers`. A non-2xx reply is
+still thrown as a `StatusError`.
+
+## Errors
+
+Every failure is an `ApiError`, a sealed class: `NetworkError`, `TimeoutError`,
+`StatusError`, `DecodeError` and `CancelledError`. The `switch` above is
+exhaustive, so the compiler tells you when a case is missing. See the
+[errors guide](doc/guide/errors.md).
 
 ## Authentication
 
@@ -112,6 +142,8 @@ await cities.then<void>((_) {}, onError: (Object e) {
 
 ## Documentation
 
+- [Getting started](doc/guide/getting-started.md)
+- [Errors](doc/guide/errors.md)
 - [Authentication](doc/guide/auth.md)
 - [Retry](doc/guide/retry.md)
 - [Logging](doc/guide/logging.md)

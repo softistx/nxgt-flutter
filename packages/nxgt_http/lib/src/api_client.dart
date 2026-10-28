@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'package:nxgt_http/src/api_error.dart';
+import 'package:nxgt_http/src/api_response.dart';
 import 'package:nxgt_http/src/auth_interceptor.dart';
 import 'package:nxgt_http/src/call_scope.dart';
 import 'package:nxgt_http/src/http_logger.dart';
@@ -90,7 +91,7 @@ class ApiClient {
     CancelToken? cancelToken,
     String? latest,
     Options? options,
-  }) => _send('GET', path, query, null, decode, cancelToken, latest, options);
+  }) => _call('GET', path, query, null, decode, cancelToken, latest, options);
 
   /// POST [path] with [data] as the body.
   Future<T> post<T>(
@@ -101,7 +102,7 @@ class ApiClient {
     CancelToken? cancelToken,
     String? latest,
     Options? options,
-  }) => _send('POST', path, query, data, decode, cancelToken, latest, options);
+  }) => _call('POST', path, query, data, decode, cancelToken, latest, options);
 
   /// PUT [path] with [data] as the body.
   Future<T> put<T>(
@@ -112,7 +113,7 @@ class ApiClient {
     CancelToken? cancelToken,
     String? latest,
     Options? options,
-  }) => _send('PUT', path, query, data, decode, cancelToken, latest, options);
+  }) => _call('PUT', path, query, data, decode, cancelToken, latest, options);
 
   /// PATCH [path] with [data] as the body.
   Future<T> patch<T>(
@@ -123,7 +124,7 @@ class ApiClient {
     CancelToken? cancelToken,
     String? latest,
     Options? options,
-  }) => _send('PATCH', path, query, data, decode, cancelToken, latest, options);
+  }) => _call('PATCH', path, query, data, decode, cancelToken, latest, options);
 
   /// DELETE [path], with an optional [data] body.
   Future<T> delete<T>(
@@ -135,9 +136,57 @@ class ApiClient {
     String? latest,
     Options? options,
   }) =>
-      _send('DELETE', path, query, data, decode, cancelToken, latest, options);
+      _call('DELETE', path, query, data, decode, cancelToken, latest, options);
 
-  Future<T> _send<T>(
+  /// Sends [method] to [path] and returns the [ApiResponse]: the decoded body
+  /// with the status code and headers, for when a call needs more than the
+  /// body (a `Location`, an `ETag`, a total count in a header).
+  ///
+  /// Failures are thrown as an [ApiError] like every other call method.
+  Future<ApiResponse<T>> send<T>(
+    String method,
+    String path, {
+    Object? data,
+    Map<String, Object?>? query,
+    Decode<T>? decode,
+    CancelToken? cancelToken,
+    String? latest,
+    Options? options,
+  }) => _send(
+    method.toUpperCase(),
+    path,
+    query,
+    data,
+    decode,
+    cancelToken,
+    latest,
+    options,
+  );
+
+  Future<T> _call<T>(
+    String method,
+    String path,
+    Map<String, Object?>? query,
+    Object? data,
+    Decode<T>? decode,
+    CancelToken? cancelToken,
+    String? latest,
+    Options? options,
+  ) async {
+    final response = await _send<T>(
+      method,
+      path,
+      query,
+      data,
+      decode,
+      cancelToken,
+      latest,
+      options,
+    );
+    return response.data;
+  }
+
+  Future<ApiResponse<T>> _send<T>(
     String method,
     String path,
     Map<String, Object?>? query,
@@ -164,7 +213,11 @@ class ApiClient {
     }
     try {
       final body = response.data;
-      return decode != null ? decode(body) : body as T;
+      return ApiResponse<T>(
+        data: decode != null ? decode(body) : body as T,
+        statusCode: response.statusCode ?? 0,
+        headers: response.headers,
+      );
     } on Object catch (e, trace) {
       throw DecodeError(
         method: method,
