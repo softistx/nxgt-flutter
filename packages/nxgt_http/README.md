@@ -1,8 +1,7 @@
 # nxgt_http
 
-A typed HTTP client for Dart on Dio with sealed errors. Retry and
-logging are on the [roadmap](doc/roadmap.md). Pure Dart: it runs on the Dart
-VM, Flutter and the web.
+A typed HTTP client for Dart on Dio with sealed errors. Logging is on the [roadmap](doc/roadmap.md). Pure Dart: it
+runs on the Dart VM, Flutter and the web.
 
 ## Install
 
@@ -60,9 +59,23 @@ final client = ApiClient(
 A 401 refreshes the token once, shared by all concurrent calls, and replays the
 request. See the [authentication guide](doc/guide/auth.md).
 
+## Retry
+
+```dart
+final client = ApiClient(
+  baseUrl: Uri.parse('https://api.example.com/v1/'),
+  retry: const RetryOptions(),
+);
+```
+
+`GET`, `HEAD`, `OPTIONS`, `PUT` and `DELETE` are sent again on a connection
+error or a 408, 429, 502, 503 or 504, with a jittered backoff and `Retry-After`.
+See the [retry guide](doc/guide/retry.md).
+
 ## Documentation
 
 - [Authentication](doc/guide/auth.md)
+- [Retry](doc/guide/retry.md)
 - [Roadmap](doc/roadmap.md)
 - [Troubleshooting](doc/troubleshooting.md)
 
