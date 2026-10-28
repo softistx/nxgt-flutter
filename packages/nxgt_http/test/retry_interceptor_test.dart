@@ -310,6 +310,39 @@ void main() {
     await h.client.post<Object?>('/a', data: {'k': 1});
     expect(h.adapter.requests.last.data, {'k': 1});
   });
+
+  test(
+    'a Stream body is not retried even when the method is allowed',
+    () async {
+      final h = Harness([
+        status(503),
+        ok(),
+      ], options: const RetryOptions(methods: {'POST'}));
+      await expectLater(
+        h.client.dio.post<Object?>(
+          '/a',
+          data: Stream.value([1, 2, 3]),
+          options: Options(headers: {Headers.contentLengthHeader: 3}),
+        ),
+        throwsA(isA<DioException>()),
+      );
+      expect(h.adapter.calls, 1);
+    },
+  );
+
+  test('a PUT with FormData is retried', () async {
+    final h = Harness([status(503), ok()]);
+    await h.client.put<Object?>('/a', data: FormData.fromMap({'k': 'v'}));
+    expect(h.adapter.calls, 2);
+  });
+
+  test('a live CancelToken does not stop a retry', () async {
+    final h = Harness([status(503), ok()]);
+    final token = CancelToken();
+    await h.client.get<Object?>('/a', cancelToken: token);
+    expect(h.adapter.calls, 2);
+    expect(token.isCancelled, isFalse);
+  });
 }
 
 Duration _hour(int attempt) => const Duration(hours: 1);

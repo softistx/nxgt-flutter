@@ -1,7 +1,7 @@
 # nxgt_http
 
-A typed HTTP client for Dart on Dio with sealed errors. Logging is on the [roadmap](doc/roadmap.md). Pure Dart: it runs on the Dart
-VM, Flutter and the web.
+A typed HTTP client for Dart on Dio with sealed errors. Logging is on the [roadmap](doc/roadmap.md). Pure Dart: it
+runs on the Dart VM, Flutter and the web.
 
 ## Install
 

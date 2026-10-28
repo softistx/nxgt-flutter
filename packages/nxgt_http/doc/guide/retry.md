@@ -31,8 +31,10 @@ After `attempts` retries (default 2) the last failure is thrown as usual.
 - **`delay`:** `delay: (attempt) => Duration(seconds: attempt)` replaces the
   backoff; its value is used as is. `attempt` is 1 for the first retry.
 - **`Retry-After`:** when the response has the header, in seconds (`3`) or as an
-  HTTP date, it sets the wait. A date in the past retries at once. An
-  unreadable value falls back to the backoff.
+  HTTP date, it sets the wait and overrides both the backoff and a custom
+  `delay`. A date in the past retries at once. Only RFC 1123 dates
+  (`Thu, 01 Jan 2026 00:00:05 GMT`) are parsed; RFC 850, asctime and any
+  other unreadable value fall back to the backoff.
 - **`maxDelay`** (default 10 s) caps every wait. When `Retry-After` asks for
   more than `maxDelay`, the client does not wait: the response is returned as
   it is, a `StatusError` with its status.
