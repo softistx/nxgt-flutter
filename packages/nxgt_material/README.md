@@ -96,6 +96,26 @@ const NxgtMaterialLocalizationsDelegate(reword: MyStrings.new),
 
 See the [localization guide](docs/guide/localization.md).
 
+## Actions
+
+`package:nxgt_material/actions.dart`, built on the Material 3 buttons:
+
+| Component | What it adds |
+| --- | --- |
+| `AsyncButton` | A button whose async action shows a spinner and ignores presses until done |
+| `CopyButton` | Copies a value to the clipboard, shows a check mark |
+| `SplitButton` | A main action plus a menu of related actions |
+| `LoadMoreButton` | "Show more" for paginated lists, hidden when nothing is left |
+
+```dart
+AsyncButton(label: 'Save', onPressed: () => repository.save(draft))
+```
+
+Pages: [AsyncButton](docs/components/async_button.md),
+[CopyButton](docs/components/copy_button.md),
+[SplitButton](docs/components/split_button.md),
+[LoadMoreButton](docs/components/load_more_button.md).
+
 ## Naming rule
 
 - **No `nxgt` prefix.** A component is called by what it is for: `StatCard`,
