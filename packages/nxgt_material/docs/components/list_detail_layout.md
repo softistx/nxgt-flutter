@@ -47,6 +47,11 @@ visible one.
   `Row` it throws (see [troubleshooting](../troubleshooting.md)).
 - Both panes keep their state when the layout crosses 648 dp, and the hidden
   pane of a narrow layout stays alive but is not focusable or announced.
+- **Side effects of keeping the hidden pane built:** its `initState` work
+  (fetches) still runs, and your detail builder runs while nothing is selected
+  (render a placeholder, as the example does); and two panes cannot both use
+  the `PrimaryScrollController`, so give one of the two scroll views its own
+  `ScrollController`.
 
 ## Properties
 

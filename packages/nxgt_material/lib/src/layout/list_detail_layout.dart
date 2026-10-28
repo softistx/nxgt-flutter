@@ -14,7 +14,11 @@ import 'package:nxgt_material/src/theme/theme_context.dart';
 ///
 /// Both panes keep their state (scroll position, text being typed) when the
 /// layout crosses 648 dp, and the hidden pane of a narrow layout stays alive
-/// but is neither focusable nor read by screen readers.
+/// but is neither focusable nor read by screen readers. Two side effects:
+/// the hidden pane stays built, so its `initState` work (fetches) still runs
+/// and a detail builder runs with no selection; and two panes cannot both use
+/// the `PrimaryScrollController`, so give one of their scroll views a
+/// controller of its own.
 class ListDetailLayout extends StatefulWidget {
   /// Creates a ListDetailLayout.
   const new({

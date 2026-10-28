@@ -63,6 +63,24 @@ Future<void> _pump(
   );
 }
 
+/// How many shapes the ink of a [Material] has drawn: a hover or focus
+/// highlight adds one. `Material.of` is the ink controller, a render object.
+int _inkDraws(RenderObject ink) {
+  var total = 0;
+  for (final draw in [#drawRect, #drawRRect, #drawPath, #drawCircle]) {
+    for (var n = 0; n < 8; n++) {
+      try {
+        expect(ink, paintsExactlyCountTimes(draw, n));
+        total += n;
+        break;
+      } on TestFailure {
+        continue;
+      }
+    }
+  }
+  return total;
+}
+
 class _Counter extends StatefulWidget {
   const new();
 
@@ -356,29 +374,19 @@ void main() {
     });
 
     for (final width in [400.0, 700.0, 1000.0]) {
-      testWidgets('a destination is a hover target under a mouse at $width', (
+      testWidgets('a mouse pointer highlights the destination at $width', (
         tester,
       ) async {
         await _pump(tester, width, _shell());
         final settings = find.text('Settings').first;
-        final regions = find.ancestor(
-          of: settings,
-          matching: find.byType(MouseRegion),
-        );
-        expect(regions, findsWidgets);
+        final ink = Material.of(tester.element(settings)) as RenderObject;
+        final before = _inkDraws(ink);
         final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
         addTearDown(mouse.removePointer);
         await mouse.addPointer(location: Offset.zero);
         await mouse.moveTo(tester.getCenter(settings));
-        await tester.pump();
-        final inside = regions.evaluate().any((e) {
-          final box = e.renderObject! as RenderBox;
-          return box.paintBounds
-              .shift(box.localToGlobal(Offset.zero))
-              .contains(tester.getCenter(settings));
-        });
-        expect(inside, isTrue);
-        expect(tester.takeException(), isNull);
+        await tester.pumpAndSettle();
+        expect(_inkDraws(ink), greaterThan(before));
       });
     }
   });
@@ -521,6 +529,32 @@ void main() {
       tester.view.physicalSize = const Size(400, 800);
       await tester.pumpAndSettle();
       expect(find.byType(NavigationDrawer), findsNothing);
+      expect(find.byTooltip('Open navigation'), findsOneWidget);
+    });
+  });
+
+  group('drawer button', () {
+    for (final width in [700.0, 1000.0]) {
+      testWidgets('no drawer button beside the navigation at $width dp', (
+        tester,
+      ) async {
+        await _pump(
+          tester,
+          width,
+          _shell(compact: CompactNavigation.drawer, title: const Text('Acme')),
+        );
+        expect(find.byType(DrawerButton), findsNothing);
+        expect(find.byTooltip('Open navigation'), findsNothing);
+        expect(find.byIcon(Icons.menu), findsNothing);
+      });
+    }
+
+    testWidgets('the menu button is there on a compact window', (tester) async {
+      await _pump(
+        tester,
+        400,
+        _shell(compact: CompactNavigation.drawer, title: const Text('Acme')),
+      );
       expect(find.byTooltip('Open navigation'), findsOneWidget);
     });
   });

@@ -111,12 +111,13 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
     }
   }
 
-  PreferredSizeWidget? _appBar(bool drawer, String openLabel) {
+  PreferredSizeWidget? _appBar(bool drawer, bool compact, String openLabel) {
     if (widget.appBar != null) return widget.appBar;
     if (widget.title == null && !drawer) return null;
     return AppBar(
       title: widget.title,
       actions: widget.actions,
+      automaticallyImplyLeading: compact,
       leading: drawer
           ? IconButton(
               tooltip: openLabel,
@@ -150,7 +151,7 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
     final rail = size == WindowSize.medium;
     final standing = size.isAtLeast(WindowSize.expanded);
     final l10n = context.materialL10n;
-    final appBar = _appBar(drawer, l10n.layoutOpenNavigation);
+    final appBar = _appBar(drawer, compact, l10n.layoutOpenNavigation);
     final data = ShellNavigationData(
       destinations: widget.destinations,
       selectedIndex: _index,
@@ -158,7 +159,7 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
       label: l10n.layoutNavigation,
     );
 
-    if (!drawer) {
+    if (!drawer && (_scaffold.currentState?.isDrawerOpen ?? false)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final scaffold = _scaffold.currentState;
         if (mounted && (scaffold?.isDrawerOpen ?? false)) {

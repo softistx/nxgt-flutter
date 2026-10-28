@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/layout.dart';
 
@@ -145,6 +146,65 @@ void main() {
           .first,
     );
     expect(material.borderRadius, isNotNull);
+  });
+
+  group('the hidden pane', () {
+    Widget fields() => ListDetailLayout(
+      showDetail: false,
+      list: const TextField(key: Key('list-field')),
+      detail: const Column(
+        children: [
+          Text('Hidden detail'),
+          TextField(key: Key('detail-field')),
+        ],
+      ),
+    );
+
+    testWidgets('has no semantics nodes', (tester) async {
+      final handle = tester.ensureSemantics();
+      await _pump(tester, 400, fields());
+      expect(find.bySemanticsLabel('Hidden detail'), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(ListDetailLayout),
+          matching: find.text('Hidden detail', skipOffstage: false),
+          skipOffstage: false,
+        ),
+        findsOneWidget,
+      );
+      handle.dispose();
+    });
+
+    testWidgets('is skipped by Tab traversal', (tester) async {
+      await _pump(tester, 400, fields());
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pump();
+      final focused = FocusManager.instance.primaryFocus!.context!;
+      expect(
+        find.descendant(
+          of: find.byKey(const Key('list-field')),
+          matching: find.byElementPredicate((e) => e == focused),
+        ),
+        findsOneWidget,
+      );
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pump();
+      final next = FocusManager.instance.primaryFocus?.context;
+      final inDetail =
+          next != null &&
+          find
+              .descendant(
+                of: find.byKey(const Key('detail-field'), skipOffstage: false),
+                matching: find.byElementPredicate(
+                  (e) => e == next,
+                  skipOffstage: false,
+                ),
+                skipOffstage: false,
+              )
+              .evaluate()
+              .isNotEmpty;
+      expect(inDetail, isFalse);
+    });
   });
 
   group('semantics', () {

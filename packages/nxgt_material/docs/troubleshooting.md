@@ -232,7 +232,7 @@ where the destinations change:
 final index = selected.clamp(0, destinations.length - 1);
 ```
 
-## LayoutBuilder does not support returning intrinsic dimensions
+## LayoutBuilder does not support returning intrinsic dimensions.
 
 **When:** a `ResponsiveGrid` or a `ListDetailLayout` sits under a parent that
 asks for intrinsic sizes: `IntrinsicWidth`, `IntrinsicHeight`, a `Table`, or a
