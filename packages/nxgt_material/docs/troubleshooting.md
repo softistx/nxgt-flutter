@@ -116,3 +116,69 @@ nothing recomputes it when the locale changes.
 **Fix:** revalidate after the change, for example
 `formKey.currentState?.validate()`, or use
 `AutovalidateMode.onUserInteraction` so the next edit refreshes it.
+
+## The theme has no Tones.
+
+**When:** an `InlineAlert`, or `context.showToast` with a `tone`, is built
+under a `ThemeData` that did not come from `ThemeSpec`. Thrown as a
+`FlutterError` while building.
+
+**Why:** the tone colours (success, info, warning) are AA-solved by the theme's
+`Tones` extension. A plain `ThemeData` has none, and guessing colours here would
+break contrast silently.
+
+**Fix:** build the theme with `ThemeSpec` or a preset, or add `Tones` to
+`ThemeData.extensions`:
+
+```dart
+MaterialApp(
+  theme: ThemePresets.ocean.light(),
+  darkTheme: ThemePresets.ocean.dark(),
+);
+```
+
+A toast without a `tone` and the `EmptyState`, `LoadingState`, `ErrorState` and
+`AsyncView` components work under any theme.
+
+## showToast: actionLabel and onAction go together.
+
+**When:** `context.showToast` was given an `actionLabel` without an `onAction`,
+or the reverse. An assertion in debug builds.
+
+**Why:** a snackbar action needs both its label and its callback; one without
+the other is a button that does nothing or has no name.
+
+**Fix:** pass both, or neither.
+
+## No ScaffoldMessenger widget found.
+
+**When:** `context.showToast` is called from a context with no `Scaffold`-capable
+`ScaffoldMessenger` above it, for example above the `MaterialApp`.
+
+**Why:** a toast is a `SnackBar` of the nearest `ScaffoldMessenger`; `MaterialApp`
+provides one, so the context must be below it.
+
+**Fix:** call it from a context under the `MaterialApp` (use a `Builder` if the
+call is in the same `build` that creates the app).
+
+## AsyncView: Give AsyncView either a future or a snapshot, not both or neither.
+
+**When:** an `AsyncView` was built with both `future` and `snapshot`, or with
+neither. An assertion in debug builds.
+
+**Why:** the view follows one source of truth.
+
+**Fix:** pass `future`, or `snapshot`, not both.
+
+## The ErrorState of an AsyncView shows no details
+
+**When:** a future or snapshot fails and the view shows only "Something went
+wrong".
+
+**Why:** the exception is deliberately not displayed: it is rarely a sentence a
+user can act on and may expose internals. It is not reported either, because
+`FutureBuilder` hands it to the view without raising it.
+
+**Fix:** log it where you create the future (`future.catchError`, or the
+repository). For a specific message, check the snapshot yourself and build an
+`ErrorState(message: ...)` instead of using `AsyncView`.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- `feedback.dart`: `EmptyState`, `LoadingState` (a static icon under reduced motion), `ErrorState` (retry through `AsyncButton`), `AsyncView<T>` (switches between them and your content over a `Future` or an `AsyncSnapshot`), `InlineAlert` and `FeedbackTone` (info, success, warning, error; role `alert` or `status`, tone spoken first, AA tone colours) and `context.showToast` (a tinted, announced `SnackBar` with an optional action). New strings `feedbackToneInfo`, `feedbackToneSuccess`, `feedbackToneWarning`, `feedbackToneError` in fr and en.
+
 - `fields.dart`: `EmailField`, `PasswordField` (show/hide toggle), `PhoneField`, `NumberField` and `TextAreaField`, built on `TextFormField` with the right keyboard, autofill hints and input action, and `Validators` (`required`, `email`, `minLength`, `maxLength`, `phone`, `number`, `compose`) with localized messages. `forms.dart`: `FormSection` and `SubmitButton` (validates, saves and awaits an action through `AsyncButton`). New strings `fieldsInvalidPhone`, `fieldsInvalidNumber`, `fieldsMinValue`, `fieldsMaxValue`, `fieldsShowPassword`, `fieldsHidePassword` in fr and en.
 
 - `actions.dart`: `AsyncButton` (a Material 3 button whose async action shows a spinner and ignores presses until done, four variants), `CopyButton` (copies a value, shows a check mark, announced to screen readers), `SplitButton` (main action plus a `MenuAnchor` of related actions) and `LoadMoreButton` (an outlined `AsyncButton` for paginated lists). New strings `actionsCopy`, `actionsCopied`, `actionsMoreOptions` in fr and en.

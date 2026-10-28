@@ -109,6 +109,18 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
       'An error occurred. Try again in a moment.';
 
   @override
+  String get feedbackToneInfo => 'Information';
+
+  @override
+  String get feedbackToneSuccess => 'Success';
+
+  @override
+  String get feedbackToneWarning => 'Warning';
+
+  @override
+  String get feedbackToneError => 'Error';
+
+  @override
   String get layoutOpenNavigation => 'Open navigation';
 
   @override

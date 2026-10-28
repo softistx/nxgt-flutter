@@ -257,6 +257,30 @@ abstract class NxgtMaterialLocalizations {
   /// **'An error occurred. Try again in a moment.'**
   String get feedbackErrorMessage;
 
+  /// Spoken before the message of an info alert or toast, so the tone is not carried by colour alone.
+  ///
+  /// In en, this message translates to:
+  /// **'Information'**
+  String get feedbackToneInfo;
+
+  /// No description provided for @feedbackToneSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get feedbackToneSuccess;
+
+  /// No description provided for @feedbackToneWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get feedbackToneWarning;
+
+  /// No description provided for @feedbackToneError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get feedbackToneError;
+
   /// No description provided for @layoutOpenNavigation.
   ///
   /// In en, this message translates to:

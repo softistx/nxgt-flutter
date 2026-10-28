@@ -5,7 +5,7 @@ adaptive layout, fields and forms, feedback states, themes. Intent-named,
 accessible, French and English.
 
 > Status: pre-0.1. Components are arriving category by category toward 0.1
-> (theme, localization, actions, fields and forms are in); see the [roadmap](docs/roadmap.md).
+> (theme, localization, actions, fields, forms and feedback are in); see the [roadmap](docs/roadmap.md).
 
 Runs on Android, iOS, web, macOS, Windows and Linux.
 
@@ -197,6 +197,59 @@ Guide: [Forms](docs/guide/forms.md). Pages:
 [TextAreaField](docs/components/text_area_field.md),
 [FormSection](docs/components/form_section.md),
 [SubmitButton](docs/components/submit_button.md).
+
+## Feedback
+
+`package:nxgt_material/feedback.dart`. Progress indicators are Flutter's own
+(`CircularProgressIndicator`, `LinearProgressIndicator`) and are not wrapped.
+
+| Component | What it adds |
+| --- | --- |
+| `EmptyState` | Icon, heading, sentence and action for "nothing here yet" |
+| `LoadingState` | Spinner and caption; a static icon under reduced motion |
+| `ErrorState` | Failure block with a "Retry" `AsyncButton` |
+| `AsyncView<T>` | Switches between the three and your content, over a `Future` or an `AsyncSnapshot` |
+| `InlineAlert` | An in-page message in four tones, announced as an alert or a status |
+| `context.showToast` | A tinted, announced `SnackBar` with an optional action |
+
+```dart
+import 'package:nxgt_material/feedback.dart';
+
+// Loading, error with retry, empty and content in one widget.
+AsyncView<List<Invoice>>(
+  future: repository.invoices(),
+  isEmpty: (invoices) => invoices.isEmpty,
+  onRetry: reload,
+  builder: (context, invoices) => InvoiceList(invoices),
+)
+
+// The states on their own.
+EmptyState(
+  title: 'No invoices',
+  action: FilledButton(onPressed: create, child: const Text('New invoice')),
+)
+const LoadingState()
+ErrorState(onRetry: reload)
+
+// An in-page message; needs a ThemeSpec theme for the tone colours.
+InlineAlert(
+  tone: FeedbackTone.warning,
+  title: 'Check the address',
+  message: 'The postcode does not match the city.',
+  onDismiss: hide,
+)
+
+// A toast over the Scaffold, replacing the one on screen.
+context.showToast('Invoice deleted', actionLabel: 'Undo', onAction: restore);
+context.showToast('Saved', tone: FeedbackTone.success);
+```
+
+Pages: [EmptyState](docs/components/empty_state.md),
+[LoadingState](docs/components/loading_state.md),
+[ErrorState](docs/components/error_state.md),
+[AsyncView](docs/components/async_view.md),
+[InlineAlert](docs/components/inline_alert.md),
+[Toast](docs/components/toast.md).
 
 ## Naming rule
 

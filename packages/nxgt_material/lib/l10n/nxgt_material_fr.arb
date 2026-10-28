@@ -26,6 +26,10 @@
   "feedbackEmptyMessage": "Il n’y a rien à afficher pour le moment.",
   "feedbackErrorTitle": "Une erreur est survenue",
   "feedbackErrorMessage": "Une erreur s’est produite. Réessayez dans un instant.",
+  "feedbackToneInfo": "Information",
+  "feedbackToneSuccess": "Succès",
+  "feedbackToneWarning": "Attention",
+  "feedbackToneError": "Erreur",
   "layoutOpenNavigation": "Ouvrir la navigation",
   "layoutCloseNavigation": "Fermer la navigation"
 }

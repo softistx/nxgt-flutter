@@ -32,6 +32,11 @@
   "feedbackEmptyMessage": "There is nothing to show for now.",
   "feedbackErrorTitle": "Something went wrong",
   "feedbackErrorMessage": "An error occurred. Try again in a moment.",
+  "feedbackToneInfo": "Information",
+  "@feedbackToneInfo": {"description": "Spoken before the message of an info alert or toast, so the tone is not carried by colour alone."},
+  "feedbackToneSuccess": "Success",
+  "feedbackToneWarning": "Warning",
+  "feedbackToneError": "Error",
   "layoutOpenNavigation": "Open navigation",
   "layoutCloseNavigation": "Close navigation"
 }

@@ -19,6 +19,18 @@ import 'package:nxgt_widgetbook/actions/load_more_button.usecase.dart'
     as _nxgt_widgetbook_actions_load_more_button_usecase;
 import 'package:nxgt_widgetbook/actions/split_button.usecase.dart'
     as _nxgt_widgetbook_actions_split_button_usecase;
+import 'package:nxgt_widgetbook/feedback/async_view.usecase.dart'
+    as _nxgt_widgetbook_feedback_async_view_usecase;
+import 'package:nxgt_widgetbook/feedback/empty_state.usecase.dart'
+    as _nxgt_widgetbook_feedback_empty_state_usecase;
+import 'package:nxgt_widgetbook/feedback/error_state.usecase.dart'
+    as _nxgt_widgetbook_feedback_error_state_usecase;
+import 'package:nxgt_widgetbook/feedback/inline_alert.usecase.dart'
+    as _nxgt_widgetbook_feedback_inline_alert_usecase;
+import 'package:nxgt_widgetbook/feedback/loading_state.usecase.dart'
+    as _nxgt_widgetbook_feedback_loading_state_usecase;
+import 'package:nxgt_widgetbook/feedback/toast.usecase.dart'
+    as _nxgt_widgetbook_feedback_toast_usecase;
 import 'package:nxgt_widgetbook/fields/email_field.usecase.dart'
     as _nxgt_widgetbook_fields_email_field_usecase;
 import 'package:nxgt_widgetbook/fields/number_field.usecase.dart'
@@ -78,6 +90,70 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_actions_split_button_usecase
                 .buildSplitButtonDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Feedback',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'AsyncView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_feedback_async_view_usecase
+                .buildAsyncViewDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'EmptyState',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_feedback_empty_state_usecase
+                .buildEmptyStateDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ErrorState',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_feedback_error_state_usecase
+                .buildErrorStateDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'InlineAlert',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_feedback_inline_alert_usecase
+                .buildInlineAlertDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'LoadingState',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_feedback_loading_state_usecase
+                .buildLoadingStateDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'SnackBar',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'showToast',
+            builder: _nxgt_widgetbook_feedback_toast_usecase.buildToastDefault,
           ),
         ],
       ),
