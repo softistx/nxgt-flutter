@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nxgt_material/l10n.dart';
 import 'package:nxgt_material/theme.dart';
 import 'package:nxgt_widgetbook/main.directories.g.dart';
 import 'package:widgetbook/widgetbook.dart';
@@ -31,6 +33,15 @@ class WidgetbookApp extends StatelessWidget {
                 data: preset.dark(),
               ),
             ],
+          ],
+        ),
+        LocalizationAddon(
+          locales: NxgtMaterialLocalizations.supportedLocales,
+          localizationsDelegates: [
+            const NxgtMaterialLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
         ),
         ViewportAddon(Viewports.all),
