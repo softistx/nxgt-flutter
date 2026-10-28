@@ -35,11 +35,21 @@ melos:
       run: dart format --output=none --set-exit-if-changed packages apps tool
 
     test:
-      description: Unit and widget tests per package, with coverage.
+      description: Unit and widget tests per Flutter package, with coverage.
       exec:
         command: flutter test --coverage --exclude-tags golden
         concurrency: 1
       packageFilters:
+        flutter: true
+        dirExists: test
+
+    test:dart:
+      description: Tests of the pure Dart packages (no Flutter SDK).
+      exec:
+        command: dart test
+        concurrency: 1
+      packageFilters:
+        flutter: false
         dirExists: test
 
     coverage:
@@ -52,6 +62,7 @@ melos:
         command: flutter test --tags golden
         concurrency: 1
       packageFilters:
+        flutter: true
         dirExists: test
 
     goldens:update:
@@ -60,6 +71,7 @@ melos:
         command: flutter test --tags golden --update-goldens
         concurrency: 1
       packageFilters:
+        flutter: true
         dirExists: test
 
     gen:

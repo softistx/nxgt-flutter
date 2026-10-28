@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-flutter pub add {{name.snakeCase()}}
+{{#flutter}}flutter pub add{{/flutter}}{{^flutter}}dart pub add{{/flutter}} {{name.snakeCase()}}
 ```
 
 ## Use

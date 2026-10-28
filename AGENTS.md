@@ -48,7 +48,8 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
   `mason make component --name StatCard --category display` from the root. It
   writes the widget, the Widgetbook use-case, an Alchemist golden test, a
   widget + semantics test and the doc page; then add the export line it
-  prints and run `melos run gen`. A new package: `mason make package`.
+  prints and run `melos run gen`. A new package: `mason make package` (`--flutter false` for a pure Dart
+  package: no Flutter SDK, `package:test`; its tests run with `melos run test:dart`).
 - Theme: `ColorScheme.fromSeed` plus `ThemeExtension`s (tones, radius, motifs),
   same presets and names as `@nxgt/material` `defineTheme`.
 - Icons: Material Symbols. Forms: Flutter `Form`/`FormField`, no form library.
