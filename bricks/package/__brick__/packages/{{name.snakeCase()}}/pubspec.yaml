@@ -6,7 +6,7 @@ homepage: https://github.com/softistx/nxgt-flutter/tree/develop/packages/{{name.
 repository: https://github.com/softistx/nxgt-flutter
 issue_tracker: https://github.com/softistx/nxgt-flutter/issues
 
-platforms:
+{{#flutter}}platforms:
   android:
   ios:
   web:
@@ -14,11 +14,11 @@ platforms:
   windows:
   linux:
 
-resolution: workspace
+{{/flutter}}resolution: workspace
 
 environment:
   sdk: ^3.13.0
-  flutter: ">=3.47.0"
+{{#flutter}}  flutter: ">=3.47.0"
 
 dependencies:
   flutter:
@@ -26,4 +26,7 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
+    sdk: flutter{{/flutter}}{{^flutter}}
+dev_dependencies:
+  coverage: ^1.11.0
+  test: ^1.25.0{{/flutter}}

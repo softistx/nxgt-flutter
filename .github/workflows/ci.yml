@@ -33,6 +33,8 @@ jobs:
         run: dart run melos run format
       - name: Test (with coverage)
         run: dart run melos run test
+      - name: Test pure Dart packages (with coverage)
+        run: dart run melos run test:dart
       - name: Coverage threshold
         run: dart run melos run coverage
       # Alchemist CI goldens are rendered on Linux only, so they are compared
