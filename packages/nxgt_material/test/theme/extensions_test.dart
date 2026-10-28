@@ -81,7 +81,6 @@ void main() {
     expect(a.copyWith(md: 14).md, 14);
     expect(a.copyWith(), a);
     expect(a.hashCode, const RadiusScale().hashCode);
-    expect(RadiusScale.circular(8), BorderRadius.circular(8));
     expect(const RadiusScale(item: 6).item, 6);
   });
 
@@ -120,5 +119,14 @@ void main() {
     expect(motif.tone, MotifTone.mixed);
     expect(motif.moonPosition, const Offset(0.1, 0.2));
     expect(motif, isNot(ThemeMotif.none));
+  });
+
+  test('Tones.lerp with different custom keys keeps both sides', () {
+    final a = light.copyWith(custom: {'a': light.info});
+    final b = dark.copyWith(custom: {'b': dark.info});
+
+    expect(a.lerp(b, 0.25).custom.keys.toSet(), {'a', 'b'});
+    expect(a.lerp(b, 0.25)['a'], light.info);
+    expect(a.lerp(b, 0.25)['b'], dark.info);
   });
 }

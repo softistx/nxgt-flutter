@@ -6,7 +6,9 @@ import 'package:nxgt_material/src/theme/tone_colors.dart';
 /// radius scale.
 ///
 /// For a catalogue, a golden or a theme picker's preview. Needs a theme built
-/// from a `ThemeSpec`.
+/// from a `ThemeSpec`. A development widget: every swatch is labelled for
+/// screen readers with its tone name and role (for example `success color`),
+/// in English, not localised.
 class TokenSheet extends StatelessWidget {
   /// Creates a token sheet.
   const new({super.key});
@@ -62,12 +64,18 @@ class _ToneRow extends StatelessWidget {
           width: 96,
           child: Text(name, style: Theme.of(context).textTheme.labelMedium),
         ),
-        _Swatch(background: tone.color, foreground: tone.onColor, label: 'on'),
+        _Swatch(
+          background: tone.color,
+          foreground: tone.onColor,
+          label: 'on',
+          semanticLabel: '$name color',
+        ),
         const SizedBox(width: 4),
         _Swatch(
           background: tone.container,
           foreground: tone.onContainer,
           label: 'on container',
+          semanticLabel: '$name container',
         ),
       ],
     );
@@ -79,26 +87,33 @@ class _Swatch extends StatelessWidget {
     required this.background,
     required this.foreground,
     required this.label,
+    required this.semanticLabel,
   });
 
   final Color background;
   final Color foreground;
   final String label;
+  final String semanticLabel;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 140,
-      height: 28,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(context.radii.sm),
-      ),
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.labelSmall
-            ?.copyWith(color: foreground),
+    return Semantics(
+      container: true,
+      label: semanticLabel,
+      excludeSemantics: true,
+      child: Container(
+        width: 140,
+        height: 28,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: BorderRadius.circular(context.radii.sm),
+        ),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.labelSmall
+              ?.copyWith(color: foreground),
+        ),
       ),
     );
   }

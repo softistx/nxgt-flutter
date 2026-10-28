@@ -55,7 +55,10 @@ class Tones extends ThemeExtension<Tones> {
     final brightness = scheme.brightness;
     ToneColors solve(ToneSeed seed) => ToneColors.fromSeed(
       brightness == Brightness.dark
-          ? seed.dark ?? seed.light.copyWith(l: 0.72)
+          ? seed.dark ??
+                seed.light.copyWith(
+                  l: seed.light.l < 0.72 ? 0.72 : seed.light.l,
+                )
           : seed.light,
       brightness,
     );

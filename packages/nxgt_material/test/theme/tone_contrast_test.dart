@@ -24,7 +24,7 @@ void main() {
           final labels = ['$name on color', '$name on container'];
           for (final (i, (fg, bg)) in tone.pairs.indexed) {
             expect(
-              contrastRatio(fg, bg),
+              wcagContrast(fg, bg),
               greaterThanOrEqualTo(_aa),
               reason: '${spec.name} ${brightness.name} ${labels[i]}',
             );
@@ -33,4 +33,19 @@ void main() {
       });
     }
   }
+
+  test('an explicit dark seed below 0.72 is kept, and still AA', () {
+    const seed = Oklch(0.6, 0.118, 145);
+    final tone = ToneColors.fromSeed(seed, Brightness.dark);
+
+    expect(Oklch.fromColor(tone.color).l, closeTo(0.6, 0.02));
+    for (final (fg, bg) in tone.pairs) {
+      expect(wcagContrast(fg, bg), greaterThanOrEqualTo(_aa));
+    }
+    final spec = ThemePresets.ocean.copyWith(
+      tones: {'success': const ToneSeed(Oklch(0.46, 0.118, 145), dark: seed)},
+    );
+    final success = spec.dark().extension<Tones>()!.success;
+    expect(Oklch.fromColor(success.color).l, closeTo(0.6, 0.02));
+  });
 }

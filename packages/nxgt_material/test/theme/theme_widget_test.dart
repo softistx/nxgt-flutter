@@ -68,4 +68,20 @@ void main() {
     expect(error, isA<FlutterError>());
     expect(error.toString(), contains('ThemeSpec'));
   });
+
+  testWidgets('TokenSheet swatches are labelled with tone and role', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemePresets.ocean.light(),
+        home: const Scaffold(body: SingleChildScrollView(child: TokenSheet())),
+      ),
+    );
+
+    expect(find.bySemanticsLabel('success color'), findsOneWidget);
+    expect(find.bySemanticsLabel('warning container'), findsOneWidget);
+    handle.dispose();
+  });
 }

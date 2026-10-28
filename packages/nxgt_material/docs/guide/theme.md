@@ -72,7 +72,7 @@ final maths = tones['maths']; // an app tone, by name
 
 - **App tones** go in `ThemeSpec.tones`, by name. The name cannot be one the
   library already uses (`primary`, `strong`, `critical`, ...): see
-  `reservedToneNames`.
+  the library's reserved list.
 - **Replace a status**: give `tones` a `success`, `info` or `warning` seed
   (Teal moves success to hue 145 so it does not read as its primary).
 - **Dark seed**: `ToneSeed(light, dark: ...)`. Without it the dark tone starts
@@ -107,6 +107,16 @@ to preview a theme, in Widgetbook or in a golden:
 ```dart
 Theme(data: school.dark(), child: const TokenSheet());
 ```
+
+## Limits
+
+- `copyWith` cannot clear a nullable field: `label`, `secondary` and
+  `tertiary` of `ThemeSpec` and `moonPosition` of `ThemeMotif` keep their value
+  when `null` is passed. Build a new spec to drop one.
+- `TokenSheet` is a catalogue and development widget. Its swatches have
+  semantics labels (`success color`, `success container`), in English, not
+  localised.
+- `wcagContrast(a, b)` is the WCAG 2.x contrast ratio the tests use.
 
 ## What differs from `@nxgt/material`
 

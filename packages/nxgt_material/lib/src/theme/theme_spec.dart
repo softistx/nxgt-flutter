@@ -24,8 +24,9 @@ import 'package:nxgt_material/src/theme/tones.dart';
 class ThemeSpec {
   /// Creates a theme from a [name] and a [primary] seed.
   ///
-  /// [tones] may not use a name in [reservedToneNames], except `success`,
-  /// `info` and `warning`, which it replaces.
+  /// [tones] may not use a name the library reserves (`primary`, `strong`,
+  /// `critical`, ...), except `success`, `info` and `warning`, which it
+  /// replaces.
   const new({
     required this.name,
     required this.primary,

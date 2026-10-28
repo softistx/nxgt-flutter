@@ -25,11 +25,7 @@ class ToneColors {
     final onColor = dark
         ? Oklch(0.2, seed.c * 0.3, seed.h).toColor()
         : const Color(0xFFFFFFFF);
-    final color = _reach(
-      dark ? seed.copyWith(l: seed.l < 0.72 ? 0.72 : seed.l) : seed,
-      onColor,
-      lighter: dark,
-    );
+    final color = _reach(seed, onColor, lighter: dark);
     final container = dark
         ? Oklch(0.32, seed.c * 0.5, seed.h).toColor()
         : Oklch(0.93, seed.c * 0.35, seed.h).toColor();
@@ -105,7 +101,7 @@ Color _reach(Oklch start, Color against, {required bool lighter}) {
   var step = start;
   for (var i = 0; i < 100; i++) {
     final color = step.toColor();
-    if (contrastRatio(color, against) >= 4.5) return color;
+    if (wcagContrast(color, against) >= 4.5) return color;
     final next = step.l + (lighter ? 0.01 : -0.01);
     if (next < 0 || next > 1) break;
     step = step.copyWith(l: next);

@@ -36,7 +36,7 @@ void main() {
 
   test('contrast ratio of black on white is 21', () {
     expect(
-      contrastRatio(const Color(0xFF000000), const Color(0xFFFFFFFF)),
+      wcagContrast(const Color(0xFF000000), const Color(0xFFFFFFFF)),
       closeTo(21, 0.01),
     );
   });
@@ -48,5 +48,22 @@ void main() {
     expect(a.copyWith(l: 0.6), isNot(a));
     expect(a.hashCode, const Oklch(0.5, 0.1, 20).hashCode);
     expect(a.toString(), contains('Oklch'));
+  });
+
+  test('published sRGB to OKLCH values', () {
+    final blue = Oklch.fromColor(const Color(0xFF0000FF));
+    final green = Oklch.fromColor(const Color(0xFF00FF00));
+
+    expect(blue.l, closeTo(0.452, 0.002));
+    expect(blue.c, closeTo(0.313, 0.002));
+    expect(blue.h, closeTo(264.05, 0.2));
+    expect(green.l, closeTo(0.866, 0.002));
+    expect(green.c, closeTo(0.295, 0.002));
+    expect(green.h, closeTo(142.5, 0.2));
+  });
+
+  test('the gamut clamp holds at lightness 0 and 1', () {
+    expect(const Oklch(0, 0.3, 40).toColor().toARGB32(), 0xFF000000);
+    expect(const Oklch(1, 0.3, 40).toColor().toARGB32(), 0xFFFFFFFF);
   });
 }

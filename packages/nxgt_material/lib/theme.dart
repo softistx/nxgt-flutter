@@ -17,5 +17,5 @@ export 'src/theme/theme_presets.dart';
 export 'src/theme/theme_spec.dart';
 export 'src/theme/token_sheet.dart';
 export 'src/theme/tone_colors.dart';
-export 'src/theme/tone_seed.dart';
-export 'src/theme/tones.dart';
+export 'src/theme/tone_seed.dart' show ToneSeed;
+export 'src/theme/tones.dart' show Tones;

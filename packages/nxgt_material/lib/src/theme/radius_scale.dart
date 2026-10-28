@@ -65,9 +65,6 @@ class RadiusScale extends ThemeExtension<RadiusScale> {
     'xxl': xxl,
   };
 
-  /// A [BorderRadius] of [value] on every corner.
-  static BorderRadius circular(double value) => BorderRadius.circular(value);
-
   @override
   RadiusScale copyWith({
     double? base,
