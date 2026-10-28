@@ -16,8 +16,8 @@ import 'package:{{name.snakeCase()}}/{{name.snakeCase()}}.dart';
 
 ## Documentation
 
-- [Roadmap](docs/roadmap.md)
-- [Troubleshooting](docs/troubleshooting.md)
+- [Roadmap](doc/roadmap.md)
+- [Troubleshooting](doc/troubleshooting.md)
 
 ## License
 
