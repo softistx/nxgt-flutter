@@ -9,9 +9,9 @@
   - Done on the integration branch: `ApiClient` (base URL, headers, timeouts,
     `wrap(Dio)`, `get`/`post`/`put`/`patch`/`delete` with `decode`) and the
     sealed `ApiError`, auth with a shared token refresh (`AuthOptions`,
-    `AuthInterceptor`), retry (`RetryOptions`, `RetryInterceptor`).
-  - To come: logging, cancellation by group,
-    `send` for status and headers.
+    `AuthInterceptor`), retry (`RetryOptions`, `RetryInterceptor`), redacted logging
+    (`HttpLogger`), cancellation by group and `latest` key.
+  - To come: `send` for status and headers.
 
 ## Next
 

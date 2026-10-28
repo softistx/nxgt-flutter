@@ -119,7 +119,11 @@ void main() {
       );
 
       expect(adapter.requests.single.headers['x-call'], '1');
-      expect(adapter.requests.single.cancelToken, same(token));
+      // The call runs on its own token, which follows the caller's.
+      expect(adapter.requests.single.cancelToken, isNotNull);
+      token.cancel('later');
+      await Future<void>.delayed(Duration.zero);
+      expect(adapter.requests.single.cancelToken!.isCancelled, isTrue);
     });
 
     test('decode turns the JSON body into a value', () async {

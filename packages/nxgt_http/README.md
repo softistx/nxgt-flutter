@@ -1,7 +1,7 @@
 # nxgt_http
 
-A typed HTTP client for Dart on Dio with sealed errors. Logging is on the [roadmap](doc/roadmap.md). Pure Dart: it
-runs on the Dart VM, Flutter and the web.
+A typed HTTP client for Dart on Dio with sealed errors, token refresh, retry,
+redacted logging and cancellation. Pure Dart: it runs on the Dart VM, Flutter and the web.
 
 ## Install
 
@@ -72,10 +72,44 @@ final client = ApiClient(
 error or a 408, 429, 502, 503 or 504, with a jittered backoff and `Retry-After`.
 See the [retry guide](doc/guide/retry.md).
 
+## Logging
+
+```dart
+final client = ApiClient(
+  baseUrl: Uri.parse('https://api.example.com/v1/'),
+  logger: HttpLogger(sink: (record) => print(record)),
+);
+```
+
+One record per attempt: method, URL, status, duration and error type. The
+`authorization`, `cookie` and `set-cookie` headers are redacted; bodies are
+logged only with `bodies: true`. Interceptors run logger, auth, retry, then
+yours. See the [logging guide](doc/guide/logging.md).
+
+## Cancelling
+
+```dart
+final screen = client.group(); // calls of one screen
+screen.get<Object?>('/me');
+screen.get<Object?>('/cities', query: {'q': 'par'}, latest: 'search');
+screen.cancel('page closed'); // all at once; a CancelledError is thrown
+
+try {
+  await screen.get<Object?>('/slow');
+} on Object catch (error) {
+  if (!isCancelled(error)) rethrow;
+}
+```
+
+`latest: 'key'` cancels the previous call with the same key. See the
+[cancelling guide](doc/guide/cancelling.md).
+
 ## Documentation
 
 - [Authentication](doc/guide/auth.md)
 - [Retry](doc/guide/retry.md)
+- [Logging](doc/guide/logging.md)
+- [Cancelling](doc/guide/cancelling.md)
 - [Roadmap](doc/roadmap.md)
 - [Troubleshooting](doc/troubleshooting.md)
 

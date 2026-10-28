@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 
 import 'package:nxgt_http/src/api_error.dart';
 import 'package:nxgt_http/src/auth_interceptor.dart';
+import 'package:nxgt_http/src/http_logger.dart';
 import 'package:nxgt_http/src/retry_interceptor.dart';
 
 /// Turns a decoded JSON body (`Map`, `List`, scalar or null) into a [T].
@@ -12,12 +15,13 @@ typedef Decode<T> = T Function(Object? json);
 class ApiClient {
   /// Creates a client for [baseUrl].
   ///
-  /// [headers] with a null value are left out. [interceptors] run in the
-  /// given order, after the auth and retry interceptors. [auth] adds the
+  /// [headers] with a null value are left out. The interceptors run in a
+  /// fixed order: [logger], then [auth], then [retry], then [interceptors] in
+  /// the given order. [logger] reports each attempt; [auth] adds the
   /// `Authorization` header and renews the token on a 401; [retry] sends
   /// failed repeatable requests again. Dio runs `onError` in insertion order,
-  /// so a 401 is refreshed before a retry is considered. [adapter] replaces
-  /// the transport (tests).
+  /// so the logger sees a failed attempt first, then a 401 is refreshed
+  /// before a retry is considered. [adapter] replaces the transport (tests).
   new({
     required Uri baseUrl,
     Map<String, Object?>? headers,
@@ -25,6 +29,7 @@ class ApiClient {
     Duration? receiveTimeout,
     AuthOptions? auth,
     RetryOptions? retry,
+    HttpLogger? logger,
     List<Interceptor> interceptors = const [],
     HttpClientAdapter? adapter,
   }) : dio = Dio(
@@ -34,29 +39,59 @@ class ApiClient {
            connectTimeout: connectTimeout,
            receiveTimeout: receiveTimeout,
          ),
-       ) {
+       ),
+       _scope = _Scope(null) {
     if (adapter != null) dio.httpClientAdapter = adapter;
+    if (logger != null) dio.interceptors.add(logger);
     if (auth != null) dio.interceptors.add(AuthInterceptor(auth, dio));
     if (retry != null) dio.interceptors.add(RetryInterceptor(retry, dio));
     dio.interceptors.addAll(interceptors);
   }
 
   /// Uses an already configured [dio] as is.
-  new wrap(this.dio);
+  new wrap(this.dio) : _scope = _Scope(null);
+
+  new _group(this.dio, this._scope);
+
+  final _Scope _scope;
 
   /// The underlying Dio, public on purpose: add interceptors or reach options
   /// this client does not wrap.
   final Dio dio;
 
+  /// A client for one screen's (or one feature's) calls: it shares this
+  /// client's [dio] and interceptors, and its [cancel] stops all of its calls
+  /// at once without touching this client or its other groups.
+  ///
+  /// Cancelling a client also cancels the calls of its groups, so cancelling
+  /// the root stops everything in flight. A group stays usable after [cancel]:
+  /// the next call starts normally. Groups are not registered anywhere, so a
+  /// dropped group is simply garbage collected.
+  ApiClient group() => ApiClient._group(dio, _Scope(_scope));
+
+  /// Cancels every call in flight on this client and its groups. Each throws
+  /// a `CancelledError` carrying [reason]; nothing is retried or refreshed
+  /// afterwards.
+  void cancel([Object? reason]) {
+    for (final token in [..._scope.tokens]) {
+      token.cancel(reason);
+    }
+  }
+
   /// GET [path]. With [decode] the JSON body becomes a [T]; without it the
   /// body is cast to [T].
+  ///
+  /// Every call method also takes [cancelToken] (cancelling it cancels the
+  /// call) and [latest]: a key that cancels the previous in-flight call of
+  /// this client with the same key, for search-as-you-type.
   Future<T> get<T>(
     String path, {
     Map<String, Object?>? query,
     Decode<T>? decode,
     CancelToken? cancelToken,
+    String? latest,
     Options? options,
-  }) => _send('GET', path, query, null, decode, cancelToken, options);
+  }) => _send('GET', path, query, null, decode, cancelToken, latest, options);
 
   /// POST [path] with [data] as the body.
   Future<T> post<T>(
@@ -65,8 +100,9 @@ class ApiClient {
     Map<String, Object?>? query,
     Decode<T>? decode,
     CancelToken? cancelToken,
+    String? latest,
     Options? options,
-  }) => _send('POST', path, query, data, decode, cancelToken, options);
+  }) => _send('POST', path, query, data, decode, cancelToken, latest, options);
 
   /// PUT [path] with [data] as the body.
   Future<T> put<T>(
@@ -75,8 +111,9 @@ class ApiClient {
     Map<String, Object?>? query,
     Decode<T>? decode,
     CancelToken? cancelToken,
+    String? latest,
     Options? options,
-  }) => _send('PUT', path, query, data, decode, cancelToken, options);
+  }) => _send('PUT', path, query, data, decode, cancelToken, latest, options);
 
   /// PATCH [path] with [data] as the body.
   Future<T> patch<T>(
@@ -85,8 +122,9 @@ class ApiClient {
     Map<String, Object?>? query,
     Decode<T>? decode,
     CancelToken? cancelToken,
+    String? latest,
     Options? options,
-  }) => _send('PATCH', path, query, data, decode, cancelToken, options);
+  }) => _send('PATCH', path, query, data, decode, cancelToken, latest, options);
 
   /// DELETE [path], with an optional [data] body.
   Future<T> delete<T>(
@@ -95,8 +133,10 @@ class ApiClient {
     Map<String, Object?>? query,
     Decode<T>? decode,
     CancelToken? cancelToken,
+    String? latest,
     Options? options,
-  }) => _send('DELETE', path, query, data, decode, cancelToken, options);
+  }) =>
+      _send('DELETE', path, query, data, decode, cancelToken, latest, options);
 
   Future<T> _send<T>(
     String method,
@@ -105,19 +145,23 @@ class ApiClient {
     Object? data,
     Decode<T>? decode,
     CancelToken? cancelToken,
+    String? latest,
     Options? options,
   ) async {
+    final token = _scope.start(cancelToken, latest);
     final Response<Object?> response;
     try {
       response = await dio.request<Object?>(
         path,
         data: data,
         queryParameters: _withoutNulls(query),
-        cancelToken: cancelToken,
+        cancelToken: token,
         options: (options ?? Options()).copyWith(method: method),
       );
     } on DioException catch (e) {
       throw ApiError.fromDio(e);
+    } finally {
+      _scope.finish(token, latest);
     }
     try {
       final body = response.data;
@@ -136,4 +180,44 @@ class ApiClient {
     for (final entry in (source ?? const <String, Object?>{}).entries)
       if (entry.value != null) entry.key: entry.value,
   };
+}
+
+/// The in-flight calls of one client or group, and its ancestors' view of
+/// them. Tokens are removed when their call ends, so nothing accumulates.
+class _Scope {
+  new(this.parent);
+
+  final _Scope? parent;
+  final Set<CancelToken> tokens = {};
+  final Map<String, CancelToken> latest = {};
+
+  CancelToken start(CancelToken? user, String? key) {
+    final token = CancelToken();
+    if (user != null) {
+      if (user.isCancelled) {
+        token.cancel(user.cancelError?.error);
+      } else {
+        unawaited(
+          user.whenCancel.then((e) {
+            if (!token.isCancelled) token.cancel(e.error);
+          }),
+        );
+      }
+    }
+    if (key != null) latest.remove(key)?.cancel(_superseded);
+    if (key != null) latest[key] = token;
+    for (_Scope? s = this; s != null; s = s.parent) {
+      s.tokens.add(token);
+    }
+    return token;
+  }
+
+  void finish(CancelToken token, String? key) {
+    if (key != null && identical(latest[key], token)) latest.remove(key);
+    for (_Scope? s = this; s != null; s = s.parent) {
+      s.tokens.remove(token);
+    }
+  }
+
+  static const _superseded = 'superseded by a newer call';
 }

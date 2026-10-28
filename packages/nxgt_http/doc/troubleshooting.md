@@ -34,3 +34,17 @@ error or a status in `statuses` (timeouts are never retried); the body is not a
 `Retry-After` is not above `maxDelay`, in which case the response is returned
 as is. A `Retry-After` in a format other than seconds or an RFC 1123 date is
 ignored and the backoff is used.
+
+## A call throws `CancelledError` that nobody cancelled
+
+Something cancelled it: a `latest:` key reused by a newer call (the reason is
+`superseded by a newer call`), `cancel()` on the client or a group (this also
+cancels the groups below it), or a `CancelToken` you passed. A cancellation is
+not a failure (`isFailure` is false): ignore it with `isCancelled(error)`. Use
+a distinct `latest` key for calls that are not meant to replace each other.
+
+## A header shows `[redacted]` in the logs
+
+`HttpLogger` replaces the value of `authorization`, `cookie` and `set-cookie`
+(or of the names in `redact`) in request and response headers. Pass your own
+`redact` set to change that; bodies and query strings are never redacted.
