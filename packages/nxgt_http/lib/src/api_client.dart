@@ -215,6 +215,7 @@ class ApiClient {
       final body = response.data;
       return ApiResponse<T>(
         data: decode != null ? decode(body) : body as T,
+        // The adapter always sets a status.
         statusCode: response.statusCode ?? 0,
         headers: response.headers,
       );
