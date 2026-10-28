@@ -19,6 +19,9 @@ Widget buildInlineAlertDefault(BuildContext context) {
         label: 'Message',
         initialValue: 'Something worth reading.',
       ),
+      icon: context.knobs.boolean(label: 'Custom icon')
+          ? const Icon(Icons.lightbulb_outline)
+          : null,
       onDismiss: context.knobs.boolean(label: 'Dismissible') ? () {} : null,
     ),
   );

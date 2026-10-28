@@ -7,7 +7,14 @@ version: 0.0.1
 homepage: https://github.com/softistx/nxgt-flutter/tree/develop/packages/nxgt_material
 repository: https://github.com/softistx/nxgt-flutter
 issue_tracker: https://github.com/softistx/nxgt-flutter/issues
-documentation: https://github.com/softistx/nxgt-flutter/tree/develop/packages/nxgt_material/docs
+documentation: https://github.com/softistx/nxgt-flutter/tree/develop/packages/nxgt_material/doc
+
+topics:
+  - material-design
+  - widgets
+  - ui
+  - forms
+  - localization
 
 platforms:
   android:
@@ -28,7 +35,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: any
+  intl: ^0.20.3
 
 dev_dependencies:
   alchemist: ^0.14.1

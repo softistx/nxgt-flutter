@@ -34,8 +34,9 @@ class InlineAlert extends StatelessWidget {
   /// The meaning, which sets the colours, the icon and the announcement.
   final FeedbackTone tone;
 
-  /// Replaces the tone's icon.
-  final IconData? icon;
+  /// Replaces the tone's icon, usually an `Icon`. It is decorative and takes
+  /// the tone's text colour and a 24 dp size from an `IconTheme`.
+  final Widget? icon;
 
   /// An action under the text, usually a `TextButton`.
   final Widget? action;
@@ -66,10 +67,9 @@ class InlineAlert extends StatelessWidget {
             spacing: 12,
             children: [
               ExcludeSemantics(
-                child: Icon(
-                  icon ?? tone.icon,
-                  color: colors.onContainer,
-                  size: 24,
+                child: IconTheme(
+                  data: IconThemeData(color: colors.onContainer, size: 24),
+                  child: icon ?? Icon(tone.icon),
                 ),
               ),
               Expanded(

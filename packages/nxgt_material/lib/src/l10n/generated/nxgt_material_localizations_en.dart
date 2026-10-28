@@ -10,28 +10,13 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
   NxgtMaterialLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get actionsConfirm => 'Confirm';
-
-  @override
-  String get actionsCancel => 'Cancel';
-
-  @override
   String get actionsClose => 'Close';
-
-  @override
-  String get actionsSave => 'Save';
 
   @override
   String get actionsRetry => 'Retry';
 
   @override
-  String get actionsClear => 'Clear';
-
-  @override
   String get actionsShowMore => 'Show more';
-
-  @override
-  String get actionsShowLess => 'Show less';
 
   @override
   String get actionsCopy => 'Copy';

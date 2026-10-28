@@ -24,6 +24,14 @@ MaterialApp(
 `flutter_localizations` comes from the Flutter SDK; add it to the app's
 `pubspec.yaml` (`flutter_localizations: {sdk: flutter}`).
 
+## What to use
+
+Use only `NxgtMaterialLocalizationsDelegate`, `context.materialL10n` and
+`NxgtMaterialLocalizations.supportedLocales`. The generated
+`NxgtMaterialLocalizations.of`, `.delegate` and `.localizationsDelegates` skip
+the English fallback and `reword`, so a locale other than `en` or `fr` finds no
+strings and a reworded string is ignored.
+
 ## Read a string
 
 ```dart
@@ -76,6 +84,10 @@ Give `reword` a constructor tear-off such as `MyStrings.new`, never a closure
 written in `build`: the delegate reloads when `reword` is not identical to the
 previous one, so a fresh closure reloads the strings on every rebuild.
 
+Customise by extending `NxgtMaterialLocalizationsWrapper`, never by
+`implements NxgtMaterialLocalizations`: new strings arrive in minor releases,
+so an `implements` stops compiling at each one, while the wrapper forwards it.
+
 Every other string keeps the package's text, in the locale that was resolved.
 **Why a wrapper and not a map of keys:** a typo in a getter name is a compile
 error, parameterised strings (`fieldsMinLength(count)`) stay typed, and an
@@ -84,7 +96,7 @@ app that adds a string later gets the compiler's help.
 ## Keys
 
 Keys are `<area><Name>` and follow the `material.*` keys of `@nxgt/material`:
-`actions*` (confirm, cancel, close, save, retry, clear, show more/less,
+`actions*` (close, retry, show more,
 `actionsCopy`, `actionsCopied`, `actionsMoreOptions`),
 `fields*` (required, invalid email, invalid phone, invalid number, min/max length
 with plural, min/max value, show/hide password), `feedback*`

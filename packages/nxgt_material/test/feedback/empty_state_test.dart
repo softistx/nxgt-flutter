@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/feedback.dart';
 
@@ -60,6 +61,29 @@ void main() {
           isHeader: true,
           isLiveRegion: true,
         ),
+      );
+      handle.dispose();
+    });
+
+    testWidgets('the block has the status role', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpApp(themedHost(const EmptyState()));
+
+      expect(
+        tester
+            .getSemantics(
+              find.descendant(
+                of: find.byType(EmptyState),
+                matching: find.byWidgetPredicate(
+                  (w) =>
+                      w is Semantics &&
+                      w.properties.role == SemanticsRole.status,
+                ),
+              ),
+            )
+            .getSemanticsData()
+            .role,
+        SemanticsRole.status,
       );
       handle.dispose();
     });

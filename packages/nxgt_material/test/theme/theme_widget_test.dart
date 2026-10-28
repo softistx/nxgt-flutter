@@ -94,24 +94,27 @@ void main() {
     expect(first, Tones.fromScheme(theme.colorScheme));
   });
 
-  testWidgets('a theme without the extensions explains the fix', (
+  testWidgets('fonts and motif fall back to the ThemeSpec defaults', (
     tester,
   ) async {
+    late ThemeFonts fonts;
+    late ThemeMotif motif;
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(),
         home: Builder(
           builder: (context) {
-            context.fonts;
+            fonts = context.fonts;
+            motif = context.motif;
             return const SizedBox();
           },
         ),
       ),
     );
 
-    final error = tester.takeException();
-    expect(error, isA<FlutterError>());
-    expect(error.toString(), contains('ThemeFonts'));
+    expect(tester.takeException(), isNull);
+    expect(fonts, const ThemeFonts());
+    expect(motif, ThemeMotif.none);
   });
 
   testWidgets('TokenSheet swatches are labelled with tone and role', (

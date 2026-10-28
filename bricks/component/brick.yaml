@@ -2,7 +2,7 @@ name: component
 description: >-
   A nxgt_material component with everything a component ships with: the
   widget, its Widgetbook use-case, an Alchemist golden test, a widget and
-  semantics test, and its docs page. Run from the repository root.
+  semantics test, and its doc page. Run from the repository root.
 version: 0.1.0+1
 
 environment:

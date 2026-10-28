@@ -15,7 +15,8 @@ void run(HookContext context) {
     ..info('Two steps are left to you:')
     ..info(
       '  1. packages/nxgt_material/lib/$category.dart: '
-      "export 'src/$category/$snake.dart';",
+      "export 'src/$category/$snake.dart'; (a category's library is created "
+      'with its first component, and exported from nxgt_material.dart)',
     )
     ..info(
       '  2. melos run gen (Widgetbook directories), then '

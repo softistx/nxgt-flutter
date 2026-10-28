@@ -102,6 +102,7 @@ void main() {
     expect(school.displayName, 'School');
     expect(ThemePresets.ocean.displayName, 'Océan');
     expect(tones['maths'], tones.custom['maths']);
+    expect(tones['unknown'], isNull);
     expect(tones.all.keys.last, 'maths');
     expect(school, isNot(ThemePresets.ocean));
     expect(school.hashCode, isNot(ThemePresets.ocean.hashCode));

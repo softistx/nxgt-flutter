@@ -32,7 +32,8 @@ void main() {
     );
     expect(material.color, tone.container);
     expect(
-      tester.widget<Icon>(find.byIcon(Icons.check_circle_outline)).color,
+      IconTheme.of(tester.element(find.byIcon(Icons.check_circle_outline)))
+          .color,
       tone.onContainer,
     );
   });
@@ -45,9 +46,11 @@ void main() {
       expect(find.byIcon(tone.icon), findsOneWidget, reason: tone.name);
     }
     await tester.pumpApp(
-      themedHost(const InlineAlert(message: 'm', icon: Icons.lightbulb)),
+      themedHost(const InlineAlert(message: 'm', icon: Icon(Icons.lightbulb))),
     );
     expect(find.byIcon(Icons.lightbulb), findsOneWidget);
+    final context = tester.element(find.byIcon(Icons.lightbulb));
+    expect(IconTheme.of(context).color, context.tones.info.onContainer);
   });
 
   testWidgets('has no close button without onDismiss, and calls it', (

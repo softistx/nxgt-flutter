@@ -43,7 +43,7 @@ void main() {
   testWidgets('English resolves', (tester) async {
     final s = await _pump(tester, locale: const Locale('en'));
     expect(s.localeName, 'en');
-    expect(s.actionsCancel, 'Cancel');
+    expect(s.actionsRetry, 'Retry');
     expect(s.fieldsMinLength(1), 'Enter at least 1 character');
     expect(s.fieldsMinLength(3), 'Enter at least 3 characters');
     expect(s.fieldsMaxLength(2), 'Enter at most 2 characters');
@@ -52,7 +52,7 @@ void main() {
   testWidgets('French resolves', (tester) async {
     final s = await _pump(tester, locale: const Locale('fr'));
     expect(s.localeName, 'fr');
-    expect(s.actionsCancel, 'Annuler');
+    expect(s.actionsRetry, 'Réessayer');
     expect(s.fieldsMinLength(1), 'Saisissez au moins 1 caractère');
     expect(s.fieldsMaxLength(5), 'Saisissez au plus 5 caractères');
   });
@@ -82,7 +82,7 @@ void main() {
       delegate: const NxgtMaterialLocalizationsDelegate(reword: _Reworded.new),
     );
     expect(s.actionsRetry, 'Try again');
-    expect(s.actionsCancel, 'Annuler');
+    expect(s.actionsCopy, 'Copier');
     expect(s.localeName, 'fr');
     expect(
       _all(s).length,
@@ -135,14 +135,9 @@ void main() {
 
 /// Every string of [s], so two locales can be compared for completeness.
 List<String> _all(NxgtMaterialLocalizations s) => [
-  s.actionsConfirm,
-  s.actionsCancel,
   s.actionsClose,
-  s.actionsSave,
   s.actionsRetry,
-  s.actionsClear,
   s.actionsShowMore,
-  s.actionsShowLess,
   s.fieldsRequired,
   s.fieldsInvalidEmail,
   s.fieldsMinLength(2),

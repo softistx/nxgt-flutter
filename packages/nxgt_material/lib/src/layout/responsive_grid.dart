@@ -29,19 +29,15 @@ class ResponsiveGrid extends StatelessWidget {
   /// The space between tiles, in both directions.
   final double spacing;
 
-  /// How many columns of at least [minItemWidth] fit in [width].
-  @visibleForTesting
-  static int columnsFor(double width, double minItemWidth, double spacing) {
-    if (!width.isFinite) return 1;
-    final fit = ((width + spacing) / (minItemWidth + spacing)).floor();
-    return math.max(1, fit);
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final columns = columnsFor(constraints.maxWidth, minItemWidth, spacing);
+        final columns = _columnsFor(
+          constraints.maxWidth,
+          minItemWidth,
+          spacing,
+        );
         final tile = constraints.maxWidth.isFinite
             ? (constraints.maxWidth - spacing * (columns - 1)) / columns
             : minItemWidth;
@@ -55,4 +51,11 @@ class ResponsiveGrid extends StatelessWidget {
       },
     );
   }
+}
+
+/// How many columns of at least [minItemWidth] fit in [width].
+int _columnsFor(double width, double minItemWidth, double spacing) {
+  if (!width.isFinite) return 1;
+  final fit = ((width + spacing) / (minItemWidth + spacing)).floor();
+  return math.max(1, fit);
 }

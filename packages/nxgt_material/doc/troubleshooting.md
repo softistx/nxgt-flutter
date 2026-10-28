@@ -69,7 +69,8 @@ your own message.
 
 ## SubmitButton was used outside a Form.
 
-**When:** pressing a `SubmitButton` that has no `Form` above it. Reported with
+**When:** a `SubmitButton` has no `Form` above it. A debug build asserts when
+the button is built; a release build reports it with
 `FlutterError.reportError` (through the button's `AsyncButton`), once per press.
 
 **Why:** the button validates and saves the enclosing `Form`; with none there
@@ -116,26 +117,6 @@ nothing recomputes it when the locale changes.
 **Fix:** revalidate after the change, for example
 `formKey.currentState?.validate()`, or use
 `AutovalidateMode.onUserInteraction` so the next edit refreshes it.
-
-## The theme has no ThemeFonts.
-
-**When:** `context.fonts` (or `context.motif`, with `ThemeMotif`) is read under
-a `ThemeData` that did not come from `ThemeSpec`. Thrown as a `FlutterError`
-while building.
-
-**Why:** fonts and motifs are the app's own choices; there is nothing sensible
-to guess. `context.tones` and `context.radii` do not throw: they fall back to
-tones generated from the colour scheme and to the Material 3 Expressive radii.
-
-**Fix:** build the theme with `ThemeSpec` or a preset, or add the extension to
-`ThemeData.extensions`:
-
-```dart
-MaterialApp(
-  theme: ThemePresets.ocean.light(),
-  darkTheme: ThemePresets.ocean.dark(),
-);
-```
 
 ## showToast: actionLabel and onAction go together.
 
@@ -194,13 +175,13 @@ AsyncView<List<Invoice>>(
 
 ## AdaptiveShell needs at least two destinations.
 
-**When:** an `AdaptiveShell` was given fewer than two `destinations`. Reported
-once, from `initState` or when the count changes, through
-`FlutterError.onError`.
+**When:** an `AdaptiveShell` was given fewer than two `destinations`. An
+assertion in debug builds, checked in `initState` and when the arguments
+change; a release build skips it.
 
 **Why:** Material's navigation bar, rail and drawer need two or more places to
-make sense, and `NavigationBar` asserts it. The shell shows only the body
-(and the `title`, if any) until there are two.
+make sense, and `NavigationBar` asserts it. A release build shows only the
+body (and the `title`, if any) until there are two.
 
 **Fix:** pass two or more destinations, or do not use the shell for a
 single-place screen:
@@ -220,9 +201,10 @@ AdaptiveShell(
 ## AdaptiveShell.selectedIndex is out of range.
 
 **When:** `selectedIndex` is negative or not below the number of
-destinations, for instance after the list shrank. Reported once per change.
+destinations, for instance after the list shrank. An assertion in debug
+builds; a release build skips it.
 
-**Why:** the index picks the highlighted destination. The shell selects the
+**Why:** the index picks the highlighted destination. A release build selects the
 nearest valid one meanwhile, so the screen still builds.
 
 **Fix:** keep the index within `0` to `destinations.length - 1`; clamp it

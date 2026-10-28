@@ -712,48 +712,30 @@ void main() {
     });
   });
 
-  group('errors', () {
-    Future<List<String>> reported(WidgetTester tester, Widget shell) async {
-      final messages = <String>[];
-      final old = FlutterError.onError;
-      FlutterError.onError = (details) =>
-          messages.add(details.exceptionAsString());
-      addTearDown(() => FlutterError.onError = old);
-      await _pump(tester, 400, shell);
-      return messages;
-    }
-
-    testWidgets('fewer than two destinations reports and shows the body', (
-      tester,
-    ) async {
-      final messages = await reported(
-        tester,
-        _shell(destinations: const [_one]),
-      );
+  group('misuse asserts', () {
+    testWidgets('fewer than two destinations', (tester) async {
+      await _pump(tester, 400, _shell(destinations: const [_one]));
+      final error = tester.takeException();
+      expect(error, isA<AssertionError>());
       expect(
-        messages.single,
+        error.toString(),
         contains('AdaptiveShell needs at least two destinations.'),
       );
-      expect(find.text('Body'), findsOneWidget);
-      expect(find.byType(NavigationBar), findsNothing);
     });
 
-    testWidgets('an out-of-range index reports and selects the nearest', (
-      tester,
-    ) async {
-      final messages = await reported(tester, _shell(selected: 7));
+    testWidgets('an out-of-range index', (tester) async {
+      await _pump(tester, 400, _shell(selected: 7));
+      final error = tester.takeException();
+      expect(error, isA<AssertionError>());
       expect(
-        messages.single,
+        error.toString(),
         contains('AdaptiveShell.selectedIndex is out of range.'),
       );
-      expect(
-        tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
-        2,
-      );
     });
 
-    testWidgets('a valid shell reports nothing', (tester) async {
-      expect(await reported(tester, _shell()), isEmpty);
+    testWidgets('a valid shell asserts nothing', (tester) async {
+      await _pump(tester, 400, _shell());
+      expect(tester.takeException(), isNull);
     });
   });
 }

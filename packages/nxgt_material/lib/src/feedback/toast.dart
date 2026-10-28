@@ -4,7 +4,7 @@ import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 
 /// `context.showToast`, a short message over the screen.
-extension Toast on BuildContext {
+extension ToastContext on BuildContext {
   /// Shows [message] in a floating `SnackBar` of the nearest
   /// `ScaffoldMessenger`, replacing the one on screen, and returns its
   /// controller.

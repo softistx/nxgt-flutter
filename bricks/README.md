@@ -13,5 +13,7 @@ mason make component --name StatCard --category display
 - `package`: a new publishable workspace package (add it to the root
   `workspace:` list afterwards).
 - `component`: widget, Widgetbook use-case, Alchemist golden test, widget and
-  semantics test, and docs page for a `nxgt_material` component. The hook
-  prints the two steps left (the export line, `melos run gen`).
+  semantics test, and doc page for a `nxgt_material` component. The hook
+  prints the two steps left (the export line, `melos run gen`); the category's
+  library `lib/<category>.dart` does not exist until its first component, so
+  create it then and export it from the barrel.

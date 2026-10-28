@@ -7,7 +7,7 @@ The owner's global rules (worktrees, commits, merges, sessions) are in
 ## Layout
 
 ```
-packages/nxgt_material/   the component package (publishable)
+packages/nxgt_material/   the component package (publishable): lib/, test/, doc/
 apps/widgetbook/          Widgetbook catalogue (not published; GitHub Pages)
 bricks/                   Mason bricks: package, component
 tool/                     Dart scripts used by Melos scripts
@@ -36,11 +36,18 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
 - **One Dart library per category** (`actions`, `collections`, `dates`,
   `display`, `feedback`, `fields`, `forms`, `layout`, `media`, `overlays`,
   `selection`, `theme`), exporting from `lib/src/<category>/`, plus the barrel
-  `nxgt_material.dart`.
+  `nxgt_material.dart`. A category's library is created with its first
+  component (and exported from the barrel); there is no empty one.
+- **Reporting an error follows three cases.** `assert` for misuse visible in
+  the arguments (an empty destination list, an index out of range); a release
+  build degrades (clamps, hides) rather than crashes. `FlutterError.reportError`
+  for a failed user action or future (an `onPressed` that threw). `throw` only
+  for a missing required ancestor or extension that only a call reveals (no
+  `ScaffoldMessenger`); one visible at build time (no `Form`) is asserted. The troubleshooting heading equals the message.
 - **A new component is made with the Mason brick**, never by hand:
   `mason make component --name StatCard --category display` from the root. It
   writes the widget, the Widgetbook use-case, an Alchemist golden test, a
-  widget + semantics test and the docs page; then add the export line it
+  widget + semantics test and the doc page; then add the export line it
   prints and run `melos run gen`. A new package: `mason make package`.
 - Theme: `ColorScheme.fromSeed` plus `ThemeExtension`s (tones, radius, motifs),
   same presets and names as `@nxgt/material` `defineTheme`.
@@ -79,5 +86,6 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
 
 ## Docs
 
-README per package (the pub.dev page) and `docs/` (guides, `components/`,
-troubleshooting, roadmap). Document a component in the same change that adds it.
+README per package (the pub.dev page) and `doc/` (guides, `components/`,
+troubleshooting, roadmap). Document a component in the same change that adds it. Dart packages use
+`doc/` (the pub convention), unlike the npm packages' `docs/`.

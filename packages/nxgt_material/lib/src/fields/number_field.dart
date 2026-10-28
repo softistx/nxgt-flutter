@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nxgt_material/src/fields/field_input.dart';
+import 'package:nxgt_material/src/fields/number_parse.dart';
 import 'package:nxgt_material/src/fields/validators.dart';
 
 /// A text field for a number, with an optional range.
@@ -85,9 +86,13 @@ class NumberField extends StatelessWidget {
   /// The keyboard action button.
   final TextInputAction textInputAction;
 
-  /// The number in [text], or `null` when it is empty or malformed. Reads a
-  /// comma as a decimal point.
-  static num? parse(String? text) => Validators.parseNumber(text);
+  /// The number in [text], or `null` when it is empty or malformed.
+  ///
+  /// The strict rule the field and `Validators.number` share: a comma or a
+  /// point is the decimal separator, there are no thousands separators
+  /// (`1,234` is 1.234 and `1,234.5` is refused), surrounding spaces are
+  /// ignored, and hexadecimal and exponent forms (`0x1A`, `1e3`) are refused.
+  static num? parse(String? text) => parseNumber(text);
 
   @override
   Widget build(BuildContext context) {

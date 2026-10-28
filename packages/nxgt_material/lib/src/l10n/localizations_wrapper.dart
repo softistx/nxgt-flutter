@@ -3,6 +3,10 @@ import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations.dar
 /// Forwards every string to [base]; subclass it and override the ones an app
 /// words differently.
 ///
+/// Always extend this class, never `implements NxgtMaterialLocalizations`: new
+/// strings arrive in minor releases, and an `implements` breaks on each one
+/// while the wrapper forwards it.
+///
 /// ```dart
 /// class MyStrings extends NxgtMaterialLocalizationsWrapper {
 ///   new(super.base);
@@ -20,21 +24,11 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   final NxgtMaterialLocalizations base;
 
   @override
-  String get actionsConfirm => base.actionsConfirm;
-  @override
-  String get actionsCancel => base.actionsCancel;
-  @override
   String get actionsClose => base.actionsClose;
-  @override
-  String get actionsSave => base.actionsSave;
   @override
   String get actionsRetry => base.actionsRetry;
   @override
-  String get actionsClear => base.actionsClear;
-  @override
   String get actionsShowMore => base.actionsShowMore;
-  @override
-  String get actionsShowLess => base.actionsShowLess;
   @override
   String get actionsCopy => base.actionsCopy;
   @override

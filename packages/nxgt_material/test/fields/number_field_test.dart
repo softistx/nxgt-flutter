@@ -100,7 +100,7 @@ void main() {
     );
     key.currentState!.validate();
     await tester.pump();
-    expect(find.text("Saisissez une valeur d'au plus 99"), findsOneWidget);
+    expect(find.text('Saisissez une valeur d’au plus 99'), findsOneWidget);
   });
 
   testWidgets('accepts a value in range, an empty optional one', (

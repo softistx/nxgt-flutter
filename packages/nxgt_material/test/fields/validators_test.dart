@@ -94,26 +94,26 @@ void main() {
       expect(v.number(min: 1, max: 3)('2'), isNull);
     });
 
-    test('parseNumber is strict', () {
-      expect(Validators.parseNumber('0x1A'), isNull);
-      expect(Validators.parseNumber('1e3'), isNull);
-      expect(Validators.parseNumber('1,234'), 1.234);
-      expect(Validators.parseNumber('1,234.5'), isNull);
-      expect(Validators.parseNumber('.5'), 0.5);
-      expect(Validators.parseNumber(',5'), 0.5);
-      expect(Validators.parseNumber('-2'), -2);
-      expect(Validators.parseNumber('1.'), isNull);
-      expect(Validators.parseNumber('--1'), isNull);
+    test('NumberField.parse is strict', () {
+      expect(NumberField.parse('0x1A'), isNull);
+      expect(NumberField.parse('1e3'), isNull);
+      expect(NumberField.parse('1,234'), 1.234);
+      expect(NumberField.parse('1,234.5'), isNull);
+      expect(NumberField.parse('.5'), 0.5);
+      expect(NumberField.parse(',5'), 0.5);
+      expect(NumberField.parse('-2'), -2);
+      expect(NumberField.parse('1.'), isNull);
+      expect(NumberField.parse('--1'), isNull);
       expect(v.number()('0x1A'), 'Enter a valid number');
       expect(v.number()('1e3'), 'Enter a valid number');
     });
 
-    test('parseNumber reads a comma and rejects the rest', () {
-      expect(Validators.parseNumber('2,5'), 2.5);
-      expect(Validators.parseNumber(' 7 '), 7);
-      expect(Validators.parseNumber(''), isNull);
-      expect(Validators.parseNumber(null), isNull);
-      expect(Validators.parseNumber('1e999'), isNull);
+    test('NumberField.parse reads a comma and rejects the rest', () {
+      expect(NumberField.parse('2,5'), 2.5);
+      expect(NumberField.parse(' 7 '), 7);
+      expect(NumberField.parse(''), isNull);
+      expect(NumberField.parse(null), isNull);
+      expect(NumberField.parse('1e999'), isNull);
     });
 
     test('compose returns the first message and skips nulls', () {
@@ -219,10 +219,10 @@ void main() {
       expect(v.maxLength(1)('ab'), 'Saisissez au plus 1 caractère');
       expect(v.phone()('12'), 'Saisissez un numéro de téléphone valide');
       expect(v.number()('x'), 'Saisissez un nombre valide');
-      expect(v.number(min: 1.5)('1'), "Saisissez une valeur d'au moins 1,5");
+      expect(v.number(min: 1.5)('1'), 'Saisissez une valeur d’au moins 1,5');
       expect(
         v.number(max: 1000)('2000'),
-        matches(RegExp(r"^Saisissez une valeur d'au plus 1\s000$")),
+        matches(RegExp(r'^Saisissez une valeur d’au plus 1\s000$')),
       );
     });
   });

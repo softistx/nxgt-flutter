@@ -5,15 +5,9 @@
 library;
 
 export 'actions.dart';
-export 'collections.dart';
-export 'dates.dart';
-export 'display.dart';
 export 'feedback.dart';
 export 'fields.dart';
 export 'forms.dart';
 export 'l10n.dart';
 export 'layout.dart';
-export 'media.dart';
-export 'overlays.dart';
-export 'selection.dart';
 export 'theme.dart';

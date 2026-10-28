@@ -101,127 +101,97 @@ abstract class NxgtMaterialLocalizations {
     Locale('fr'),
   ];
 
-  /// Primary button of a confirmation dialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm'**
-  String get actionsConfirm;
-
-  /// No description provided for @actionsCancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get actionsCancel;
-
-  /// No description provided for @actionsClose.
+  /// Tooltip and screen reader label of a close button, such as the one of a dismissible alert or toast.
   ///
   /// In en, this message translates to:
   /// **'Close'**
   String get actionsClose;
 
-  /// No description provided for @actionsSave.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get actionsSave;
-
-  /// No description provided for @actionsRetry.
+  /// Label of the button that tries a failed action or load again.
   ///
   /// In en, this message translates to:
   /// **'Retry'**
   String get actionsRetry;
 
-  /// No description provided for @actionsClear.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear'**
-  String get actionsClear;
-
-  /// No description provided for @actionsShowMore.
+  /// Label of the button that loads the next page of a list.
   ///
   /// In en, this message translates to:
   /// **'Show more'**
   String get actionsShowMore;
 
-  /// No description provided for @actionsShowLess.
-  ///
-  /// In en, this message translates to:
-  /// **'Show less'**
-  String get actionsShowLess;
-
-  /// No description provided for @actionsCopy.
+  /// Label of the button that copies a value to the clipboard.
   ///
   /// In en, this message translates to:
   /// **'Copy'**
   String get actionsCopy;
 
-  /// No description provided for @actionsCopied.
+  /// Label of the copy button after the value was copied, and what a screen reader announces.
   ///
   /// In en, this message translates to:
   /// **'Copied'**
   String get actionsCopied;
 
-  /// No description provided for @actionsMoreOptions.
+  /// Tooltip and screen reader label of the arrow button of a split button that opens its menu.
   ///
   /// In en, this message translates to:
   /// **'More options'**
   String get actionsMoreOptions;
 
-  /// No description provided for @fieldsRequired.
+  /// Error shown under a required field that is empty.
   ///
   /// In en, this message translates to:
   /// **'This field is required'**
   String get fieldsRequired;
 
-  /// No description provided for @fieldsInvalidEmail.
+  /// Error shown under an email field whose value is not an email address.
   ///
   /// In en, this message translates to:
   /// **'Enter a valid email address'**
   String get fieldsInvalidEmail;
 
-  /// No description provided for @fieldsMinLength.
+  /// Error shown under a field whose text is shorter than its minimum length.
   ///
   /// In en, this message translates to:
   /// **'Enter at least {count, plural, =1{1 character} other{{count} characters}}'**
   String fieldsMinLength(int count);
 
-  /// No description provided for @fieldsMaxLength.
+  /// Error shown under a field whose text is longer than its maximum length.
   ///
   /// In en, this message translates to:
   /// **'Enter at most {count, plural, =1{1 character} other{{count} characters}}'**
   String fieldsMaxLength(int count);
 
-  /// No description provided for @fieldsInvalidPhone.
+  /// Error shown under a phone field whose value is not a phone number.
   ///
   /// In en, this message translates to:
   /// **'Enter a valid phone number'**
   String get fieldsInvalidPhone;
 
-  /// No description provided for @fieldsInvalidNumber.
+  /// Error shown under a number field whose value is not a number.
   ///
   /// In en, this message translates to:
   /// **'Enter a valid number'**
   String get fieldsInvalidNumber;
 
-  /// No description provided for @fieldsMinValue.
+  /// Error shown under a number field whose value is below its minimum.
   ///
   /// In en, this message translates to:
   /// **'Enter a value of at least {min}'**
   String fieldsMinValue(String min);
 
-  /// No description provided for @fieldsMaxValue.
+  /// Error shown under a number field whose value is above its maximum.
   ///
   /// In en, this message translates to:
   /// **'Enter a value of at most {max}'**
   String fieldsMaxValue(String max);
 
-  /// No description provided for @fieldsShowPassword.
+  /// Tooltip and screen reader label of the button that reveals the password.
   ///
   /// In en, this message translates to:
   /// **'Show password'**
   String get fieldsShowPassword;
 
-  /// No description provided for @fieldsHidePassword.
+  /// Tooltip and screen reader label of the button that hides the password.
   ///
   /// In en, this message translates to:
   /// **'Hide password'**
@@ -233,25 +203,25 @@ abstract class NxgtMaterialLocalizations {
   /// **'Loading'**
   String get feedbackLoading;
 
-  /// No description provided for @feedbackEmptyTitle.
+  /// Title of an empty state when the app gives none.
   ///
   /// In en, this message translates to:
   /// **'Nothing here yet'**
   String get feedbackEmptyTitle;
 
-  /// No description provided for @feedbackEmptyMessage.
+  /// Message of an empty state when the app gives none.
   ///
   /// In en, this message translates to:
   /// **'There is nothing to show for now.'**
   String get feedbackEmptyMessage;
 
-  /// No description provided for @feedbackErrorTitle.
+  /// Title of an error state when the app gives none.
   ///
   /// In en, this message translates to:
   /// **'Something went wrong'**
   String get feedbackErrorTitle;
 
-  /// No description provided for @feedbackErrorMessage.
+  /// Message of an error state when the app gives none.
   ///
   /// In en, this message translates to:
   /// **'An error occurred. Try again in a moment.'**
@@ -281,13 +251,13 @@ abstract class NxgtMaterialLocalizations {
   /// **'Error'**
   String get feedbackToneError;
 
-  /// No description provided for @layoutOpenNavigation.
+  /// Tooltip and screen reader label of the menu button that opens the navigation drawer.
   ///
   /// In en, this message translates to:
   /// **'Open navigation'**
   String get layoutOpenNavigation;
 
-  /// No description provided for @layoutCloseNavigation.
+  /// Screen reader label of the action that closes the navigation drawer.
   ///
   /// In en, this message translates to:
   /// **'Close navigation'**
