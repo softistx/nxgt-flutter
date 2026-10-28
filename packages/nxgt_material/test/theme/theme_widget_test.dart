@@ -37,6 +37,25 @@ void main() {
     expect(captured.motif.preset, BackgroundPreset.confettiGrid);
   });
 
+  testWidgets('radii falls back to the defaults without a ThemeSpec', (
+    tester,
+  ) async {
+    late BuildContext captured;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            captured = context;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+
+    expect(captured.radii.xs, 4);
+    expect(captured.radii.xl, 28);
+  });
+
   testWidgets('the theme animates between two presets', (tester) async {
     Widget app(ThemeData theme) => MaterialApp(
       theme: theme,

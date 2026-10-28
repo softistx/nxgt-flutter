@@ -34,6 +34,15 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
   String get actionsShowLess => 'Show less';
 
   @override
+  String get actionsCopy => 'Copy';
+
+  @override
+  String get actionsCopied => 'Copied';
+
+  @override
+  String get actionsMoreOptions => 'More options';
+
+  @override
   String get fieldsRequired => 'This field is required';
 
   @override

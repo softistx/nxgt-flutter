@@ -149,6 +149,24 @@ abstract class NxgtMaterialLocalizations {
   /// **'Show less'**
   String get actionsShowLess;
 
+  /// No description provided for @actionsCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get actionsCopy;
+
+  /// No description provided for @actionsCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get actionsCopied;
+
+  /// No description provided for @actionsMoreOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get actionsMoreOptions;
+
   /// No description provided for @fieldsRequired.
   ///
   /// In en, this message translates to:

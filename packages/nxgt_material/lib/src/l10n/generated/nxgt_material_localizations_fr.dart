@@ -34,6 +34,15 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
   String get actionsShowLess => 'Afficher moins';
 
   @override
+  String get actionsCopy => 'Copier';
+
+  @override
+  String get actionsCopied => 'Copié';
+
+  @override
+  String get actionsMoreOptions => 'Plus d’options';
+
+  @override
   String get fieldsRequired => 'Ce champ est obligatoire';
 
   @override

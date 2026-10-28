@@ -6,14 +6,16 @@ import 'package:nxgt_material/src/theme/tones.dart';
 
 /// Reads the extensions of the nearest [Theme].
 ///
-/// Each getter throws a [FlutterError] naming the fix when the theme was not
-/// built from a `ThemeSpec`.
+/// Each getter except [radii] throws a [FlutterError] naming the fix when the
+/// theme was not built from a `ThemeSpec`; [radii] falls back to the Material 3
+/// Expressive defaults, so a component can use it under any theme.
 extension ThemeSpecContext on BuildContext {
   /// The tones of the theme.
   Tones get tones => _read<Tones>(this);
 
   /// The corner radii of the theme.
-  RadiusScale get radii => _read<RadiusScale>(this);
+  RadiusScale get radii =>
+      Theme.of(this).extension<RadiusScale>() ?? const RadiusScale();
 
   /// The font families of the theme.
   ThemeFonts get fonts => _read<ThemeFonts>(this);
