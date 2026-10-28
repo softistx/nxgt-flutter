@@ -39,3 +39,9 @@ jobs:
       # here and nowhere else.
       - name: Goldens
         run: dart run melos run goldens
+      - name: Upload golden failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures
+          path: packages/*/test/**/failures/**

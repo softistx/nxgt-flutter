@@ -1,0 +1,66 @@
+# Regenerates the Alchemist goldens on Linux and pushes them to a branch.
+#
+#   gh workflow run goldens-update.yml -f ref=<branch>
+#
+# A push made with GITHUB_TOKEN does not trigger CI, so re-run CI (or push an
+# empty commit) on the branch afterwards.
+name: goldens-update
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch to update
+        required: true
+        type: string
+
+concurrency:
+  group: goldens-update-${{ inputs.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Refuse a bad ref
+        env:
+          REF: ${{ inputs.ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          case "$REF" in
+            ""|develop|main|refs/*)
+              echo "refusing ref '$REF'" >&2
+              exit 1
+              ;;
+          esac
+          gh api "repos/${GITHUB_REPOSITORY}/branches/${REF}" --silent \
+            || { echo "'$REF' is not an existing remote branch" >&2; exit 1; }
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: .fvmrc
+          channel: stable
+          cache: true
+      - name: Install melos and resolve the workspace
+        run: |
+          dart pub get
+          dart run melos bootstrap
+      - name: Regenerate goldens
+        run: dart run melos run goldens:update
+      - name: Commit and push
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "test: regenerate goldens on linux"
+            git push origin "HEAD:refs/heads/${REF}"
+          else
+            echo "goldens unchanged"
+          fi
