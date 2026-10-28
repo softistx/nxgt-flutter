@@ -6,10 +6,12 @@ import 'package:nxgt_material/src/actions/async_button.dart';
 /// Pressing it validates the form; when every field is valid it saves them
 /// (`FormState.save`) and then awaits [onSubmit], showing the spinner of an
 /// [AsyncButton] meanwhile so the form cannot be sent twice. When a field is
-/// invalid nothing is sent: the fields show their errors, and the first one
-/// is announced by screen readers.
+/// invalid nothing is sent: the fields show their errors, the SDK announces
+/// the first error (`SemanticsService` / live region), and the button also
+/// scrolls to the first invalid field, in tree order, and moves focus to it.
 ///
-/// It must be below a [Form]; otherwise pressing it reports a [FlutterError]
+/// It must be inside a [Form] (a descendant of it); otherwise pressing it
+/// reports a [FlutterError]
 /// (see the troubleshooting page).
 class SubmitButton extends StatelessWidget {
   /// Creates a SubmitButton.
@@ -46,9 +48,31 @@ class SubmitButton extends StatelessWidget {
         ErrorHint('Wrap the fields and the button in a Form widget.'),
       ]);
     }
-    if (!form.validate()) return;
+    final invalid = form.validateGranularly();
+    if (invalid.isNotEmpty) {
+      _reveal(invalid.first);
+      return;
+    }
     form.save();
     await onSubmit!();
+  }
+
+  /// Scrolls to [field] and focuses its text input, when it has one.
+  static void _reveal(FormFieldState<Object?> field) {
+    final context = field.context;
+    Scrollable.ensureVisible(context);
+    FocusNode? node;
+    void visit(Element element) {
+      if (node != null) return;
+      if (element is StatefulElement && element.state is EditableTextState) {
+        node = (element.state as EditableTextState).widget.focusNode;
+        return;
+      }
+      element.visitChildren(visit);
+    }
+
+    context.visitChildElements(visit);
+    node?.requestFocus();
   }
 
   @override

@@ -53,6 +53,32 @@ void main() {
     expect(find.text('Enter a valid email address'), findsOneWidget);
   });
 
+  testWidgets('focuses the first invalid field, in tree order', (tester) async {
+    await tester.pumpWidget(
+      formHost([
+        const EmailField(label: 'Ok', initialValue: 'ada@example.com'),
+        const EmailField(label: 'First bad', initialValue: 'nope'),
+        const EmailField(label: 'Second bad', initialValue: 'nope too'),
+        SubmitButton(label: 'Send', onSubmit: () async {}),
+      ], formKey: key),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Send'));
+    await tester.pumpAndSettle();
+
+    final focused = FocusManager.instance.primaryFocus!;
+    expect(
+      find.ancestor(
+        of: find.byWidgetPredicate(
+          (w) => w is EditableText && w.focusNode == focused,
+        ),
+        matching: find.widgetWithText(TextFormField, 'First bad'),
+      ),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('is busy until the submit completes and ignores a second press', (
     tester,
   ) async {

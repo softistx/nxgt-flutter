@@ -6,7 +6,8 @@ import 'package:nxgt_material/src/fields/validators.dart';
 /// A text field for a phone number.
 ///
 /// Opens the phone keypad, accepts only the characters of a number (digits,
-/// a leading `+`, spaces, dots, dashes and parentheses), offers the saved
+/// a `+` only at the start, spaces, dots, dashes and parentheses), offers the
+/// saved
 /// number to autofill and rejects one that cannot be dialled. It does not
 /// reformat the text; parse it with your own phone library when you need an
 /// E.164 value.
@@ -73,10 +74,6 @@ class PhoneField extends StatelessWidget {
   /// The keyboard action button.
   final TextInputAction textInputAction;
 
-  static final _allowed = FilteringTextInputFormatter.allow(
-    RegExp(r'[\d+\s().\-]'),
-  );
-
   @override
   Widget build(BuildContext context) {
     final v = Validators.of(context);
@@ -96,7 +93,30 @@ class PhoneField extends StatelessWidget {
       keyboardType: TextInputType.phone,
       textInputAction: textInputAction,
       autofillHints: const [AutofillHints.telephoneNumber],
-      inputFormatters: [_allowed],
+      inputFormatters: const [_PhoneFilter()],
+    );
+  }
+}
+
+/// Keeps the characters of a number, and a `+` only as the first one.
+class _PhoneFilter extends TextInputFormatter {
+  const new();
+
+  static final _dropped = RegExp(r'[^\d+\s().\-]');
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final kept = newValue.text.replaceAll(_dropped, '');
+    final text = kept.isEmpty
+        ? kept
+        : kept[0] + kept.substring(1).replaceAll('+', '');
+    if (text == newValue.text) return newValue;
+    return TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
     );
   }
 }

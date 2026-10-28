@@ -196,6 +196,25 @@ void main() {
       handle.dispose();
     });
 
+    testWidgets('the toggle stays 48 dp with shrinkWrap tap targets', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          home: const Scaffold(body: PasswordField(label: 'Password')),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final size = tester.getSize(find.byTooltip('Show password'));
+      expect(size.width, greaterThanOrEqualTo(48));
+      expect(size.height, greaterThanOrEqualTo(48));
+    });
+
     testWidgets('announces the error and marks the field invalid', (
       tester,
     ) async {

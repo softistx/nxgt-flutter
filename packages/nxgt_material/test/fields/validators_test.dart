@@ -94,6 +94,20 @@ void main() {
       expect(v.number(min: 1, max: 3)('2'), isNull);
     });
 
+    test('parseNumber is strict', () {
+      expect(Validators.parseNumber('0x1A'), isNull);
+      expect(Validators.parseNumber('1e3'), isNull);
+      expect(Validators.parseNumber('1,234'), 1.234);
+      expect(Validators.parseNumber('1,234.5'), isNull);
+      expect(Validators.parseNumber('.5'), 0.5);
+      expect(Validators.parseNumber(',5'), 0.5);
+      expect(Validators.parseNumber('-2'), -2);
+      expect(Validators.parseNumber('1.'), isNull);
+      expect(Validators.parseNumber('--1'), isNull);
+      expect(v.number()('0x1A'), 'Enter a valid number');
+      expect(v.number()('1e3'), 'Enter a valid number');
+    });
+
     test('parseNumber reads a comma and rejects the rest', () {
       expect(Validators.parseNumber('2,5'), 2.5);
       expect(Validators.parseNumber(' 7 '), 7);
@@ -115,6 +129,81 @@ void main() {
       expect(composed('a@b.co'), 'Enter at least 20 characters');
       expect(composed('a-very-long-address@example.org'), isNull);
       expect(v.compose(const [])('anything'), isNull);
+    });
+  });
+
+  group('table-driven edge cases', () {
+    final v = Validators(NxgtMaterialLocalizationsEn());
+
+    final emails = {
+      'a@b': false,
+      'a@b.c': true,
+      'a b@c.de': false,
+      'a@b c.de': false,
+      ' a@b.co ': true,
+      'a@b.co ': true,
+    };
+    for (final MapEntry(key: input, value: valid) in emails.entries) {
+      test('email "$input" is ${valid ? 'valid' : 'invalid'}', () {
+        expect(v.email()(input), valid ? isNull : isNotNull);
+      });
+    }
+
+    final phones = {
+      '123456': false,
+      '1234567': true,
+      '123456789012345': true,
+      '1234567890123456': false,
+    };
+    for (final MapEntry(key: input, value: valid) in phones.entries) {
+      test(
+        'phone with ${input.length} digits is ${valid ? 'valid' : 'invalid'}',
+        () {
+          expect(v.phone()(input), valid ? isNull : isNotNull);
+        },
+      );
+    }
+
+    final validators = <String, FormFieldValidator<String>>{
+      'email': v.email(),
+      'minLength': v.minLength(3),
+      'maxLength': v.maxLength(3),
+      'phone': v.phone(),
+      'number': v.number(min: 1, max: 2),
+    };
+    for (final MapEntry(key: name, value: validator) in validators.entries) {
+      test('$name accepts an empty value', () {
+        expect(validator(''), isNull);
+        expect(validator(null), isNull);
+      });
+    }
+
+    test('only required rejects an empty value', () {
+      expect(v.required()(''), isNotNull);
+    });
+
+    test('the length messages use the plural form', () {
+      expect(v.l10n.fieldsMinLength(1), 'Enter at least 1 character');
+      expect(v.l10n.fieldsMinLength(2), 'Enter at least 2 characters');
+      expect(v.l10n.fieldsMaxLength(1), 'Enter at most 1 character');
+      expect(v.l10n.fieldsMaxLength(10), 'Enter at most 10 characters');
+    });
+
+    test('compose runs in order and skips null validators', () {
+      final calls = <String>[];
+      FormFieldValidator<String> spy(String name, String? result) => (_) {
+        calls.add(name);
+        return result;
+      };
+      final composed = v.compose([
+        spy('a', null),
+        null,
+        spy('b', 'second'),
+        spy('c', 'third'),
+      ]);
+
+      expect(composed('x'), 'second');
+      expect(calls, ['a', 'b']);
     });
   });
 

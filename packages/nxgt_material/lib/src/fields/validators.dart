@@ -35,17 +35,20 @@ class Validators {
     '[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?'
     r'(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$',
   );
+  static final _number = RegExp(r'^-?\d+([.,]\d+)?$|^-?[.,]\d+$');
   static final _phone = RegExp(r'^\+?[\d\s().\-]+$');
 
   /// Parses what a user typed in a number field.
   ///
-  /// Accepts a comma as the decimal separator (French keyboards) and
-  /// surrounding spaces. Returns `null` for an empty or malformed text.
+  /// A comma or a point is the decimal separator (French keyboards have a
+  /// comma); there are no thousands separators, so `1,234` is 1.234 and
+  /// `1,234.5` is malformed. Surrounding spaces are ignored. Hexadecimal and
+  /// exponent forms (`0x1A`, `1e3`) are rejected. Returns `null` for an empty
+  /// or malformed text.
   static num? parseNumber(String? text) {
-    final trimmed = text?.trim().replaceAll(',', '.');
-    if (trimmed == null || trimmed.isEmpty) return null;
-    final value = num.tryParse(trimmed);
-    return value == null || !value.isFinite ? null : value;
+    final trimmed = text?.trim();
+    if (trimmed == null || !_number.hasMatch(trimmed)) return null;
+    return num.tryParse(trimmed.replaceAll(',', '.'));
   }
 
   /// Fails when the value is `null` or blank.

@@ -5,7 +5,7 @@ adaptive layout, fields and forms, feedback states, themes. Intent-named,
 accessible, French and English.
 
 > Status: pre-0.1. Components are arriving category by category toward 0.1
-> (theme, localization and actions are in); see the [roadmap](docs/roadmap.md).
+> (theme, localization, actions, fields and forms are in); see the [roadmap](docs/roadmap.md).
 
 Runs on Android, iOS, web, macOS, Windows and Linux.
 
@@ -169,6 +169,20 @@ Form(
     ],
   ),
 )
+
+// A phone number, filtered to what a number can contain.
+const PhoneField(label: 'Phone')
+
+// A number in a range; a comma is read as a decimal point.
+NumberField(
+  label: 'Quantity',
+  min: 1,
+  max: 99,
+  onChanged: (text) => quantity = NumberField.parse(text),
+)
+
+// Grows from 3 to 8 lines, with a counter.
+const TextAreaField(label: 'Notes', maxLength: 500)
 
 // The same rules on any TextFormField:
 final v = Validators.of(context);

@@ -120,7 +120,13 @@ void main() {
 
     expect(
       tester.widget<EditableText>(find.byType(EditableText)).controller.text,
-      '06 -12.(3)+',
+      '06 -12.(3)',
+    );
+
+    await tester.enterText(find.byType(EditableText), '+33 6+12');
+    expect(
+      tester.widget<EditableText>(find.byType(EditableText)).controller.text,
+      '+33 612',
     );
   });
 

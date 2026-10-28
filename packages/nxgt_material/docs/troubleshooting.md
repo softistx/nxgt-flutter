@@ -87,3 +87,32 @@ Form(
   ),
 )
 ```
+
+## Validation messages stay in the old language after a locale change
+
+**When:** a `Validators.of(context)` set was built once (in `initState`, a
+static field or a view model) and the app locale changes later.
+
+**Why:** the set reads `context.materialL10n` when it is built and keeps those
+strings. Only a set built in `build` is rebuilt with the new locale.
+
+**Fix:** build it in `build`, where the locale is a dependency:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final v = Validators.of(context);
+  return TextFormField(validator: v.compose([v.required(), v.minLength(3)]));
+}
+```
+
+## An error message is still in the old language after a locale change
+
+**When:** a field already showing an error when the locale changes.
+
+**Why:** a `FormField` keeps the message it computed at the last validation;
+nothing recomputes it when the locale changes.
+
+**Fix:** revalidate after the change, for example
+`formKey.currentState?.validate()`, or use
+`AutovalidateMode.onUserInteraction` so the next edit refreshes it.
