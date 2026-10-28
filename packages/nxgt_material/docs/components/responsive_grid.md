@@ -25,6 +25,13 @@ SingleChildScrollView(
 )
 ```
 
+## Limits
+
+It follows the width it is *given*, not the window: in a horizontal scroll view
+or an unconstrained `Row` it has no width to follow and lays out one tile
+width per child; give it a bounded width. Inside an `IntrinsicWidth` or a
+`Table` it fails, see [troubleshooting](../troubleshooting.md).
+
 ## Accessibility
 
 It adds no semantics: each tile keeps its own label, role and 48 dp target,

@@ -74,12 +74,58 @@ void main() {
     expect(back, 1);
   });
 
-  testWidgets('the back gesture on the list leaves the route', (tester) async {
+  testWidgets('the back gesture on the list really pops the route', (
+    tester,
+  ) async {
     var back = 0;
-    await _pump(tester, 400, _layout(onBack: () => back++));
+    tester.view
+      ..physicalSize = const Size(400, 800)
+      ..devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpApp(themedHost(const SizedBox()));
+    tester
+        .state<NavigatorState>(find.byType(Navigator))
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => Scaffold(body: _layout(onBack: () => back++)),
+          ),
+        );
+    await tester.pumpAndSettle();
+    expect(find.byType(ListDetailLayout), findsOneWidget);
     await tester.binding.handlePopRoute();
-    await tester.pump();
+    await tester.pumpAndSettle();
+    expect(find.byType(ListDetailLayout), findsNothing);
     expect(back, 0);
+  });
+
+  testWidgets('both panes keep their state across 648 dp, hidden or not', (
+    tester,
+  ) async {
+    _Probe.mounts = 0;
+    Widget probe(double width, {required bool showDetail}) => Align(
+      alignment: Alignment.topLeft,
+      child: SizedBox(
+        width: width,
+        child: ListDetailLayout(
+          showDetail: showDetail,
+          list: const _Probe(),
+          detail: const _Probe(),
+        ),
+      ),
+    );
+    await _pump(tester, 1000, probe(900, showDetail: true));
+    expect(_Probe.mounts, 2);
+    for (final (width, detail) in [
+      (500.0, true),
+      (500.0, false),
+      (649.0, false),
+      (648.0, true),
+      (900.0, true),
+    ]) {
+      await tester.pumpWidget(themedHost(probe(width, showDetail: detail)));
+      await tester.pump();
+    }
+    expect(_Probe.mounts, 2);
   });
 
   testWidgets('the detail pane has a rounded surface (plain theme too)', (
@@ -140,4 +186,24 @@ void main() {
       handle.dispose();
     });
   });
+}
+
+class _Probe extends StatefulWidget {
+  const new();
+
+  static int mounts = 0;
+
+  @override
+  State<_Probe> createState() => _ProbeState();
+}
+
+class _ProbeState extends State<_Probe> {
+  @override
+  void initState() {
+    super.initState();
+    _Probe.mounts++;
+  }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox(height: 10);
 }

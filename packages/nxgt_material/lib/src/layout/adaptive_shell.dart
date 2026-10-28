@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/layout/safe_sides.dart';
 import 'package:nxgt_material/src/layout/shell_destination.dart';
+import 'package:nxgt_material/src/layout/shell_navigation.dart';
+import 'package:nxgt_material/src/layout/shell_validation.dart';
 import 'package:nxgt_material/src/layout/window_size.dart';
 
 /// The frame of an app: its [destinations] as a navigation bar, a rail or a
@@ -21,8 +24,10 @@ import 'package:nxgt_material/src/layout/window_size.dart';
 /// order (Tab moves through them, Enter or Space selects) and highlight under
 /// a mouse pointer, as Material's own destinations do.
 ///
-/// It builds a [Scaffold]; keep the app bar of each screen in the [body] or
-/// give the shell a [title] for a shared one.
+/// It builds a [Scaffold]: give it a [title] (or an [appBar]) for a shared app
+/// bar, or keep an app bar in each screen. A screen's own `Scaffold` can nest
+/// inside [body]. The [body] keeps its state when the window changes class,
+/// and an open drawer closes when the window leaves the compact class.
 class AdaptiveShell extends StatefulWidget {
   /// Creates an AdaptiveShell.
   const new({
@@ -32,7 +37,11 @@ class AdaptiveShell extends StatefulWidget {
     required this.body,
     this.compactNavigation = CompactNavigation.bar,
     this.title,
+    this.appBar,
+    this.actions,
     this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.bottomSheet,
     super.key,
   });
 
@@ -51,12 +60,27 @@ class AdaptiveShell extends StatefulWidget {
   /// What a compact window uses: a bar (default) or a drawer.
   final CompactNavigation compactNavigation;
 
-  /// The title of a shared app bar; without it the shell has no app bar,
-  /// except in [CompactNavigation.drawer], whose menu button needs one.
+  /// The title of a shared app bar; without it (and without [appBar]) the
+  /// shell has no app bar, except in [CompactNavigation.drawer], whose menu
+  /// button needs one.
   final Widget? title;
+
+  /// A shared app bar of your own; it replaces the one built from [title] and
+  /// [actions]. With [CompactNavigation.drawer] the `AppBar` adds Material's
+  /// drawer button on its own, unless you set its `leading`.
+  final PreferredSizeWidget? appBar;
+
+  /// Actions of the app bar built from [title].
+  final List<Widget>? actions;
 
   /// A floating action button over the body.
   final Widget? floatingActionButton;
+
+  /// Where the floating action button sits.
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+
+  /// A persistent bottom sheet, as `Scaffold.bottomSheet`.
+  final Widget? bottomSheet;
 
   @override
   State<AdaptiveShell> createState() => _AdaptiveShellState();
@@ -75,7 +99,7 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
   @override
   void initState() {
     super.initState();
-    _report();
+    reportShellProblems(widget.destinations, widget.selectedIndex);
   }
 
   @override
@@ -83,45 +107,24 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.destinations.length != widget.destinations.length ||
         oldWidget.selectedIndex != widget.selectedIndex) {
-      _report();
+      reportShellProblems(widget.destinations, widget.selectedIndex);
     }
   }
 
-  void _report() {
-    final count = widget.destinations.length;
-    if (!_usable) {
-      FlutterError.reportError(
-        FlutterErrorDetails(
-          exception: FlutterError.fromParts([
-            ErrorSummary('AdaptiveShell needs at least two destinations.'),
-            ErrorDescription('It was given $count.'),
-            ErrorHint(
-              'Navigation bars and rails need two or more places; the body is '
-              'shown without navigation until there are.',
-            ),
-          ]),
-          library: 'nxgt_material',
-          context: ErrorDescription('while building an AdaptiveShell'),
-        ),
-      );
-    } else if (widget.selectedIndex < 0 || widget.selectedIndex >= count) {
-      FlutterError.reportError(
-        FlutterErrorDetails(
-          exception: FlutterError.fromParts([
-            ErrorSummary('AdaptiveShell.selectedIndex is out of range.'),
-            ErrorDescription(
-              'It was ${widget.selectedIndex} for $count destinations.',
-            ),
-            ErrorHint(
-              'Use an index from 0 to ${count - 1}; the nearest one is '
-              'selected meanwhile.',
-            ),
-          ]),
-          library: 'nxgt_material',
-          context: ErrorDescription('while building an AdaptiveShell'),
-        ),
-      );
-    }
+  PreferredSizeWidget? _appBar(bool drawer, String openLabel) {
+    if (widget.appBar != null) return widget.appBar;
+    if (widget.title == null && !drawer) return null;
+    return AppBar(
+      title: widget.title,
+      actions: widget.actions,
+      leading: drawer
+          ? IconButton(
+              tooltip: openLabel,
+              icon: const Icon(Icons.menu),
+              onPressed: () => _scaffold.currentState?.openDrawer(),
+            )
+          : null,
+    );
   }
 
   @override
@@ -129,161 +132,72 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
     final size = context.windowSize;
     if (!_usable) {
       return Scaffold(
-        appBar: widget.title == null ? null : AppBar(title: widget.title),
+        appBar:
+            widget.appBar ??
+            (widget.title == null
+                ? null
+                : AppBar(title: widget.title, actions: widget.actions)),
         body: SafeArea(child: widget.body),
         floatingActionButton: widget.floatingActionButton,
+        floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        bottomSheet: widget.bottomSheet,
       );
     }
+    final compact = size == WindowSize.compact;
     final drawer =
-        size == WindowSize.compact &&
-        widget.compactNavigation == CompactNavigation.drawer;
-    final bar = size == WindowSize.compact && !drawer;
-    final wide = size.isAtLeast(WindowSize.expanded);
+        compact && widget.compactNavigation == CompactNavigation.drawer;
+    final bar = compact && !drawer;
     final rail = size == WindowSize.medium;
-    final side = rail || wide;
-    final hasAppBar = widget.title != null || drawer;
+    final standing = size.isAtLeast(WindowSize.expanded);
     final l10n = context.materialL10n;
-
-    final body = Expanded(
-      child: SafeArea(
-        top: !hasAppBar,
-        bottom: !bar,
-        left: !side,
-        child: widget.body,
-      ),
+    final appBar = _appBar(drawer, l10n.layoutOpenNavigation);
+    final data = ShellNavigationData(
+      destinations: widget.destinations,
+      selectedIndex: _index,
+      onSelected: widget.onSelected,
+      label: l10n.layoutNavigation,
     );
 
+    if (!drawer) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final scaffold = _scaffold.currentState;
+        if (mounted && (scaffold?.isDrawerOpen ?? false)) {
+          scaffold!.closeDrawer();
+        }
+      });
+    }
+
+    // One Row for every size class, the navigation in its first slot, so the
+    // body keeps its place in the tree (and its state) when the class changes.
     return Scaffold(
       key: _scaffold,
-      appBar: hasAppBar
-          ? AppBar(
-              title: widget.title,
-              leading: drawer
-                  ? IconButton(
-                      tooltip: l10n.layoutOpenNavigation,
-                      icon: const Icon(Icons.menu),
-                      onPressed: () => _scaffold.currentState?.openDrawer(),
-                    )
-                  : null,
-            )
+      appBar: appBar,
+      drawer: widget.compactNavigation == CompactNavigation.drawer
+          ? buildShellModalDrawer(context, data, l10n.layoutCloseNavigation)
           : null,
-      drawer: drawer ? _buildDrawer(l10n.layoutCloseNavigation) : null,
+      drawerEnableOpenDragGesture: drawer,
       floatingActionButton: widget.floatingActionButton,
-      bottomNavigationBar: bar ? _buildBar(l10n.layoutNavigation) : null,
-      body: side
-          ? Row(
-              children: [
-                if (rail)
-                  _buildRail(l10n.layoutNavigation)
-                else
-                  _buildStandardDrawer(l10n.layoutNavigation),
-                body,
-              ],
-            )
-          : Column(children: [body]),
-    );
-  }
-
-  Widget _group(String label, Widget child) => Semantics(
-    container: true,
-    explicitChildNodes: true,
-    label: label,
-    child: FocusTraversalGroup(
-      policy: ReadingOrderTraversalPolicy(),
-      child: child,
-    ),
-  );
-
-  Widget _buildBar(String label) => _group(
-    label,
-    NavigationBar(
-      selectedIndex: _index,
-      onDestinationSelected: widget.onSelected,
-      destinations: [
-        for (final d in widget.destinations)
-          NavigationDestination(
-            icon: _badged(d, d.icon),
-            selectedIcon: _badged(d, d.selectedIcon ?? d.icon),
-            label: d.label,
-          ),
-      ],
-    ),
-  );
-
-  Widget _buildRail(String label) => _group(
-    label,
-    SafeArea(
-      right: false,
-      child: NavigationRail(
-        selectedIndex: _index,
-        onDestinationSelected: widget.onSelected,
-        labelType: NavigationRailLabelType.all,
-        destinations: [
-          for (final d in widget.destinations)
-            NavigationRailDestination(
-              icon: _badged(d, d.icon),
-              selectedIcon: _badged(d, d.selectedIcon ?? d.icon),
-              label: Text(d.label),
+      floatingActionButtonLocation: widget.floatingActionButtonLocation,
+      bottomSheet: widget.bottomSheet,
+      bottomNavigationBar: bar ? buildShellBar(data) : null,
+      body: Row(
+        children: [
+          if (rail)
+            buildShellRail(data)
+          else if (standing)
+            buildShellStandardDrawer(data)
+          else
+            const SizedBox.shrink(),
+          Expanded(
+            child: SafeSides(
+              start: !rail && !standing,
+              top: appBar == null,
+              bottom: !bar,
+              child: widget.body,
             ),
+          ),
         ],
       ),
-    ),
-  );
-
-  Widget _buildStandardDrawer(String label) => _group(
-    label,
-    SafeArea(
-      right: false,
-      child: SizedBox(
-        width: 280,
-        child: NavigationDrawer(
-          elevation: 0,
-          selectedIndex: _index,
-          onDestinationSelected: widget.onSelected,
-          children: [..._drawerDestinations(), const SizedBox(height: 12)],
-        ),
-      ),
-    ),
-  );
-
-  Widget _buildDrawer(String closeLabel) => NavigationDrawer(
-    selectedIndex: _index,
-    onDestinationSelected: (i) {
-      Navigator.of(context).maybePop();
-      widget.onSelected(i);
-    },
-    children: [
-      Align(
-        alignment: AlignmentDirectional.centerEnd,
-        child: Padding(
-          padding: const EdgeInsetsDirectional.only(end: 12),
-          child: IconButton(
-            tooltip: closeLabel,
-            icon: const Icon(Icons.close),
-            onPressed: () => Navigator.of(context).maybePop(),
-          ),
-        ),
-      ),
-      ..._drawerDestinations(),
-    ],
-  );
-
-  List<Widget> _drawerDestinations() => [
-    for (final d in widget.destinations)
-      NavigationDrawerDestination(
-        icon: _badged(d, d.icon),
-        selectedIcon: _badged(d, d.selectedIcon ?? d.icon),
-        label: Text(d.label),
-      ),
-  ];
-
-  Widget _badged(ShellDestination d, Widget icon) => d.badge == null
-      ? icon
-      : Stack(
-          clipBehavior: Clip.none,
-          children: [
-            icon,
-            PositionedDirectional(top: -4, end: -6, child: d.badge!),
-          ],
-        );
+    );
+  }
 }

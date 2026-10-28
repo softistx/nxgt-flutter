@@ -10,8 +10,12 @@ import 'package:nxgt_material/src/theme/theme_context.dart';
 /// the [detail] while [showDetail] is true, the [list] otherwise, and the
 /// system back gesture calls [onBack] so the app can clear its selection and
 /// return to the list. It follows its own width, not the window's, so it also
-/// works in a column or a dialog.
-class ListDetailLayout extends StatelessWidget {
+/// works in a column or a dialog, and needs a bounded width.
+///
+/// Both panes keep their state (scroll position, text being typed) when the
+/// layout crosses 648 dp, and the hidden pane of a narrow layout stays alive
+/// but is neither focusable nor read by screen readers.
+class ListDetailLayout extends StatefulWidget {
   /// Creates a ListDetailLayout.
   const new({
     required this.list,
@@ -38,28 +42,57 @@ class ListDetailLayout extends StatelessWidget {
   final double listWidth;
 
   @override
+  State<ListDetailLayout> createState() => _ListDetailLayoutState();
+}
+
+class _ListDetailLayoutState extends State<ListDetailLayout> {
+  final GlobalKey _listKey = GlobalKey();
+  final GlobalKey _detailKey = GlobalKey();
+
+  Widget _hideable(Widget child, {required bool hidden}) => Offstage(
+    offstage: hidden,
+    child: TickerMode(
+      enabled: !hidden,
+      child: ExcludeFocus(excluding: hidden, child: child),
+    ),
+  );
+
+  @override
   Widget build(BuildContext context) {
+    final list = KeyedSubtree(key: _listKey, child: widget.list);
+    final detail = KeyedSubtree(key: _detailKey, child: widget.detail);
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth > Breakpoints.singlePane) {
-          return Row(
-            children: [
-              SizedBox(
-                width: listWidth,
-                child: Semantics(container: true, child: list),
-              ),
-              Expanded(child: _DetailPane(child: detail)),
-            ],
-          );
-        }
+        final wide = constraints.maxWidth > Breakpoints.singlePane;
+        final back = !wide && widget.showDetail && widget.onBack != null;
         return PopScope(
-          canPop: !(showDetail && onBack != null),
+          canPop: !back,
           onPopInvokedWithResult: (didPop, _) {
-            if (!didPop) onBack?.call();
+            if (!didPop) widget.onBack?.call();
           },
-          child: showDetail
-              ? Semantics(container: true, child: detail)
-              : Semantics(container: true, child: list),
+          child: wide
+              ? Row(
+                  children: [
+                    SizedBox(
+                      width: widget.listWidth,
+                      child: Semantics(container: true, child: list),
+                    ),
+                    Expanded(child: _DetailPane(child: detail)),
+                  ],
+                )
+              : Stack(
+                  fit: StackFit.passthrough,
+                  children: [
+                    _hideable(
+                      Semantics(container: true, child: list),
+                      hidden: widget.showDetail,
+                    ),
+                    _hideable(
+                      Semantics(container: true, child: detail),
+                      hidden: !widget.showDetail,
+                    ),
+                  ],
+                ),
         );
       },
     );

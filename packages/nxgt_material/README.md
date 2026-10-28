@@ -5,7 +5,7 @@ adaptive layout, fields and forms, feedback states, themes. Intent-named,
 accessible, French and English.
 
 > Status: pre-0.1. Components are arriving category by category toward 0.1
-> (theme, localization, actions, fields, forms and feedback are in); see the [roadmap](docs/roadmap.md).
+> (theme, localization, actions, fields, forms, feedback and adaptive layout are in); see the [roadmap](docs/roadmap.md).
 
 Runs on Android, iOS, web, macOS, Windows and Linux.
 
@@ -266,31 +266,65 @@ classes; no extra package.
 | `ListDetailLayout` | List and detail side by side, or one at a time under 648 dp |
 
 ```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:nxgt_material/l10n.dart';
 import 'package:nxgt_material/layout.dart';
 
-AdaptiveShell(
-  destinations: const [
-    ShellDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-    ShellDestination(icon: Icon(Icons.inbox_outlined), label: 'Inbox'),
-  ],
-  selectedIndex: index,
-  onSelected: (i) => setState(() => index = i),
-  body: SingleChildScrollView(
-    child: PageBody(
-      child: ResponsiveGrid(children: [for (final s in stats) StatTile(s)]),
-    ),
+void main() => runApp(
+  MaterialApp(
+    localizationsDelegates: const [
+      NxgtMaterialLocalizationsDelegate(),
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: NxgtMaterialLocalizations.supportedLocales,
+    home: const Home(),
   ),
-)
+);
 
-if (context.windowSize == WindowSize.compact) { /* one column */ }
+class Home extends StatefulWidget {
+  const Home({super.key});
 
-ListDetailLayout(
-  showDetail: selected != null,
-  onBack: () => setState(() => selected = null),
-  list: InvoiceList(onTap: (i) => setState(() => selected = i)),
-  detail: InvoiceDetail(selected),
-)
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return AdaptiveShell(
+      destinations: const [
+        ShellDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
+        ShellDestination(icon: Icon(Icons.inbox_outlined), label: 'Inbox'),
+      ],
+      selectedIndex: index,
+      onSelected: (i) => setState(() => index = i),
+      body: SingleChildScrollView(
+        child: PageBody(
+          child: ResponsiveGrid(
+            children: [
+              for (var i = 0; i < 6; i++)
+                Card(child: SizedBox(height: 80, child: Center(child: Text('Tile $i')))),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 ```
+
+Read the class anywhere with `context.windowSize`
+(`if (context.windowSize == WindowSize.compact) ...`). A list and its detail:
+`ListDetailLayout(showDetail: selected != null, onBack: clear, list: ..., detail: ...)`,
+see [ListDetailLayout](docs/components/list_detail_layout.md). The shell takes
+`title`, `appBar`, `actions`, `floatingActionButton`,
+`floatingActionButtonLocation` and `bottomSheet`, and a screen's own
+`Scaffold` can nest in `body`.
 
 Guide: [Adaptive layout](docs/guide/adaptive.md). Pages:
 [WindowSize](docs/components/window_size.md),

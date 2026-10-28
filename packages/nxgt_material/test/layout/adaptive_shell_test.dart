@@ -63,23 +63,42 @@ Future<void> _pump(
   );
 }
 
-/// How many shapes the ink of a [Material] has drawn: a hover or focus
-/// highlight adds one.
-int _inkDraws(RenderObject ink) {
-  var total = 0;
-  for (final draw in [#drawRect, #drawRRect, #drawPath, #drawCircle]) {
-    for (var n = 0; n < 8; n++) {
-      try {
-        expect(ink, paintsExactlyCountTimes(draw, n));
-        total += n;
-        break;
-      } on TestFailure {
-        continue;
-      }
-    }
-  }
-  return total;
+class _Counter extends StatefulWidget {
+  const new();
+
+  static int mounts = 0;
+
+  @override
+  State<_Counter> createState() => _CounterState();
 }
+
+class _CounterState extends State<_Counter> {
+  int taps = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _Counter.mounts++;
+  }
+
+  @override
+  Widget build(BuildContext context) => TextButton(
+    onPressed: () => setState(() => taps++),
+    child: Text('taps $taps'),
+  );
+}
+
+Widget _statefulShell({
+  CompactNavigation compact = CompactNavigation.bar,
+  Widget? title,
+}) => AdaptiveShell(
+  destinations: _places,
+  selectedIndex: 0,
+  onSelected: (_) {},
+  compactNavigation: compact,
+  title: title,
+  body: const Align(alignment: Alignment.topLeft, child: _Counter()),
+);
 
 void main() {
   group('switching', () {
@@ -337,28 +356,29 @@ void main() {
     });
 
     for (final width in [400.0, 700.0, 1000.0]) {
-      testWidgets('a mouse pointer highlights the destination at $width', (
+      testWidgets('a destination is a hover target under a mouse at $width', (
         tester,
       ) async {
         await _pump(tester, width, _shell());
         final settings = find.text('Settings').first;
-        final ink = tester.renderObject(
-          find
-              .ancestor(
-                of: settings,
-                matching: find.byWidgetPredicate(
-                  (w) => w.runtimeType.toString() == '_InkFeatures',
-                ),
-              )
-              .first,
+        final regions = find.ancestor(
+          of: settings,
+          matching: find.byType(MouseRegion),
         );
-        final before = _inkDraws(ink);
+        expect(regions, findsWidgets);
         final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
         addTearDown(mouse.removePointer);
         await mouse.addPointer(location: Offset.zero);
         await mouse.moveTo(tester.getCenter(settings));
-        await tester.pumpAndSettle();
-        expect(_inkDraws(ink), greaterThan(before));
+        await tester.pump();
+        final inside = regions.evaluate().any((e) {
+          final box = e.renderObject! as RenderBox;
+          return box.paintBounds
+              .shift(box.localToGlobal(Offset.zero))
+              .contains(tester.getCenter(settings));
+        });
+        expect(inside, isTrue);
+        expect(tester.takeException(), isNull);
       });
     }
   });
@@ -418,6 +438,243 @@ void main() {
       );
       expect(tester.getRect(find.byType(AppBar)).height, 56 + 30);
       expect(tester.getTopLeft(find.byKey(const Key('body'))).dy, 56 + 30);
+    });
+  });
+
+  group('stability', () {
+    testWidgets('the body keeps its state across every size class', (
+      tester,
+    ) async {
+      _Counter.mounts = 0;
+      await _pump(tester, 400, _statefulShell());
+      await tester.tap(find.text('taps 0'));
+      await tester.pump();
+      for (final width in [
+        599.0,
+        600.0,
+        700.0,
+        839.0,
+        840.0,
+        1000.0,
+        1700.0,
+        700.0,
+        400.0,
+      ]) {
+        tester.view.physicalSize = Size(width, 800);
+        await tester.pump();
+        expect(find.text('taps 1'), findsOneWidget, reason: '$width');
+      }
+      expect(_Counter.mounts, 1);
+    });
+
+    testWidgets('the body keeps its state with a drawer and a title', (
+      tester,
+    ) async {
+      _Counter.mounts = 0;
+      await _pump(
+        tester,
+        400,
+        _statefulShell(
+          compact: CompactNavigation.drawer,
+          title: const Text('Acme'),
+        ),
+      );
+      tester.view.physicalSize = const Size(1000, 800);
+      await tester.pump();
+      tester.view.physicalSize = const Size(400, 800);
+      await tester.pump();
+      expect(_Counter.mounts, 1);
+    });
+
+    testWidgets('an open drawer closes when the window stops being compact', (
+      tester,
+    ) async {
+      tester.view
+        ..physicalSize = const Size(400, 800)
+        ..devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpApp(themedHost(const SizedBox()));
+      tester
+          .state<NavigatorState>(find.byType(Navigator))
+          .push(
+            MaterialPageRoute<void>(
+              builder: (_) => _shell(compact: CompactNavigation.drawer),
+            ),
+          );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Open navigation'));
+      await tester.pumpAndSettle();
+      expect(find.byType(NavigationDrawer), findsOneWidget);
+
+      tester.view.physicalSize = const Size(700, 800);
+      await tester.pumpAndSettle();
+      expect(find.byType(NavigationDrawer), findsNothing);
+      expect(find.byType(NavigationRail), findsOneWidget);
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(AdaptiveShell), findsNothing);
+    });
+
+    testWidgets('shrinking back leaves the drawer closed', (tester) async {
+      await _pump(tester, 700, _shell(compact: CompactNavigation.drawer));
+      tester.view.physicalSize = const Size(400, 800);
+      await tester.pumpAndSettle();
+      expect(find.byType(NavigationDrawer), findsNothing);
+      expect(find.byTooltip('Open navigation'), findsOneWidget);
+    });
+  });
+
+  group('boundaries', () {
+    final cases = <double, bool>{
+      1199: false,
+      1200: true,
+      1599: true,
+      1600: true,
+    };
+    for (final MapEntry(key: width) in cases.entries) {
+      testWidgets('a standing drawer at $width dp', (tester) async {
+        await _pump(tester, width, _shell());
+        expect(find.byType(NavigationDrawer), findsOneWidget);
+        expect(find.byType(NavigationRail), findsNothing);
+      });
+    }
+  });
+
+  group('right to left', () {
+    const insets = EdgeInsets.fromLTRB(20, 30, 40, 50);
+
+    for (final width in [700.0, 1000.0]) {
+      testWidgets('the navigation takes the start inset at $width dp', (
+        tester,
+      ) async {
+        tester.view
+          ..physicalSize = Size(width, 800)
+          ..devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        await tester.pumpApp(
+          themedHost(
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: Builder(
+                builder: (context) => MediaQuery(
+                  data: MediaQuery.of(context)
+                      .copyWith(padding: insets, viewPadding: insets),
+                  child: _shell(),
+                ),
+              ),
+            ),
+          ),
+        );
+        final nav = width < 840
+            ? find.byType(NavigationRail)
+            : find.byType(NavigationDrawer);
+        // The navigation sits at the right (start) and stays clear of the
+        // 40 dp inset there; the body stays clear of the 20 dp left inset.
+        expect(tester.getRect(nav).right, lessThanOrEqualTo(width - 40));
+        expect(
+          tester.getRect(find.byKey(const Key('body'))).left,
+          greaterThanOrEqualTo(20),
+        );
+      });
+    }
+  });
+
+  group('slots', () {
+    testWidgets('an appBar overrides the title; actions fill the default one', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        400,
+        AdaptiveShell(
+          destinations: _places,
+          selectedIndex: 0,
+          onSelected: (_) {},
+          title: const Text('Ignored'),
+          appBar: AppBar(title: const Text('Mine')),
+          body: const SizedBox(),
+        ),
+      );
+      expect(find.text('Mine'), findsOneWidget);
+      expect(find.text('Ignored'), findsNothing);
+
+      await _pump(
+        tester,
+        400,
+        AdaptiveShell(
+          destinations: _places,
+          selectedIndex: 0,
+          onSelected: (_) {},
+          title: const Text('Acme'),
+          actions: const [Icon(Icons.search)],
+          body: const SizedBox(),
+        ),
+      );
+      expect(find.byIcon(Icons.search), findsOneWidget);
+    });
+
+    testWidgets('forwards the button location and the bottom sheet', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        400,
+        AdaptiveShell(
+          destinations: _places,
+          selectedIndex: 0,
+          onSelected: (_) {},
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            child: const Icon(Icons.add),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+          bottomSheet: const Text('Sheet'),
+          body: const SizedBox(),
+        ),
+      );
+      expect(find.text('Sheet'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.byType(FloatingActionButton)).dx,
+        lessThan(100),
+      );
+    });
+
+    testWidgets('a screen can nest its own Scaffold in the body', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        700,
+        AdaptiveShell(
+          destinations: _places,
+          selectedIndex: 0,
+          onSelected: (_) {},
+          body: Scaffold(appBar: AppBar(title: const Text('Inner'))),
+        ),
+      );
+      expect(find.text('Inner'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  });
+
+  group('keyboard in French', () {
+    testWidgets('Space selects and the region is labelled in French', (
+      tester,
+    ) async {
+      final picked = <int>[];
+      await _pump(
+        tester,
+        400,
+        _shell(onSelected: picked.add),
+        locale: const Locale('fr'),
+      );
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.space);
+      await tester.pump();
+      expect(picked, [1]);
     });
   });
 

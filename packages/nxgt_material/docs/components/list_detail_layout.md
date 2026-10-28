@@ -34,6 +34,20 @@ nothing hidden can be focused. The back gesture and the platform back button
 return to the list. Put your own back button in the detail if you want a
 visible one.
 
+## Back navigation
+
+- **Android 14 and later:** for the predictive back animation, set
+  `android:enableOnBackInvokedCallback="true"` on the `<application>` (or the
+  activity) in `AndroidManifest.xml`. Without it the back button still calls
+  `onBack`, with no animation.
+- **iOS:** the swipe-back gesture is off while the detail is shown on a narrow
+  layout, because the layout intercepts the pop; offer a back button in the
+  detail that calls the same function as `onBack`.
+- It needs a bounded width: inside a horizontal scroll view or an unconstrained
+  `Row` it throws (see [troubleshooting](../troubleshooting.md)).
+- Both panes keep their state when the layout crosses 648 dp, and the hidden
+  pane of a narrow layout stays alive but is not focusable or announced.
+
 ## Properties
 
 | Name | Type | Description |
