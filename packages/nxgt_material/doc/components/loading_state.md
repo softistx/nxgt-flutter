@@ -20,8 +20,8 @@ const LoadingState(message: 'Fetching invoices')
 
 ## Accessibility
 
-The block has the semantics role `status` and is a live region (on two nested
-nodes), so "Loading" (or your message) is spoken when it
+The block has the semantics role `status` and, outside the web, a live region (on two nested
+nodes; on the web the role alone speaks), so "Loading" (or your message) is spoken when it
 appears; the spinner itself is hidden from screen readers. With reduced motion
 (`MediaQuery.disableAnimations`, the system "remove animations" setting) the
 spinner is replaced by a static hourglass icon and the caption stays.
