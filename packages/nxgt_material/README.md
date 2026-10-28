@@ -134,6 +134,56 @@ Pages: [AsyncButton](docs/components/async_button.md),
 [SplitButton](docs/components/split_button.md),
 [LoadMoreButton](docs/components/load_more_button.md).
 
+## Fields and forms
+
+`package:nxgt_material/fields.dart` and `forms.dart`, on Flutter's `Form` and
+`FormField` (no form library):
+
+| Component | What it adds |
+| --- | --- |
+| `EmailField` | Email keyboard, autofill and validation |
+| `PasswordField` | Obscured text with a localized show/hide toggle |
+| `PhoneField` | Phone keypad, character filter and validation |
+| `NumberField` | Numeric keypad, comma or point, min and max |
+| `TextAreaField` | Growing multi-line text with an optional counter |
+| `FormSection` | A heading and its fields |
+| `SubmitButton` | Validates, saves, then awaits the action |
+| `Validators` | `required`, `email`, `minLength`, `maxLength`, `phone`, `number`, `compose`, localized |
+
+```dart
+import 'package:nxgt_material/fields.dart';
+import 'package:nxgt_material/forms.dart';
+
+Form(
+  child: Column(
+    spacing: 16,
+    children: [
+      FormSection(
+        title: 'Account',
+        children: [
+          const EmailField(label: 'Email', required: true),
+          const PasswordField(label: 'Password', newPassword: true, minLength: 8),
+        ],
+      ),
+      SubmitButton(label: 'Create account', onSubmit: () => api.signUp()),
+    ],
+  ),
+)
+
+// The same rules on any TextFormField:
+final v = Validators.of(context);
+TextFormField(validator: v.compose([v.required(), v.minLength(3)]));
+```
+
+Guide: [Forms](docs/guide/forms.md). Pages:
+[EmailField](docs/components/email_field.md),
+[PasswordField](docs/components/password_field.md),
+[PhoneField](docs/components/phone_field.md),
+[NumberField](docs/components/number_field.md),
+[TextAreaField](docs/components/text_area_field.md),
+[FormSection](docs/components/form_section.md),
+[SubmitButton](docs/components/submit_button.md).
+
 ## Naming rule
 
 - **No `nxgt` prefix.** A component is called by what it is for: `StatCard`,
@@ -145,6 +195,7 @@ Pages: [AsyncButton](docs/components/async_button.md),
 ## Documentation
 
 - [Theme](docs/guide/theme.md)
+- [Forms](docs/guide/forms.md)
 - [Localization](docs/guide/localization.md)
 - [Roadmap](docs/roadmap.md)
 - [Troubleshooting](docs/troubleshooting.md)

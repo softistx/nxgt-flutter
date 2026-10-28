@@ -66,3 +66,24 @@ the copy worked.
 **Fix:** on the web, serve the page over HTTPS and copy from a user gesture (a
 tap on the button is one). Elsewhere, listen to `FlutterError.onError` to show
 your own message.
+
+## SubmitButton was used outside a Form.
+
+**When:** pressing a `SubmitButton` that has no `Form` above it. Reported with
+`FlutterError.reportError` (through the button's `AsyncButton`), once per press.
+
+**Why:** the button validates and saves the enclosing `Form`; with none there
+is nothing to validate, so it refuses to send.
+
+**Fix:** wrap the fields and the button in a `Form`:
+
+```dart
+Form(
+  child: Column(
+    children: [
+      const EmailField(label: 'Email'),
+      SubmitButton(label: 'Send', onSubmit: send),
+    ],
+  ),
+)
+```

@@ -71,6 +71,28 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
   }
 
   @override
+  String get fieldsInvalidPhone => 'Saisissez un numéro de téléphone valide';
+
+  @override
+  String get fieldsInvalidNumber => 'Saisissez un nombre valide';
+
+  @override
+  String fieldsMinValue(String min) {
+    return 'Saisissez une valeur d\'au moins $min';
+  }
+
+  @override
+  String fieldsMaxValue(String max) {
+    return 'Saisissez une valeur d\'au plus $max';
+  }
+
+  @override
+  String get fieldsShowPassword => 'Afficher le mot de passe';
+
+  @override
+  String get fieldsHidePassword => 'Masquer le mot de passe';
+
+  @override
   String get feedbackLoading => 'Chargement';
 
   @override
