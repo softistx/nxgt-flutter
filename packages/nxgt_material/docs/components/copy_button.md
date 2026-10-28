@@ -33,6 +33,12 @@ Row(
 - The touch target is 48 x 48 dp; it is reachable and activated from the
   keyboard like any `IconButton`.
 
+## Errors
+
+If the clipboard refuses the write, the error goes to `FlutterError.onError`
+(see [troubleshooting](../troubleshooting.md)), `onCopied` is not called and
+no check mark is shown.
+
 ## Properties
 
 | Name | Type | Description |

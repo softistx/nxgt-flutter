@@ -84,7 +84,8 @@ app that adds a string later gets the compiler's help.
 ## Keys
 
 Keys are `<area><Name>` and follow the `material.*` keys of `@nxgt/material`:
-`actions*` (confirm, cancel, close, save, retry, clear, show more/less),
+`actions*` (confirm, cancel, close, save, retry, clear, show more/less,
+`actionsCopy`, `actionsCopied`, `actionsMoreOptions`),
 `fields*` (required, invalid email, min/max length with plural), `feedback*`
 (loading, empty and error title/message), `layout*` (open/close navigation).
 

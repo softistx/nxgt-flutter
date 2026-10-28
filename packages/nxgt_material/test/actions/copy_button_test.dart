@@ -77,6 +77,29 @@ void main() {
     expect(find.byTooltip('Copy id'), findsOneWidget);
   });
 
+  testWidgets('a clipboard failure is reported and shows no check mark', (
+    tester,
+  ) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, (call) async {
+          if (call.method == 'Clipboard.setData') {
+            throw PlatformException(code: 'denied');
+          }
+          return null;
+        });
+    var copied = 0;
+    await tester.pumpWidget(
+      host(CopyButton(value: 'abc', onCopied: () => copied++)),
+    );
+
+    await tester.tap(find.byType(CopyButton));
+    await tester.pump();
+
+    expect(tester.takeException(), isA<PlatformException>());
+    expect(copied, 0);
+    expect(find.byIcon(Icons.check), findsNothing);
+  });
+
   group('semantics', () {
     testWidgets('is a labelled button in a live region, 48 dp wide', (
       tester,
@@ -84,7 +107,19 @@ void main() {
       final handle = tester.ensureSemantics();
       await tester.pumpWidget(host(const CopyButton(value: 'abc')));
 
-      expect(find.bySemanticsLabel('Copy'), findsOneWidget);
+      expect(
+        tester.getSemantics(find.byType(IconButton)),
+        matchesSemantics(
+          label: 'Copy',
+          isButton: true,
+          isLiveRegion: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasEnabledState: true,
+          hasTapAction: true,
+          hasFocusAction: true,
+        ),
+      );
       final size = tester.getSize(find.byType(IconButton));
       expect(size.width, greaterThanOrEqualTo(48));
       expect(size.height, greaterThanOrEqualTo(48));

@@ -70,18 +70,89 @@ void main() {
       final handle = tester.ensureSemantics();
       await tester.pumpWidget(host(onPressed: () {}));
 
-      expect(find.bySemanticsLabel('Save'), findsOneWidget);
       expect(
-        tester.getSemantics(find.byType(IconButton)).tooltip,
-        'More options',
+        tester.getSemantics(find.byType(FilledButton)),
+        matchesSemantics(
+          label: 'Save',
+          isButton: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasEnabledState: true,
+          hasTapAction: true,
+          hasFocusAction: true,
+        ),
       );
       expect(
-        tester.getSize(find.byType(FilledButton)).height,
-        greaterThanOrEqualTo(48),
+        tester.getSemantics(find.byType(IconButton)),
+        matchesSemantics(
+          tooltip: 'More options',
+          isButton: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasEnabledState: true,
+          hasExpandedState: true,
+          hasTapAction: true,
+          hasFocusAction: true,
+        ),
       );
+      final main = tester.getSize(find.byType(FilledButton));
+      expect(main.height, greaterThanOrEqualTo(48));
+      expect(main.width, greaterThanOrEqualTo(48));
       final arrow = tester.getSize(find.byType(IconButton));
       expect(arrow.width, greaterThanOrEqualTo(48));
       expect(arrow.height, greaterThanOrEqualTo(48));
+      handle.dispose();
+    });
+
+    testWidgets('a null main action disables the main part only', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(host());
+
+      expect(
+        tester.getSemantics(find.byType(FilledButton)),
+        matchesSemantics(label: 'Save', isButton: true, hasEnabledState: true),
+      );
+      expect(
+        tester.getSemantics(find.byType(IconButton)),
+        matchesSemantics(
+          tooltip: 'More options',
+          isButton: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasEnabledState: true,
+          hasExpandedState: true,
+          hasTapAction: true,
+          hasFocusAction: true,
+        ),
+      );
+      handle.dispose();
+    });
+
+    testWidgets('the arrow reports expanded when the menu is open', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(host(onPressed: () {}));
+
+      await tester.tap(find.byTooltip('More options'));
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.getSemantics(find.byType(IconButton)),
+        matchesSemantics(
+          tooltip: 'More options',
+          isButton: true,
+          isEnabled: true,
+          isFocusable: true,
+          hasEnabledState: true,
+          hasExpandedState: true,
+          isExpanded: true,
+          hasTapAction: true,
+          hasFocusAction: true,
+        ),
+      );
       handle.dispose();
     });
   });

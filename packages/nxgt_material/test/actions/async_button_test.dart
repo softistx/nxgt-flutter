@@ -152,29 +152,37 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('announces Loading while busy and stays enabled', (
-      tester,
-    ) async {
-      final handle = tester.ensureSemantics();
-      await tester.pumpWidget(
-        host(AsyncButton(label: 'Save', loading: true, onPressed: () async {})),
-      );
+    testWidgets(
+      'announces Loading in a live region while busy and stays enabled',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await tester.pumpWidget(
+          host(
+            AsyncButton(label: 'Save', loading: true, onPressed: () async {}),
+          ),
+        );
 
-      expect(
-        tester.getSemantics(find.text('Save')),
-        matchesSemantics(
-          label: 'Save',
-          value: 'Loading',
-          isButton: true,
-          isEnabled: true,
-          isFocusable: true,
-          hasEnabledState: true,
-          hasTapAction: true,
-          hasFocusAction: true,
-        ),
-      );
-      handle.dispose();
-    });
+        expect(
+          tester.getSemantics(find.text('Save')),
+          matchesSemantics(
+            label: 'Save',
+            value: 'Loading',
+            isLiveRegion: true,
+            isButton: true,
+            isEnabled: true,
+            isFocusable: true,
+            hasEnabledState: true,
+            hasTapAction: true,
+            hasFocusAction: true,
+          ),
+        );
+        expect(
+          tester.getSize(find.byType(AsyncButton)).height,
+          greaterThanOrEqualTo(48),
+        );
+        handle.dispose();
+      },
+    );
 
     testWidgets('is disabled without an action', (tester) async {
       final handle = tester.ensureSemantics();

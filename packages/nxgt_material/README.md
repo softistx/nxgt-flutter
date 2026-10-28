@@ -4,8 +4,8 @@ Material 3 components for Flutter that fill what the framework leaves out:
 adaptive layout, fields and forms, feedback states, themes. Intent-named,
 accessible, French and English.
 
-> Status: 0.0.1, the package skeleton. Components arrive with 0.1; see the
-> [roadmap](docs/roadmap.md).
+> Status: pre-0.1. Components are arriving category by category toward 0.1
+> (theme, localization and actions are in); see the [roadmap](docs/roadmap.md).
 
 Runs on Android, iOS, web, macOS, Windows and Linux.
 
@@ -108,7 +108,25 @@ See the [localization guide](docs/guide/localization.md).
 | `LoadMoreButton` | "Show more" for paginated lists, hidden when nothing is left |
 
 ```dart
+import 'package:nxgt_material/actions.dart';
+
+// A busy state while the future runs; presses are ignored meanwhile.
 AsyncButton(label: 'Save', onPressed: () => repository.save(draft))
+
+// Copies to the clipboard, shows a check mark.
+const CopyButton(value: 'INV-2026-0042')
+
+// A main action plus a menu of siblings.
+SplitButton(
+  label: 'Save',
+  onPressed: save,
+  menuChildren: [
+    MenuItemButton(onPressed: saveDraft, child: const Text('Save as draft')),
+  ],
+)
+
+// "Show more" under a paginated list; hidden when hasMore is false.
+LoadMoreButton(hasMore: page.hasNext, onPressed: controller.loadNextPage)
 ```
 
 Pages: [AsyncButton](docs/components/async_button.md),

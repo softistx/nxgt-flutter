@@ -30,7 +30,8 @@ AsyncButton(label: 'Save', loading: state.isSaving, onPressed: cubit.save)
 ## Accessibility
 
 - Read as a button named by `label`; while busy its value is the localized
-  "Loading" (`context.materialL10n.feedbackLoading`).
+  "Loading" (`context.materialL10n.feedbackLoading`) and it is a live region,
+  so the change is spoken.
 - It stays focusable and enabled while busy, so keyboard focus is not lost; the
   press is simply ignored. It is disabled only when `onPressed` is null.
 - The touch target is 48 dp high (Material tap-target padding).

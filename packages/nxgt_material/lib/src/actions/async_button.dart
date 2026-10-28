@@ -115,6 +115,7 @@ class _AsyncButtonState extends State<AsyncButton> {
     return MergeSemantics(
       child: Semantics(
         value: busy ? context.materialL10n.feedbackLoading : null,
+        liveRegion: busy,
         child: button,
       ),
     );

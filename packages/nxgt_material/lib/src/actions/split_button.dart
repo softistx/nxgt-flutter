@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/theme/theme_context.dart';
 
 /// A main action with a menu of related actions beside it.
 ///
@@ -34,26 +35,33 @@ class SplitButton extends StatelessWidget {
   /// Overrides the localized "More options" tooltip of the arrow.
   final String? menuTooltip;
 
-  static const _outer = Radius.circular(20);
-  static const _inner = Radius.circular(4);
-  static const _mainShape = RoundedRectangleBorder(
-    borderRadius: BorderRadiusDirectional.horizontal(
-      start: _outer,
-      end: _inner,
-    ),
-  );
-  static const _arrowShape = RoundedRectangleBorder(
-    borderRadius: BorderRadiusDirectional.horizontal(
-      start: _inner,
-      end: _outer,
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     final tooltip = menuTooltip ?? context.materialL10n.actionsMoreOptions;
     final text = Text(label);
-    const mainStyle = ButtonStyle(shape: WidgetStatePropertyAll(_mainShape));
+    final radii = context.radii;
+    final outer = Radius.circular(radii.xl);
+    final inner = Radius.circular(radii.xs);
+    final mainStyle = ButtonStyle(
+      shape: WidgetStatePropertyAll(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadiusDirectional.horizontal(
+            start: outer,
+            end: inner,
+          ),
+        ),
+      ),
+    );
+    final arrowStyle = ButtonStyle(
+      shape: WidgetStatePropertyAll(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadiusDirectional.horizontal(
+            start: inner,
+            end: outer,
+          ),
+        ),
+      ),
+    );
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -69,15 +77,20 @@ class SplitButton extends StatelessWidget {
         const SizedBox(width: 2),
         MenuAnchor(
           menuChildren: menuChildren,
-          builder: (context, controller, _) => IconButton.filled(
-            tooltip: tooltip,
-            style: const ButtonStyle(
-              shape: WidgetStatePropertyAll(_arrowShape),
-            ),
-            onPressed: () =>
-                controller.isOpen ? controller.close() : controller.open(),
-            icon: Icon(
-              controller.isOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+          builder: (context, controller, _) => MergeSemantics(
+            child: Semantics(
+              expanded: controller.isOpen,
+              child: IconButton.filled(
+                tooltip: tooltip,
+                style: arrowStyle,
+                onPressed: () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+                icon: Icon(
+                  controller.isOpen
+                      ? Icons.arrow_drop_up
+                      : Icons.arrow_drop_down,
+                ),
+              ),
             ),
           ),
         ),

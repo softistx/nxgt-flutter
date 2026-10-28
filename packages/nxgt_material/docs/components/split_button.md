@@ -31,6 +31,11 @@ SplitButton(
   semantic tooltip is the localized "More options" (`actionsMoreOptions`).
 - Both targets are 48 dp; the menu is a `MenuAnchor`, so arrow keys, Escape and
   focus return work as for any Material menu.
+- The arrow reports expanded or collapsed, so a screen reader says whether the
+  menu is open.
+- The corners come from `context.radii` (`xl` outside, `xs` between the two
+  parts), with the Material 3 Expressive defaults when the theme has no
+  `RadiusScale`.
 - The arrow stays enabled when `onPressed` is null, so the menu is still reachable.
 
 ## Properties

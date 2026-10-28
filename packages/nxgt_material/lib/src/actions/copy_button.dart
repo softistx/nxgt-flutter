@@ -41,7 +41,19 @@ class _CopyButtonState extends State<CopyButton> {
   bool _copied = false;
 
   Future<void> _copy() async {
-    await Clipboard.setData(ClipboardData(text: widget.value));
+    try {
+      await Clipboard.setData(ClipboardData(text: widget.value));
+    } on Object catch (error, stack) {
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: error,
+          stack: stack,
+          library: 'nxgt_material',
+          context: ErrorDescription('while copying to the clipboard'),
+        ),
+      );
+      return;
+    }
     if (!mounted) return;
     widget.onCopied?.call();
     setState(() => _copied = true);
