@@ -1,4 +1,14 @@
-## Unreleased
+## 0.2.0
+
+Adds four libraries: `display.dart`, `overlays.dart`, `selection.dart` and `collections.dart`.
+
+### Breaking
+
+- `EmailField`, `PasswordField`, `NumberField`, `PhoneField` and `TextAreaField` now extend the internal, unexported `TextFieldBase`. Code that relied on their previous superclass or on members outside their documented constructor needs updating; their constructors are unchanged.
+- `PasswordField` is now a `StatelessWidget` (its visibility toggle lives in a private widget). Code that reached its `State` must stop doing so.
+- `NxgtMaterialLocalizations` gains the new strings listed below. A class that `implements NxgtMaterialLocalizations` no longer compiles; extend `NxgtMaterialLocalizationsWrapper` instead, which forwards every string.
+
+### Added
 
 - `display.dart`: `StatusIndicator` (a dot or the tone icon and a label in AA tone colours from `FeedbackTone`, the tone spoken first) and `CountBadge` (a count on `Badge.count`: `99+` above `max`, hidden at 0, spoken with a plural label; asserts a negative count and a non-positive `max`). New string `displayCount` in fr and en.
 - `display.dart`: `UserAvatar` (a `CircleAvatar` with the picture or the name's initials, also when the image fails, on a theme tone picked from the name with AA contrast, an optional `AvatarPresence` dot spoken after the name; an empty name draws a person icon; asserts a non-positive `size`). New strings `displayPresenceOnline`, `displayPresenceAway`, `displayPresenceBusy`, `displayPresenceOffline` in fr and en.
@@ -15,7 +25,9 @@
 - `collections.dart`: `SearchField` (a search input that is not a `FormField`: a search icon, a localized hint, a 48 dp clear button shown only when there is text that emits `''` at once and keeps the focus, the `search` keyboard action, and `onChanged` debounced by `debounce`, 300 ms by default, `Duration.zero` for every keystroke; `onSubmitted` fires at once and drops a pending emission; no callback after dispose; owns its controller and focus node only when none is given, follows a swapped controller; the node is a text field of the search input type; directional layout; asserts `controller` with `initialValue`, and a negative `debounce`). New strings `collectionsSearchHint` ("Search" / "Rechercher") and `collectionsSearchClear` ("Clear search" / "Effacer la recherche") in both ARBs and `NxgtMaterialLocalizationsWrapper`.
 - `collections.dart`: `PagedList<T>` and `LoadMoreMode` (a vertical list loaded page by page: the first load, the failure and the empty state through `AsyncView`'s `LoadingState`, `ErrorState` and `EmptyState`; a `LoadMoreButton` at the end or, with `LoadMoreMode.onScroll`, `onLoadMore` within about one viewport of the end, never while a call runs and not repeated for a load that added nothing; a failing `onLoadMore` is reported, shows an inline `ErrorState` with a retry and stops auto-loading until it succeeds; `loading` and `error` also drive the end of the list for a caller-run load; pull to refresh through `RefreshIndicator`; "N more loaded" announced as a `status` node, a live region off the web; optional separators and padding; a `ScrollController` never disposed, owned only when none is given; 48 dp controls under desktop density, directional layout, reduced motion; no `shrinkWrap` or sliver variant; asserts `hasMore` without `onLoadMore`). New string `collectionsLoadedMore` ("{count} more loaded" / "{count} éléments de plus chargés", plural) in both ARBs and `NxgtMaterialLocalizationsWrapper`.
 - `collections.dart`: `ResponsiveTable<T>` and `TableColumn<T>` (rows as a Material 3 `DataTable` from the medium window size, scrolling sideways, and one `Card` per row built on `DescriptionList` on compact, chosen through `context.windowSize` without a `LayoutBuilder`; the caller owns the sort through `sortColumnIndex`, `sortAscending` and `onSort`, sortable headers are buttons and the sorted column is announced "Name, sorted ascending", a 48 dp sort menu serves compact; `onRowTap` makes a row, or a whole card, a button; `TableColumn.cell` builds a widget for the table's cell (compact cards show `value`); `empty` replaces the table with an `EmptyState` by default; asserts an empty `columns` and a `sortColumnIndex` out of range, an empty widget and no sort in release). New strings `collectionsSortBy`, `collectionsSortedAscending` and `collectionsSortedDescending` ("Sort by", "{column}, sorted ascending", "{column}, sorted descending" / "Trier par", "{column}, tri croissant", "{column}, tri décroissant") in both ARBs and `NxgtMaterialLocalizationsWrapper`.
-- Fixed: `AsyncButton` and `LoadMoreButton` keep a 48 dp target on desktop platforms (all four variants, busy or not), instead of the 32 dp of desktop density.
+### Fixed
+
+- `AsyncButton` and `LoadMoreButton` keep a 48 dp target on desktop platforms (all four variants, busy or not), instead of the 32 dp of desktop density.
 
 ## 0.1.0
 
