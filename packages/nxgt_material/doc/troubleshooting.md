@@ -311,3 +311,21 @@ final ok = await context.confirm(
   message: 'This cannot be undone.',
 );
 ```
+
+## AdaptiveSheet.title must not be empty.
+
+**When:** in a debug build, `context.showAdaptiveSheet` (or an `AdaptiveSheet`)
+is given an empty `title`.
+
+**Why:** the title is the heading of the sheet and the name of its route for a
+screen reader. A release build does not assert: the sheet is shown with an
+empty header text and no route name, and the close button still works.
+
+**Fix:** give the sheet a title that says what it is for.
+
+```dart
+final result = await context.showAdaptiveSheet<String>(
+  title: 'Filters',
+  builder: (context) => const FilterForm(),
+);
+```

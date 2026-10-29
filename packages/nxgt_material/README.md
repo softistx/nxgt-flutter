@@ -34,7 +34,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `forms.dart` | Form scaffolding: sections, validation summary, submit bar |
 | `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
-| `overlays.dart` | Dialogs: `ConfirmDialog` and `context.confirm` |
+| `overlays.dart` | Dialogs and sheets: `ConfirmDialog` and `context.confirm`, `AdaptiveSheet` and `context.showAdaptiveSheet` |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
 ## Theme
@@ -297,11 +297,12 @@ Pages: [StatusIndicator](doc/components/status_indicator.md),
 
 ## Overlays
 
-`package:nxgt_material/overlays.dart`. Built on Flutter's `AlertDialog` and `showDialog`.
+`package:nxgt_material/overlays.dart`. Built on Flutter's `AlertDialog`, `showDialog` and `showModalBottomSheet`.
 
 | Component | What it adds |
 | --- | --- |
 | `ConfirmDialog` / `context.confirm` | A confirmation dialog at every window size that answers `true` or `false`; an async `onConfirm` with a busy state, a `destructive` error-tone action, 48 dp targets |
+| `AdaptiveSheet` / `context.showAdaptiveSheet` | A modal sheet chosen by window size (not platform): a bottom sheet on compact with a drag handle and keyboard inset, a side sheet on the end edge from medium up; returns the popped value or `null`; semantics header, 48 dp close button |
 
 ```dart
 import 'package:nxgt_material/overlays.dart';
@@ -315,7 +316,15 @@ final deleted = await context.confirm(
 );
 ```
 
-Pages: [ConfirmDialog](doc/components/confirm_dialog.md).
+```dart
+final color = await context.showAdaptiveSheet<Color>(
+  title: 'Pick a color',
+  builder: (context) => ColorList(onPick: (c) => Navigator.pop(context, c)),
+);
+```
+
+Pages: [AdaptiveSheet](doc/components/adaptive_sheet.md),
+[ConfirmDialog](doc/components/confirm_dialog.md).
 
 ## Layout
 
@@ -417,6 +426,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
 - [Roadmap](doc/roadmap.md)
 - [Troubleshooting](doc/troubleshooting.md)
 - Components, one page each:
+  [AdaptiveSheet](doc/components/adaptive_sheet.md),
   [AdaptiveShell](doc/components/adaptive_shell.md),
   [AsyncButton](doc/components/async_button.md),
   [AsyncView](doc/components/async_view.md),
