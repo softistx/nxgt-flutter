@@ -80,7 +80,7 @@ ResponsiveTable<Invoice>(
 | `rows` | `List<T>` | The rows, in the order to show them. |
 | `sortColumnIndex` | `int?` | The index in `columns` the rows are sorted by. |
 | `sortAscending` | `bool` | Whether that sort is ascending; default `true`. |
-| `onSort` | `void Function(int, {required bool ascending})?` | Called with the column and direction the user chose. |
+| `onSort` | `void Function(int columnIndex, {required bool ascending})?` | Called with the column and direction the user chose. |
 | `onRowTap` | `void Function(T)?` | Called with the tapped row; `null` makes rows inert. |
 | `empty` | `Widget?` | Shown instead of the default `EmptyState` when `rows` is empty. |
 

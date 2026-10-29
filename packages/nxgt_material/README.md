@@ -4,10 +4,6 @@ Material 3 components for Flutter that fill what the framework leaves out:
 adaptive layout, fields and forms, feedback states, themes. Intent-named,
 accessible, French and English.
 
-> Status: pre-release. The 0.1 content is complete (theme, localization,
-> actions, fields, forms, feedback and adaptive layout); see the
-> [roadmap](doc/roadmap.md) for what comes next.
-
 Runs on Android, iOS, web, macOS, Windows and Linux.
 
 ## Install
@@ -29,7 +25,8 @@ import 'package:nxgt_material/nxgt_material.dart';
 | Library | What is in it |
 | --- | --- |
 | `actions.dart` | Buttons and menus that trigger something |
-| `collections.dart` | Search and list-shaped inputs: `SearchField` |
+| `collections.dart` | Search and list-shaped data: `SearchField`, `PagedList`, `ResponsiveTable` and `TableColumn` |
+| `display.dart` | Read-only record display: `StatusIndicator`, `CountBadge`, `UserAvatar`, `StatCard`, `DescriptionList`, `EntityHeader` |
 | `feedback.dart` | Empty, loading and error states, toasts, banners, progress |
 | `fields.dart` | Single-value inputs built on `FormField` |
 | `forms.dart` | Form scaffolding: sections, validation summary, submit bar |
@@ -299,7 +296,7 @@ Pages: [StatusIndicator](doc/components/status_indicator.md),
 
 ## Overlays
 
-`package:nxgt_material/overlays.dart`. Built on Flutter's `AlertDialog`, `showDialog` and `showModalBottomSheet`.
+`package:nxgt_material/overlays.dart`. Built on Flutter's `AlertDialog`, `showDialog`, `showModalBottomSheet` and `showGeneralDialog`.
 
 | Component | What it adds |
 | --- | --- |
@@ -335,7 +332,8 @@ final invoice = await context.showFormDialog<Invoice>(
 );
 ```
 
-Pages: [AdaptiveSheet](doc/components/adaptive_sheet.md),
+Guide: [Overlays](doc/guide/overlays.md). Pages:
+[AdaptiveSheet](doc/components/adaptive_sheet.md),
 [ConfirmDialog](doc/components/confirm_dialog.md),
 [FormDialog](doc/components/form_dialog.md).
 
@@ -399,7 +397,19 @@ SearchField(
 )
 ```
 
+```dart
+PagedList<Patient>(
+  items: state.patients,
+  hasMore: state.hasMore,
+  loading: state.loading,
+  onLoadMore: controller.loadNextPage,
+  onRefresh: controller.refresh,
+  itemBuilder: (context, patient, index) => ListTile(title: Text(patient.name)),
+)
+```
+
 Pages: [SearchField](doc/components/search_field.md),
+[PagedList](doc/components/paged_list.md),
 [ResponsiveTable](doc/components/responsive_table.md).
 
 ## Layout
@@ -499,6 +509,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
 - [Forms](doc/guide/forms.md)
 - [Localization](doc/guide/localization.md)
 - [Adaptive layout](doc/guide/adaptive.md)
+- [Overlays: dialog or sheet](doc/guide/overlays.md)
 - [Roadmap](doc/roadmap.md)
 - [Troubleshooting](doc/troubleshooting.md)
 - Components, one page each:
@@ -506,11 +517,16 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [AdaptiveShell](doc/components/adaptive_shell.md),
   [AsyncButton](doc/components/async_button.md),
   [AsyncView](doc/components/async_view.md),
+  [CheckboxField](doc/components/checkbox_field.md),
+  [CheckboxGroupField](doc/components/checkbox_group_field.md),
+  [ChoiceChipsField and FilterChipsField](doc/components/choice_chips_field.md),
   [ConfirmDialog](doc/components/confirm_dialog.md),
   [CopyButton](doc/components/copy_button.md),
   [CountBadge](doc/components/count_badge.md),
+  [DescriptionList](doc/components/description_list.md),
   [EmailField](doc/components/email_field.md),
   [EmptyState](doc/components/empty_state.md),
+  [EntityHeader](doc/components/entity_header.md),
   [ErrorState](doc/components/error_state.md),
   [FormDialog](doc/components/form_dialog.md),
   [FormSection](doc/components/form_section.md),
@@ -520,10 +536,16 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [LoadingState](doc/components/loading_state.md),
   [NumberField](doc/components/number_field.md),
   [PageBody](doc/components/page_body.md),
+  [PagedList](doc/components/paged_list.md),
   [PasswordField](doc/components/password_field.md),
   [PhoneField](doc/components/phone_field.md),
+  [RadioGroupField](doc/components/radio_group_field.md),
   [ResponsiveGrid](doc/components/responsive_grid.md),
+  [ResponsiveTable](doc/components/responsive_table.md),
+  [SearchField](doc/components/search_field.md),
+  [SelectField](doc/components/select_field.md),
   [SplitButton](doc/components/split_button.md),
+  [StatCard](doc/components/stat_card.md),
   [StatusIndicator](doc/components/status_indicator.md),
   [SubmitButton](doc/components/submit_button.md),
   [TextAreaField](doc/components/text_area_field.md),
