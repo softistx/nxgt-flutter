@@ -33,7 +33,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
 | `overlays.dart` | Dialogs and sheets: `ConfirmDialog` and `context.confirm`, `AdaptiveSheet` and `context.showAdaptiveSheet`, `FormDialog` and `context.showFormDialog` |
-| `selection.dart` | Choice fields built on `FormField`: `CheckboxField`, `RadioGroupField`, `CheckboxGroupField`, `ChoiceChipsField`, `FilterChipsField`, `SelectField`, `ChoiceOption` |
+| `selection.dart` | Choice fields built on `FormField`: `CheckboxField`, `RadioGroupField`, `CheckboxGroupField`, `ChoiceChipsField`, `FilterChipsField`, `SelectField`, `SwitchField`, `ChoiceOption` |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
 ## Theme
@@ -344,6 +344,7 @@ Guide: [Overlays](doc/guide/overlays.md). Pages:
 | Component | What it adds |
 | --- | --- |
 | `CheckboxField` | A `FormField<bool>` on a full-width 48 dp tile; `required` means checked, with a localized, announced error |
+| `SwitchField` | A `FormField<bool>` on a full-width 48 dp `SwitchListTile`; off by default, a `validator` for "must be on", error and helper text as the switch's hint |
 | `RadioGroupField` | A single choice among `ChoiceOption`s on Flutter's `RadioGroup`: group label, 48 dp tiles, arrow-key navigation, `required` with an announced error |
 | `CheckboxGroupField` | Several choices as a `FormField<Set<T>>`, same group semantics; reports new unmodifiable sets |
 | `SelectField` | A single choice in a list as a `FormField<T?>` on Material 3 `DropdownMenu`; on a compact window a searchable sheet for a long list; `required`, or a clear button |
@@ -375,7 +376,8 @@ Pages: [CheckboxField](doc/components/checkbox_field.md),
 [RadioGroupField](doc/components/radio_group_field.md),
 [CheckboxGroupField](doc/components/checkbox_group_field.md),
 [ChoiceChipsField and FilterChipsField](doc/components/choice_chips_field.md),
-[SelectField](doc/components/select_field.md).
+[SelectField](doc/components/select_field.md),
+[SwitchField](doc/components/switch_field.md).
 
 ## Collections
 
@@ -548,6 +550,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [StatCard](doc/components/stat_card.md),
   [StatusIndicator](doc/components/status_indicator.md),
   [SubmitButton](doc/components/submit_button.md),
+  [SwitchField](doc/components/switch_field.md),
   [TextAreaField](doc/components/text_area_field.md),
   [Toast](doc/components/toast.md),
   [UserAvatar](doc/components/user_avatar.md),

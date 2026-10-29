@@ -35,6 +35,7 @@ Form(
 | `PhoneField` | fields | Phone keypad, character filter, validation |
 | `NumberField` | fields | Numeric keypad, comma or point, min and max |
 | `TextAreaField` | fields | Growing multi-line text with an optional counter |
+| `SwitchField` | selection | An on/off switch tile as a `FormField<bool>`; off by default |
 | `FormSection` | forms | A heading and its fields |
 | `SubmitButton` | forms | Validate, save, then await a submit action |
 
