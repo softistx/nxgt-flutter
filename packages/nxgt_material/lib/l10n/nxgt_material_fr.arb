@@ -27,5 +27,6 @@
   "feedbackToneError": "Erreur",
   "layoutOpenNavigation": "Ouvrir la navigation",
   "layoutCloseNavigation": "Fermer la navigation",
-  "layoutNavigation": "Navigation"
+  "layoutNavigation": "Navigation",
+  "displayCount": "{count, plural, =1{1 élément} other{{count} éléments}}"
 }

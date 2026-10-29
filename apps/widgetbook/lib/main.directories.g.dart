@@ -19,6 +19,10 @@ import 'package:nxgt_widgetbook/actions/load_more_button.usecase.dart'
     as _nxgt_widgetbook_actions_load_more_button_usecase;
 import 'package:nxgt_widgetbook/actions/split_button.usecase.dart'
     as _nxgt_widgetbook_actions_split_button_usecase;
+import 'package:nxgt_widgetbook/display/count_badge.usecase.dart'
+    as _nxgt_widgetbook_display_count_badge_usecase;
+import 'package:nxgt_widgetbook/display/status_indicator.usecase.dart'
+    as _nxgt_widgetbook_display_status_indicator_usecase;
 import 'package:nxgt_widgetbook/feedback/async_view.usecase.dart'
     as _nxgt_widgetbook_feedback_async_view_usecase;
 import 'package:nxgt_widgetbook/feedback/empty_state.usecase.dart'
@@ -100,6 +104,31 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_actions_split_button_usecase
                 .buildSplitButtonDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Display',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'CountBadge',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_count_badge_usecase
+                .buildCountBadgeDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'StatusIndicator',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_status_indicator_usecase
+                .buildStatusIndicatorDefault,
           ),
         ],
       ),

@@ -268,6 +268,12 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Navigation'**
   String get layoutNavigation;
+
+  /// Screen reader text of a count badge: how many items the count stands for.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String displayCount(int count);
 }
 
 class _NxgtMaterialLocalizationsDelegate

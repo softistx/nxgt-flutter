@@ -2,11 +2,9 @@
 
 ## Now
 
-Nothing in progress.
+- **nxgt_material 0.2**: collections, display, selection and overlays ([#72](https://github.com/softistx/nxgt-flutter/issues/72)).
 
 ## Next
-
-- Collections, display, selection and overlays.
 
 ## Later
 

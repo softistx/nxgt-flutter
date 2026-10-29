@@ -55,5 +55,7 @@
   "layoutCloseNavigation": "Close navigation",
   "@layoutCloseNavigation": {"description": "Screen reader label of the action that closes the navigation drawer."},
   "layoutNavigation": "Navigation",
-  "@layoutNavigation": {"description": "Label of the navigation region of the adaptive shell (bar, rail or drawer), read by screen readers."}
+  "@layoutNavigation": {"description": "Label of the navigation region of the adaptive shell (bar, rail or drawer), read by screen readers."},
+  "displayCount": "{count, plural, =1{1 item} other{{count} items}}",
+  "@displayCount": {"description": "Screen reader text of a count badge: how many items the count stands for.", "placeholders": {"count": {"type": "int"}}}
 }
