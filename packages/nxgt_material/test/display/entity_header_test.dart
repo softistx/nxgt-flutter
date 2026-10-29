@@ -278,4 +278,14 @@ void main() {
 
     expect(tester.takeException(), isNull);
   });
+
+  for (final width in [360.0, 640.0]) {
+    testWidgets('answers intrinsic sizes at $width dp', (tester) async {
+      await _pump(tester, IntrinsicHeight(child: header()), width: width);
+      expect(tester.takeException(), isNull);
+
+      await _pump(tester, IntrinsicWidth(child: header()), width: width);
+      expect(tester.takeException(), isNull);
+    });
+  }
 }

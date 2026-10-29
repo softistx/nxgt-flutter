@@ -38,6 +38,11 @@ class EntityAction {
 /// window size, because buttons would not fit beside the title.
 const _inlineMaxTextScale = 1.5;
 
+/// The share of the free width the text and the inline buttons get. A flex
+/// split, not a `LayoutBuilder`, so the header answers intrinsic sizes.
+const _textFlex = 3;
+const _actionsFlex = 2;
+
 const _minTarget = Size.square(48);
 
 /// The error tone while enabled; `null` when disabled, so the theme's
@@ -129,27 +134,18 @@ class EntityHeader extends StatelessWidget {
     final inline =
         context.windowSize.isAtLeast(WindowSize.medium) &&
         MediaQuery.textScalerOf(context).scale(14) / 14 <= _inlineMaxTextScale;
-    return LayoutBuilder(
-      builder: (context, constraints) => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 16,
-        children: [
-          ?leading,
-          Expanded(child: _text(context)),
-          if (shown.isNotEmpty)
-            if (inline)
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: constraints.maxWidth.isFinite
-                      ? constraints.maxWidth / 2
-                      : double.infinity,
-                ),
-                child: _buttons(context, shown),
-              )
-            else
-              _overflow(context, shown),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 16,
+      children: [
+        ?leading,
+        Flexible(flex: _textFlex, child: _text(context)),
+        if (shown.isNotEmpty)
+          if (inline)
+            Flexible(flex: _actionsFlex, child: _buttons(context, shown))
+          else
+            _overflow(context, shown),
+      ],
     );
   }
 
