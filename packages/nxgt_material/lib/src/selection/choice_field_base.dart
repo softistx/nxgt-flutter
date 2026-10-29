@@ -62,6 +62,13 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
   @protected
   bool isEmpty(V value) => value == null;
 
+  /// Whether the field is a group of options named by [label]. A group shows
+  /// [label] as a visible title and exposes it as the label of a container
+  /// node holding one node per option (with the error or helper text as its
+  /// hint), instead of merging everything into one node.
+  @protected
+  bool get isGroup => false;
+
   /// The `FormField` of this field. [builder] draws the choice itself from
   /// the state and reports a change through [change].
   @protected
@@ -93,20 +100,33 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // The error, or the helper text, is the hint of the control, so
-            // the focused control reads label, state, then it.
-            MergeSemantics(
-              child: Semantics(
+            if (isGroup)
+              _GroupBody(
+                label: label,
                 hint: error ?? helperText,
-                // Its own Material, so a coloured ancestor neither hides the
-                // ink splashes nor trips the ListTile assertion.
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: builder(state.context, state),
+                hasError: error != null,
+                child: builder(state.context, state),
+              )
+            else
+              // The error, or the helper text, is the hint of the control, so
+              // the focused control reads label, state, then it.
+              MergeSemantics(
+                child: Semantics(
+                  hint: error ?? helperText,
+                  // Its own Material, so a coloured ancestor neither hides
+                  // the ink splashes nor trips the ListTile assertion.
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: builder(state.context, state),
+                  ),
                 ),
               ),
+            _Footer(
+              helperText: helperText,
+              errorText: error,
+              // A group's helper text is already the hint of its container.
+              excludeHelper: isGroup,
             ),
-            _Footer(helperText: helperText, errorText: error),
           ],
         );
       },
@@ -121,15 +141,71 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
   }
 }
 
+/// The body of a group: a visible title and a container node named by it,
+/// holding the options in [child].
+class _GroupBody extends StatelessWidget {
+  const new({
+    required this.label,
+    required this.hint,
+    required this.hasError,
+    required this.child,
+  });
+
+  final String label;
+  final String? hint;
+  final bool hasError;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: label,
+      hint: hint,
+      // Its own Material, so a coloured ancestor neither hides the ink
+      // splashes nor trips the ListTile assertion.
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // The visible title; the container node carries it.
+            ExcludeSemantics(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
+                child: Text(
+                  label,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: hasError ? theme.colorScheme.error : null,
+                  ),
+                ),
+              ),
+            ),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// The helper text, replaced by the announced error when there is one.
 ///
 /// The 16 dp start inset matches the padding of a `ListTile`, so the text
 /// lines up with the tile's content edge.
 class _Footer extends StatelessWidget {
-  const new({required this.helperText, required this.errorText});
+  const new({
+    required this.helperText,
+    required this.errorText,
+    required this.excludeHelper,
+  });
 
   final String? helperText;
   final String? errorText;
+  final bool excludeHelper;
 
   @override
   Widget build(BuildContext context) {
@@ -160,10 +236,13 @@ class _Footer extends StatelessWidget {
     if (helper == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
-      child: Text(
-        helper,
-        style: theme.textTheme.bodySmall?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant,
+      child: ExcludeSemantics(
+        excluding: excludeHelper,
+        child: Text(
+          helper,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
     );

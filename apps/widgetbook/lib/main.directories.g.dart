@@ -75,6 +75,10 @@ import 'package:nxgt_widgetbook/overlays/form_dialog.usecase.dart'
     as _nxgt_widgetbook_overlays_form_dialog_usecase;
 import 'package:nxgt_widgetbook/selection/checkbox_field.usecase.dart'
     as _nxgt_widgetbook_selection_checkbox_field_usecase;
+import 'package:nxgt_widgetbook/selection/checkbox_group_field.usecase.dart'
+    as _nxgt_widgetbook_selection_checkbox_group_field_usecase;
+import 'package:nxgt_widgetbook/selection/radio_group_field.usecase.dart'
+    as _nxgt_widgetbook_selection_radio_group_field_usecase;
 import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
     as _nxgt_widgetbook_theme_token_sheet_usecase;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
@@ -434,6 +438,26 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_selection_checkbox_field_usecase
                 .buildCheckboxFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'CheckboxGroupField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_checkbox_group_field_usecase
+                .buildCheckboxGroupFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'RadioGroupField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_radio_group_field_usecase
+                .buildRadioGroupFieldDefault,
           ),
         ],
       ),

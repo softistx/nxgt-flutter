@@ -349,3 +349,93 @@ final invoice = await context.showFormDialog<Invoice>(
   onSubmit: () => repository.create(draft),
 );
 ```
+
+## RadioGroupField.options must have unique values.
+
+**When:** in a debug build, two options of a `RadioGroupField` share a value.
+
+**Why:** the value identifies the option in the group and in the form. A
+release build does not assert: the first option with a value is kept, the
+later ones with the same value are not shown.
+
+**Fix:** give each option its own value.
+
+```dart
+RadioGroupField<String>(
+  label: 'Plan',
+  options: const [
+    ChoiceOption(value: 'monthly', label: 'Monthly'),
+    ChoiceOption(value: 'yearly', label: 'Yearly'),
+  ],
+)
+```
+
+## RadioGroupField.initialValue must be one of the options.
+
+**When:** in a debug build, `initialValue` of a `RadioGroupField` is not the
+value of any option.
+
+**Why:** nothing could show as chosen. A release build does not assert: no
+option is shown as chosen, but the value is still the form's value, so
+`required` passes and `onSaved` receives it until the user chooses.
+
+**Fix:** start from a value that is in `options`, or leave it out.
+
+```dart
+RadioGroupField<String>(
+  label: 'Plan',
+  initialValue: 'monthly',
+  options: const [ChoiceOption(value: 'monthly', label: 'Monthly')],
+)
+```
+
+## RadioGroupField.options must not be empty.
+
+**When:** in a debug build, `options` of a `RadioGroupField` is an empty list.
+
+**Why:** a group without options cannot be answered. A release build does not
+assert: only the group label is shown, and `required` can never be satisfied.
+
+**Fix:** pass at least one option, or do not show the field.
+
+```dart
+if (plans.isNotEmpty)
+  RadioGroupField<Plan>(label: 'Plan', options: plans)
+```
+
+## CheckboxGroupField.options must have unique values.
+
+**When:** in a debug build, two options of a `CheckboxGroupField` share a value.
+
+**Why:** see [RadioGroupField.options must have unique values.](#radiogroupfieldoptions-must-have-unique-values).
+A release build keeps the first option of each value.
+
+**Fix:** give each option its own value.
+
+## CheckboxGroupField.initialValue must only hold values of the options.
+
+**When:** in a debug build, `initialValue` of a `CheckboxGroupField` holds a
+value that is the value of no option.
+
+**Why:** nothing could show as chosen for it. A release build does not assert:
+that value is not shown, but it stays in the form's value, is reported after
+the first change (at the end of the set) and counts for `required`.
+
+**Fix:** start from values that are in `options`.
+
+```dart
+CheckboxGroupField<String>(
+  label: 'Topics',
+  initialValue: const {'news'},
+  options: const [ChoiceOption(value: 'news', label: 'News')],
+)
+```
+
+## CheckboxGroupField.options must not be empty.
+
+**When:** in a debug build, `options` of a `CheckboxGroupField` is an empty list.
+
+**Why:** see [RadioGroupField.options must not be empty.](#radiogroupfieldoptions-must-not-be-empty).
+A release build shows only the label.
+
+**Fix:** pass at least one option, or do not show the field.
