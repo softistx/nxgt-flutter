@@ -27,6 +27,9 @@ jobs:
         run: |
           dart pub get
           dart run melos bootstrap
+      # Before the tests, so a pub.dev validation failure fails fast.
+      - name: Publish dry run
+        run: dart run melos run publish:check
       - name: Analyze
         run: dart run melos run analyze
       - name: Format check

@@ -24,7 +24,7 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
   file. Bump it in one PR, with the lockfile.
 - Lints: `very_good_analysis`, included from the root `analysis_options.yaml`.
   Analysis is run with `--fatal-infos`; fix an info, do not ignore it.
-- Commands: `dart run melos run analyze | format | test | coverage | goldens | goldens:update | gen`.
+- Commands: `dart run melos run analyze | format | test | test:dart | publish:check | coverage | goldens | goldens:update | gen`.
   Heavy ones run with `nice -n 10`, one at a time.
 
 ## Component rules (`nxgt_material`)

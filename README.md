@@ -50,6 +50,7 @@ activated globally).
 | `test` | `flutter test --coverage` in the Flutter packages only, goldens excluded |
 | `test:dart` | `dart test` in the pure Dart packages (no Flutter SDK) |
 | `coverage` | fails when a package's line coverage is under 80 % (skipped while a package has no code) |
+| `publish:check` | `flutter pub publish --dry-run` in every published package |
 | `goldens` | Alchemist golden tests |
 | `goldens:update` | regenerates goldens; run on Linux so CI matches |
 | `gen` | `build_runner`, then `flutter gen-l10n`, where a package uses them |
