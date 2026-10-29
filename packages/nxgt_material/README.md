@@ -296,7 +296,7 @@ Pages: [StatusIndicator](doc/components/status_indicator.md),
 
 ## Overlays
 
-`package:nxgt_material/overlays.dart`. Built on Flutter's `AlertDialog`, `showDialog` and `showModalBottomSheet`.
+`package:nxgt_material/overlays.dart`. Built on Flutter's `AlertDialog`, `showDialog`, `showModalBottomSheet` and `showGeneralDialog`.
 
 | Component | What it adds |
 | --- | --- |

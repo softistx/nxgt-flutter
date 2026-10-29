@@ -16,7 +16,7 @@ action and no discard guard), and never ask a yes/no question in a sheet.
 
 All three need a `Navigator` above (any `MaterialApp` has one), return a
 `Future`, and read the window size when they open. They are built on Flutter's
-`AlertDialog`, `showModalBottomSheet` and `showGeneralDialog`.
+`AlertDialog`, `showDialog`, `showModalBottomSheet` and `showGeneralDialog`.
 
 ## Confirm: a dialog
 
