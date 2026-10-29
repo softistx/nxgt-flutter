@@ -295,6 +295,19 @@ reader. A release build does not assert: `EntityHeader` leaves that action out.
 EntityAction(label: 'Edit', icon: Icons.edit, onPressed: edit)
 ```
 
+## EntityHeader.title must not be empty.
+
+**When:** in a debug build, an `EntityHeader` is built with an empty `title`.
+
+**Why:** the title is the heading of the page for a screen reader. A release
+build does not assert: the header draws no title.
+
+**Fix:** give the header the name of the entity.
+
+```dart
+EntityHeader(title: patient.name, subtitle: patient.email)
+```
+
 ## ConfirmDialog.title must not be empty.
 
 **When:** in a debug build, a `ConfirmDialog` (or `context.confirm`) is given an
@@ -604,7 +617,7 @@ PagedList<Patient>(
 )
 ```
 
-## ResponsiveTable.columns is empty.
+## ResponsiveTable.columns must not be empty.
 
 **When:** in a debug build, a `ResponsiveTable` has no columns.
 

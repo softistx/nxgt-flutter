@@ -14,6 +14,7 @@ import 'package:nxgt_material/src/theme/tone_style.dart';
 /// of its "More options" menu on compact. A [destructive] action (delete,
 /// archive) is tinted with the error tone, never by colour alone: keep the
 /// label explicit.
+@immutable
 class EntityAction {
   /// Creates an EntityAction.
   const new({
@@ -101,7 +102,7 @@ class EntityHeader extends StatelessWidget {
     this.status,
     this.actions = const [],
     super.key,
-  });
+  }) : assert(title != '', 'EntityHeader.title must not be empty.');
 
   /// The name of the entity, a semantics header.
   final String title;
@@ -150,15 +151,16 @@ class EntityHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4,
       children: [
-        Semantics(
-          header: true,
-          child: Text(
-            title,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: theme.colorScheme.onSurface,
+        if (title.isNotEmpty)
+          Semantics(
+            header: true,
+            child: Text(
+              title,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
             ),
           ),
-        ),
         if (sub != null && sub.isNotEmpty)
           Text(
             sub,

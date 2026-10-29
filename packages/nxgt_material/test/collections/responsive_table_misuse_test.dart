@@ -15,7 +15,7 @@ void main() {
           isA<AssertionError>().having(
             (e) => e.message,
             'message',
-            'ResponsiveTable.columns is empty.',
+            'ResponsiveTable.columns must not be empty.',
           ),
         ),
       );

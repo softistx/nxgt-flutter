@@ -36,7 +36,7 @@ class ResponsiveTable<T> extends StatelessWidget {
     this.onRowTap,
     this.empty,
     super.key,
-  }) : assert(columns.length > 0, 'ResponsiveTable.columns is empty.'),
+  }) : assert(columns.length > 0, 'ResponsiveTable.columns must not be empty.'),
        assert(
          sortColumnIndex == null ||
              (sortColumnIndex >= 0 && sortColumnIndex < columns.length),

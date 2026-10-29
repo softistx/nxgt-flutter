@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
+
 /// One choice offered by a group, chip set or select of this package.
+@immutable
 class ChoiceOption<T> {
   /// Creates an option.
   const new({
