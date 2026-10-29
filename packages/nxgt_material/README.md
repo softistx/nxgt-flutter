@@ -168,6 +168,15 @@ Form(
   ),
 )
 
+// A web address; normalize adds https:// when the scheme is missing.
+UrlField(
+  label: 'Website',
+  onSaved: (v) => site = UrlField.normalize(v ?? ''),
+)
+
+// A one-time code in digit slots; fires once when it is complete.
+OtpField(label: 'Code', onCompleted: verify)
+
 // A phone number, filtered to what a number can contain.
 const PhoneField(label: 'Phone')
 
@@ -403,6 +412,13 @@ RadioGroupField<String>(
 )
 ```
 
+```dart
+SwitchField(
+  label: 'Enable notifications',
+  onChanged: (on) => setState(() => _notify = on),
+)
+```
+
 Pages: [CheckboxField](doc/components/checkbox_field.md),
 [RadioGroupField](doc/components/radio_group_field.md),
 [CheckboxGroupField](doc/components/checkbox_group_field.md),
@@ -542,6 +558,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
 - [Forms](doc/guide/forms.md)
 - [Localization](doc/guide/localization.md)
 - [Adaptive layout](doc/guide/adaptive.md)
+- [Dates](doc/guide/dates.md)
 - [Overlays: dialog or sheet](doc/guide/overlays.md)
 - [Roadmap](doc/roadmap.md)
 - [Troubleshooting](doc/troubleshooting.md)

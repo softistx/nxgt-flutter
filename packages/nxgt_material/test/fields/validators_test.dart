@@ -45,6 +45,7 @@ void main() {
         'example.com:8080',
         'https://bücher.de',
         '例え.jp',
+        'मेरा.भारत',
         'xn--bcher-kva.de',
         '  example.com  ',
         '',

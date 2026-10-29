@@ -12,8 +12,9 @@ import 'package:nxgt_material/src/fields/validators.dart';
 ///
 /// Only digits are kept; a paste is stripped of everything else and cut at
 /// [length]. The slots stay left to right in right-to-left layouts, like the
-/// digits. [onCompleted] fires once each time the code becomes complete, and
-/// never submits the form. Inside a `Form`, an incomplete code fails with a
+/// digits. [onCompleted] fires once each time the code becomes complete (also
+/// when a full code is replaced by another), and never submits
+/// the form. Inside a `Form`, an incomplete code fails with a
 /// localized message, and an empty one when [required]. The row is [length]
 /// slots wide (328 dp for 6); the slots stay 48 dp high and narrow below 48 dp
 /// wide when the field has less room. A programmatic change of the controller
@@ -27,6 +28,7 @@ class OtpField extends StatefulWidget {
     this.onChanged,
     this.onSaved,
     this.validator,
+    this.autovalidateMode,
     this.controller,
     this.focusNode,
     this.enabled = true,
@@ -55,6 +57,9 @@ class OtpField extends StatefulWidget {
   /// An extra validator, run after the built-in ones.
   final FormFieldValidator<String>? validator;
 
+  /// When to validate; `null` follows the enclosing [Form].
+  final AutovalidateMode? autovalidateMode;
+
   /// Controls the digits.
   final TextEditingController? controller;
 
@@ -82,6 +87,7 @@ class _OtpFieldState extends State<OtpField> {
   FocusNode? _ownFocus;
   final _hasError = ValueNotifier<bool>(false);
   late bool _complete;
+  late String _text;
 
   TextEditingController get _controller =>
       widget.controller ?? (_ownController ??= TextEditingController());
@@ -91,6 +97,7 @@ class _OtpFieldState extends State<OtpField> {
   void initState() {
     super.initState();
     _complete = _controller.text.length >= widget.length;
+    _text = _controller.text;
     _controller.addListener(_onText);
     _focus.addListener(_refresh);
   }
@@ -104,6 +111,7 @@ class _OtpFieldState extends State<OtpField> {
     }
     if (old.controller != widget.controller || old.length != widget.length) {
       _complete = _controller.text.length >= widget.length;
+      _text = _controller.text;
     }
     if (old.focusNode != widget.focusNode) {
       (old.focusNode ?? _ownFocus)?.removeListener(_refresh);
@@ -125,8 +133,13 @@ class _OtpFieldState extends State<OtpField> {
 
   void _onText() {
     final complete = _controller.text.length >= widget.length;
-    if (complete && !_complete) widget.onCompleted?.call(_controller.text);
+    final text = _controller.text;
+    // Also when a full code is replaced by another full code.
+    if (complete && (!_complete || text != _text)) {
+      widget.onCompleted?.call(text);
+    }
     _complete = complete;
+    _text = text;
     setState(() {});
   }
 
@@ -197,6 +210,7 @@ class _OtpFieldState extends State<OtpField> {
                     autofocus: widget.autofocus,
                     onChanged: widget.onChanged,
                     onSaved: widget.onSaved,
+                    autovalidateMode: widget.autovalidateMode,
                     helperText: widget.helperText,
                   ),
                 ),

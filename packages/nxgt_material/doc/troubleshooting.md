@@ -678,6 +678,25 @@ MaterialApp(
 )
 ```
 
+## lastDate must not be before firstDate
+
+**When:** in a debug build, a `DateField` or `DateRangeField` is built with a
+`lastDate` earlier than its `firstDate`.
+
+**Why:** no date can be picked in an empty span. A release build reads the
+reversed pair as `lastDate == firstDate`.
+
+**Fix:** pass `firstDate` first, or leave one bound out for its default
+(1 January 1900 to 31 December 2100).
+
+```dart
+DateField(
+  label: 'Birth date',
+  firstDate: DateTime(1900),
+  lastDate: DateTime.now(), // not before firstDate
+)
+```
+
 ## length must be 1 to 12
 
 **When:** in a debug build, an `OtpField` is created with `length: 0` or

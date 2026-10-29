@@ -98,8 +98,10 @@ app that adds a string later gets the compiler's help.
 Keys are `<area><Name>` and follow the `material.*` keys of `@nxgt/material`:
 `actions*` (close, retry, show more,
 `actionsCopy`, `actionsCopied`, `actionsMoreOptions`),
-`fields*` (required, invalid email, invalid phone, invalid number, min/max length
-with plural, min/max value, show/hide password), `feedback*`
+`fields*` (required, invalid email, invalid phone, invalid number, invalid URL,
+incomplete one-time code with plural, min/max length with plural, min/max value,
+show/hide password), `dates*` (clear, the before and after bound errors, the
+joiner of a range), `feedback*`
 (loading, empty and error title/message, and the spoken tone words
 `feedbackToneInfo`, `feedbackToneSuccess`, `feedbackToneWarning`,
 `feedbackToneError`), `layout*` (open/close navigation, `layoutNavigation`, the label of the

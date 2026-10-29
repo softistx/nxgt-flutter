@@ -175,6 +175,8 @@ void main() {
       tester.getSemantics(find.byType(Switch)).getSemanticsData().hint,
       'Help',
     );
+    // The helper text is read once, as the hint: no node of its own.
+    expect(find.semantics.byLabel('Help'), findsNothing);
     key.currentState!.validate();
     await tester.pump();
     final node = tester.getSemantics(find.byType(Switch)).getSemanticsData();

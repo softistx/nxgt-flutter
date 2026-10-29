@@ -369,4 +369,65 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('asserts when lastDate is before firstDate', (tester) async {
+    await tester.pumpWidget(
+      formHost([
+        DateField(
+          label: label,
+          firstDate: DateTime(2026, 5),
+          lastDate: DateTime(2026, 4),
+        ),
+      ]),
+    );
+    await tester.pump();
+    expect(
+      tester.takeException(),
+      isA<AssertionError>().having(
+        (e) => e.message,
+        'message',
+        'lastDate must not be before firstDate',
+      ),
+    );
+  });
+
+  testWidgets('names the bound through the formatter', (tester) async {
+    await pump(
+      tester,
+      DateField(
+        label: label,
+        initialValue: DateTime(2020),
+        firstDate: DateTime(2024, 3),
+        formatter: (d) => 'D${d.year}-${d.month}',
+        required: true,
+      ),
+    );
+    expect(key.currentState!.validate(), isFalse);
+    await tester.pump();
+    expect(find.text('Choose a date on or after D2024-3'), findsOneWidget);
+  });
+
+  testWidgets('right-to-left: the clear button sits between icon and value', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpWidget(
+      themedHost(
+        Form(
+          key: key,
+          child: DateField(label: label, initialValue: may2026),
+        ),
+        direction: TextDirection.rtl,
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    final icon = tester.getCenter(find.byIcon(Icons.calendar_today_outlined));
+    final clear = tester.getRect(find.byIcon(Icons.clear));
+    final value = tester.getCenter(find.text('Thu, May 14'));
+    final decorator = tester.getRect(find.byType(InputDecorator));
+    expect(decorator.contains(clear.center), isTrue);
+    expect(icon.dx, lessThan(clear.center.dx));
+    expect(clear.center.dx, lessThan(value.dx));
+  });
 }

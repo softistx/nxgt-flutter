@@ -229,7 +229,7 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
 
   @override
   String datesAfter(String date) {
-    return 'Choisissez une date jusqu\'au $date';
+    return 'Choisissez une date jusqu’au $date';
   }
 
   @override

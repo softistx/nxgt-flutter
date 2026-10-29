@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/dates/picker_field_body.dart';
+import 'package:nxgt_material/src/forms/field_footer.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
-import 'package:nxgt_material/src/selection/choice_field_parts.dart';
 
 /// A form field that shows a value as read-only text and opens a picker to
 /// change it: the shared base of `DateField`, `TimeField` and
@@ -132,12 +132,7 @@ class PickerFieldBase<V> extends StatelessWidget {
                 onChanged?.call(null);
               },
             ),
-            ChoiceFooter(
-              helperText: helperText,
-              errorText: error,
-              // The helper text is already the hint of the control.
-              excludeHelper: true,
-            ),
+            ChoiceFooter(helperText: helperText, errorText: error),
           ],
         );
       },
