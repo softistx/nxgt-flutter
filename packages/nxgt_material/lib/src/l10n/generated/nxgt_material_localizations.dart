@@ -287,7 +287,7 @@ abstract class NxgtMaterialLocalizations {
   /// **'Away'**
   String get displayPresenceAway;
 
-  /// Screen reader text of an avatar's presence dot: the person is do not disturb.
+  /// Screen reader text of an avatar's presence dot: the person asked not to be disturbed.
   ///
   /// In en, this message translates to:
   /// **'Busy'**
