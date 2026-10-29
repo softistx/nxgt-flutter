@@ -74,6 +74,6 @@ validation.
 | `helperText` | `String?` | A hint under the field, replaced by the error. |
 | `hintText` | `String?` | Placeholder of the empty field. |
 | `initialEntryMode` | `DatePickerEntryMode` | Calendar (default) or typed input. |
-| `formatter` | `String Function(DateTimeRange)?` | Words the whole range instead of "start to end". |
+| `formatter` | `String Function(DateTimeRange)?` | Words the whole range instead of "start to end". It also words the bound in a `firstDate` or `lastDate` error, called with a one-day range. |
 | `clearable` | `bool` | Shows a clear button once there is a range. Default `true`. |
 | `focusNode` | `FocusNode?` | The focus node of the control. |

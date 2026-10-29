@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nxgt_material/src/dates/date_bounds.dart';
 import 'package:nxgt_material/src/dates/picker_field_base.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
@@ -82,29 +83,18 @@ class DateField extends StatelessWidget {
   /// The focus node of the control.
   final FocusNode? focusNode;
 
-  DateTime get _first => DateUtils.dateOnly(firstDate ?? DateTime(1900));
-
-  DateTime get _last => DateUtils.dateOnly(lastDate ?? DateTime(2100, 12, 31));
-
   String _format(BuildContext context, DateTime date) =>
       formatter?.call(date) ??
       MaterialLocalizations.of(context).formatMediumDate(date);
 
-  String? _range(BuildContext context, DateTime date) {
-    final l10n = context.materialL10n;
-    if (date.isBefore(_first)) {
-      return l10n.datesBefore(_format(context, _first));
-    }
-    if (date.isAfter(_last)) return l10n.datesAfter(_format(context, _last));
-    return null;
-  }
-
-  Future<DateTime?> _pick(BuildContext context, DateTime? current) async {
-    final first = _first;
-    final last = _last;
-    var start = DateUtils.dateOnly(current ?? DateTime.now());
-    if (start.isBefore(first)) start = first;
-    if (start.isAfter(last)) start = last;
+  Future<DateTime?> _pick(
+    BuildContext context,
+    DateTime? current,
+    DateBounds bounds,
+  ) async {
+    final first = bounds.first;
+    final last = bounds.last;
+    final start = bounds.clamp(DateUtils.dateOnly(current ?? DateTime.now()));
     final picked = await showDatePicker(
       context: context,
       initialDate: start,
@@ -118,6 +108,7 @@ class DateField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bounds = DateBounds(firstDate, lastDate);
     return PickerFieldBase<DateTime>(
       label: label,
       icon: Icons.calendar_today_outlined,
@@ -125,9 +116,14 @@ class DateField extends StatelessWidget {
           ? null
           : DateUtils.dateOnly(initialValue!),
       format: _format,
-      pick: _pick,
+      pick: (context, current) => _pick(context, current, bounds),
       clearLabel: context.materialL10n.datesClear(label),
-      rangeError: _range,
+      rangeError: (context, date) => bounds.error(
+        context.materialL10n,
+        date,
+        date,
+        (day) => _format(context, day),
+      ),
       focusNode: focusNode,
       onChanged: onChanged,
       onSaved: onSaved,

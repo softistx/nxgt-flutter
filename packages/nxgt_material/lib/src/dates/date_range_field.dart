@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nxgt_material/src/dates/date_bounds.dart';
 import 'package:nxgt_material/src/dates/picker_field_base.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
@@ -84,10 +85,6 @@ class DateRangeField extends StatelessWidget {
   /// The focus node of the control.
   final FocusNode? focusNode;
 
-  DateTime get _first => DateUtils.dateOnly(firstDate ?? DateTime(1900));
-
-  DateTime get _last => DateUtils.dateOnly(lastDate ?? DateTime(2100, 12, 31));
-
   static DateTimeRange _normalize(DateTimeRange range) => DateTimeRange(
     start: DateUtils.dateOnly(range.start),
     end: DateUtils.dateOnly(range.end),
@@ -105,36 +102,25 @@ class DateRangeField extends StatelessWidget {
     );
   }
 
-  String? _rangeError(BuildContext context, DateTimeRange range) {
-    final l10n = context.materialL10n;
-    if (range.start.isBefore(_first)) {
-      return l10n.datesBefore(_day(context, _first));
-    }
-    if (range.end.isAfter(_last)) {
-      return l10n.datesAfter(_day(context, _last));
-    }
-    return null;
-  }
-
-  DateTime _clamp(DateTime date) {
-    if (date.isBefore(_first)) return _first;
-    if (date.isAfter(_last)) return _last;
-    return date;
-  }
+  // A bound is worded by the field's formatter as a one-day range.
+  String _bound(BuildContext context, DateTime date) => formatter == null
+      ? _day(context, date)
+      : formatter!(DateTimeRange(start: date, end: date));
 
   Future<DateTimeRange?> _pick(
     BuildContext context,
     DateTimeRange? current,
+    DateBounds bounds,
   ) async {
-    final start = current == null ? null : _clamp(current.start);
-    final end = current == null ? null : _clamp(current.end);
+    final start = current == null ? null : bounds.clamp(current.start);
+    final end = current == null ? null : bounds.clamp(current.end);
     final picked = await showDateRangePicker(
       context: context,
       initialDateRange: start == null || end == null
           ? null
           : DateTimeRange(start: start, end: end),
-      firstDate: _first,
-      lastDate: _last,
+      firstDate: bounds.first,
+      lastDate: bounds.last,
       helpText: label,
       initialEntryMode: initialEntryMode,
     );
@@ -143,14 +129,20 @@ class DateRangeField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bounds = DateBounds(firstDate, lastDate);
     return PickerFieldBase<DateTimeRange>(
       label: label,
       icon: Icons.date_range_outlined,
       initialValue: initialValue == null ? null : _normalize(initialValue!),
       format: _format,
-      pick: _pick,
+      pick: (context, current) => _pick(context, current, bounds),
       clearLabel: context.materialL10n.datesClear(label),
-      rangeError: _rangeError,
+      rangeError: (context, range) => bounds.error(
+        context.materialL10n,
+        range.start,
+        range.end,
+        (day) => _bound(context, day),
+      ),
       focusNode: focusNode,
       onChanged: onChanged,
       onSaved: onSaved,
