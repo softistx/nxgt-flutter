@@ -91,7 +91,9 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
 ## Releases
 
 - Tag `<package>-v<version>` triggers `release.yml` (pub.dev OIDC, GitHub
-  environment `pub-dev`).
+  environment `pub-dev`). It refuses a tag whose version differs from the
+  package's pubspec `version`, or whose commit is not on `main`: tag `main`
+  after the release PR lands and `main` is fast-forwarded.
 - **The first publish of a package is manual, by the owner**: pub.dev needs the
   package to exist before automated publishing can be enabled. After that, the
   owner enables automated publishing on pub.dev (repository, tag pattern

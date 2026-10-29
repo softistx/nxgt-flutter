@@ -25,6 +25,8 @@ jobs:
       id-token: write # pub.dev OIDC
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the main-branch check below needs the history
       # setup-dart exchanges the job's OIDC token for a pub.dev credential;
       # Flutter is installed after it so its bundled Dart is the one on PATH.
       - uses: dart-lang/setup-dart@v1
@@ -38,6 +40,14 @@ jobs:
           package="${GITHUB_REF_NAME%-v*}"
           test -d "packages/$package" || { echo "no packages/$package"; exit 1; }
           echo "PACKAGE=$package" >> "$GITHUB_ENV"
+      # A pub.dev version is immutable: refuse a mistyped tag, or one on a
+      # commit that never reached main.
+      - name: Check the tag against the pubspec and main
+        run: |
+          tagged="${GITHUB_REF_NAME##*-v}"
+          declared="$(sed -n 's/^version:[[:space:]]*//p' "packages/$PACKAGE/pubspec.yaml")"
+          test "$tagged" = "$declared" || { echo "tag version $tagged, pubspec version $declared"; exit 1; }
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main || { echo "$GITHUB_SHA is not on main"; exit 1; }
       - name: Resolve the workspace
         run: dart pub get
       - name: Dry run
