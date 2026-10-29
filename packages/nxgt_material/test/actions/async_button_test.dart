@@ -197,4 +197,51 @@ void main() {
       handle.dispose();
     });
   });
+
+  group('autofocus', () {
+    bool focused(WidgetTester tester, Type button) =>
+        FocusManager.instance.primaryFocus?.context
+                ?.findAncestorWidgetOfExactType<AsyncButton>() !=
+            null ||
+        FocusManager.instance.primaryFocus?.context
+                ?.findAncestorWidgetOfExactType<FilledButton>() !=
+            null;
+
+    testWidgets('takes the focus, without an icon', (tester) async {
+      await tester.pumpWidget(
+        host(
+          AsyncButton(label: 'Save', autofocus: true, onPressed: () async {}),
+        ),
+      );
+      await tester.pump();
+      expect(focused(tester, FilledButton), isTrue);
+    });
+
+    testWidgets('takes the focus, with an icon', (tester) async {
+      await tester.pumpWidget(
+        host(
+          AsyncButton(
+            label: 'Save',
+            icon: const Icon(Icons.save),
+            autofocus: true,
+            onPressed: () async {},
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(focused(tester, FilledButton), isTrue);
+    });
+
+    testWidgets('does not take the focus by default', (tester) async {
+      await tester.pumpWidget(
+        host(AsyncButton(label: 'Save', onPressed: () async {})),
+      );
+      await tester.pump();
+      expect(
+        FocusManager.instance.primaryFocus?.context
+            ?.findAncestorWidgetOfExactType<FilledButton>(),
+        isNull,
+      );
+    });
+  });
 }

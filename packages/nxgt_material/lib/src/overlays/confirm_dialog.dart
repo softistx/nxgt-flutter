@@ -14,9 +14,10 @@ const _minTarget = Size.square(48);
 ///
 /// The confirm action runs [onConfirm] through an [AsyncButton]: it shows a
 /// spinner and ignores further presses until the future completes, then the
-/// dialog pops `true`. While it runs the dialog cannot be dismissed. If
+/// dialog pops `true`. While it runs there is no way out of the dialog, so
+/// give the future a timeout. If
 /// [onConfirm] throws, the error is reported with [FlutterError.reportError],
-/// and the dialog stays open so the user can retry or cancel.
+
 ///
 /// Focus starts on Cancel when [destructive], else on Confirm. Escape, a tap
 /// on the barrier and the system back gesture pop `false`.
@@ -60,11 +61,14 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
     setState(() => _busy = true);
     try {
       await widget.onConfirm?.call();
-      if (mounted) Navigator.of(context).pop(true);
-    } finally {
-      // A throw goes on to the AsyncButton, which reports it.
+    } on Object {
+      // The AsyncButton reports it; the dialog stays open and usable.
       if (mounted) setState(() => _busy = false);
+      rethrow;
     }
+    // On success the dialog stays locked while it animates out, so a tap or
+    // Escape cannot pop the page beneath.
+    if (mounted) Navigator.of(context).pop(true);
   }
 
   @override
@@ -76,30 +80,37 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
       theme.filledButtonTheme,
       widget.destructive ? error : null,
     );
-    return PopScope(
-      canPop: !_busy,
-      child: AlertDialog(
-        title: Text(widget.title),
-        content: Text(widget.message),
-        scrollable: true,
-        semanticLabel: widget.title,
-        actions: [
-          TextButton(
-            onPressed: _busy ? null : () => Navigator.of(context).pop(false),
-            autofocus: widget.destructive,
-            style: _targetStyle,
-            child: Text(l10n.actionsCancel),
-          ),
-          Theme(
-            data: theme.copyWith(filledButtonTheme: confirmTheme),
-            child: AsyncButton(
-              label: widget.confirmLabel ?? l10n.actionsConfirm,
-              onPressed: _confirm,
-              loading: _busy,
-              autofocus: !widget.destructive,
+    return Actions(
+      // Escape pops the topmost present route; once this one is popping that
+      // is the page beneath, so the key does nothing while locked.
+      actions: _busy
+          ? {DismissIntent: DoNothingAction()}
+          : const <Type, Action<Intent>>{},
+      child: PopScope(
+        canPop: !_busy,
+        child: AlertDialog(
+          title: Text(widget.title),
+          content: Text(widget.message),
+          scrollable: true,
+          semanticLabel: widget.title,
+          actions: [
+            TextButton(
+              onPressed: _busy ? null : () => Navigator.of(context).pop(false),
+              autofocus: widget.destructive,
+              style: _targetStyle,
+              child: Text(l10n.actionsCancel),
             ),
-          ),
-        ],
+            Theme(
+              data: theme.copyWith(filledButtonTheme: confirmTheme),
+              child: AsyncButton(
+                label: widget.confirmLabel ?? l10n.actionsConfirm,
+                onPressed: _confirm,
+                loading: _busy,
+                autofocus: !widget.destructive,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

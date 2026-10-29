@@ -10,6 +10,8 @@ import 'package:nxgt_material/src/theme/theme_context.dart';
 
 import '../support/host.dart';
 
+FocusNode? _openerNode;
+
 /// A button that opens the dialog and reports the answer.
 class _Opener extends StatelessWidget {
   const new({
@@ -30,6 +32,7 @@ class _Opener extends StatelessWidget {
   Widget build(BuildContext context) => Center(
     child: ElevatedButton(
       autofocus: true,
+      focusNode: _openerNode,
       onPressed: () async => onResult(
         await context.confirm(
           title: 'Delete invoice?',
@@ -310,13 +313,63 @@ void main() {
     });
 
     testWidgets('returns to the opener after close', (tester) async {
+      _openerNode = FocusNode();
+      addTearDown(() {
+        _openerNode!.dispose();
+        _openerNode = null;
+      });
       await _open(tester, (_) {});
-      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(_openerNode!.hasFocus, isFalse);
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
 
-      expect(_focusedIn<ElevatedButton>(), isNotNull);
+      expect(_openerNode!.hasFocus, isTrue);
     });
+  });
+
+  testWidgets('stays locked while it closes after a confirm', (tester) async {
+    bool? result;
+    await tester.pumpApp(
+      themedHost(
+        Builder(
+          builder: (context) => Center(
+            child: TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => Scaffold(
+                    appBar: AppBar(title: const Text('Beneath')),
+                    body: _Opener(onResult: (v) => result = v),
+                  ),
+                ),
+              ),
+              child: const Text('Push'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Push'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Open'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Confirm'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(
+      tester
+          .widget<TextButton>(find.widgetWithText(TextButton, 'Cancel'))
+          .onPressed,
+      isNull,
+    );
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.pumpAndSettle();
+
+    expect(result, isTrue);
+    expect(find.text('Beneath'), findsOneWidget);
   });
 
   group('layout', () {

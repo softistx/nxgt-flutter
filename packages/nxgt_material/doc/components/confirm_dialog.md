@@ -37,7 +37,8 @@ if (deleted) context.showToast('Invoice deleted');
   Escape, a tap on the barrier and the system back gesture pop `false`.
 - **`onConfirm`.** It runs through an `AsyncButton`: the confirm action shows a
   spinner and ignores further presses until the future completes. While it
-  runs, Cancel is disabled and the dialog cannot be dismissed. If it throws,
+  runs, Cancel is disabled and the dialog cannot be dismissed: there is no way
+  out of the dialog, so give the future a timeout. If it throws,
   the error is reported with `FlutterError.reportError` (see
   [troubleshooting](../troubleshooting.md#while-running-an-asyncbutton-action)),
   and the dialog stays open so the user can retry or cancel. Show the failure
