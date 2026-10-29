@@ -1,14 +1,15 @@
 # Dates
 
-`package:nxgt_material/dates.dart` holds the fields that pick a date or a time,
-`DateField` and `TimeField`: each a `FormField` that shows its value as read-only text, opens
-Material's picker on tap, Enter or Space, and follows the app's locale.
+`package:nxgt_material/dates.dart` holds the fields that pick a date or a
+time, `DateField` and `TimeField`: each a `FormField` that shows its value as
+read-only text, opens Material's picker on tap, Enter or Space, and follows
+the app's locale.
 
 ## Setup
 
 The text and the picker come from Flutter's `MaterialLocalizations`, so the
 app needs `GlobalMaterialLocalizations.delegate` and the languages it
-supports. Without it a French app shows English dates (see
+supports. Without it a French app shows English dates and times (see
 [Troubleshooting](../troubleshooting.md)).
 
 ## DateField
