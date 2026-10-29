@@ -26,7 +26,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | --- | --- |
 | `actions.dart` | Buttons and menus that trigger something |
 | `collections.dart` | Search and list-shaped data: `SearchField`, `PagedList`, `ResponsiveTable` and `TableColumn` |
-| `dates.dart` | Date fields built on `FormField`: `DateField` |
+| `dates.dart` | Date and time fields built on `FormField`: `DateField`, `TimeField` |
 | `display.dart` | Read-only record display: `StatusIndicator`, `CountBadge`, `UserAvatar`, `StatCard`, `DescriptionList`, `EntityHeader` |
 | `feedback.dart` | Empty, loading and error states, toasts, banners, progress |
 | `fields.dart` | Single-value inputs built on `FormField` |
@@ -344,12 +344,13 @@ Guide: [Overlays](doc/guide/overlays.md). Pages:
 
 ## Dates
 
-`package:nxgt_material/dates.dart`. Built on Material 3 `showDatePicker` and
-`InputDecorator`.
+`package:nxgt_material/dates.dart`. Built on Material 3 `showDatePicker`,
+`showTimePicker` and `InputDecorator`.
 
 | Component | What it adds |
 | --- | --- |
 | `DateField` | A `FormField<DateTime>` that opens the date picker: value at midnight, text in the locale's medium date (or a `formatter`), `firstDate` and `lastDate` with a named-bound error, `required`, a 48 dp clear button, one announced node |
+| `TimeField` | A `FormField<TimeOfDay>` that opens the time picker: text in the locale's format (or a `formatter`), `use24HourFormat` to force the 12 or 24 hour clock in the text and the picker, `required`, a 48 dp clear button, one announced node |
 
 ```dart
 import 'package:nxgt_material/dates.dart';
@@ -362,7 +363,8 @@ DateField(
 )
 ```
 
-Pages: [DateField](doc/components/date_field.md), [dates guide](doc/guide/dates.md).
+Pages: [DateField](doc/components/date_field.md),
+[TimeField](doc/components/time_field.md), [dates guide](doc/guide/dates.md).
 
 ## Selection
 
@@ -581,6 +583,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [SubmitButton](doc/components/submit_button.md),
   [SwitchField](doc/components/switch_field.md),
   [TextAreaField](doc/components/text_area_field.md),
+  [TimeField](doc/components/time_field.md),
   [Toast](doc/components/toast.md),
   [UrlField](doc/components/url_field.md),
   [UserAvatar](doc/components/user_avatar.md),

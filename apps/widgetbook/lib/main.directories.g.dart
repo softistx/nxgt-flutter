@@ -27,6 +27,8 @@ import 'package:nxgt_widgetbook/collections/search_field.usecase.dart'
     as _nxgt_widgetbook_collections_search_field_usecase;
 import 'package:nxgt_widgetbook/dates/date_field.usecase.dart'
     as _nxgt_widgetbook_dates_date_field_usecase;
+import 'package:nxgt_widgetbook/dates/time_field.usecase.dart'
+    as _nxgt_widgetbook_dates_time_field_usecase;
 import 'package:nxgt_widgetbook/display/count_badge.usecase.dart'
     as _nxgt_widgetbook_display_count_badge_usecase;
 import 'package:nxgt_widgetbook/display/description_list.usecase.dart'
@@ -192,6 +194,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder:
                 _nxgt_widgetbook_dates_date_field_usecase.buildDateFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'TimeField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_dates_time_field_usecase.buildTimeFieldDefault,
           ),
         ],
       ),

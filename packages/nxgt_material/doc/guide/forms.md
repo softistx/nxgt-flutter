@@ -38,6 +38,7 @@ Form(
 | `NumberField` | fields | Numeric keypad, comma or point, min and max |
 | `TextAreaField` | fields | Growing multi-line text with an optional counter |
 | `DateField` | dates | A date picked in Material's date picker, as a `FormField<DateTime>` |
+| `TimeField` | dates | A time of day picked in Material's time picker, as a `FormField<TimeOfDay>` |
 | `SwitchField` | selection | An on/off switch tile as a `FormField<bool>`; off by default |
 | `FormSection` | forms | A heading and its fields |
 | `SubmitButton` | forms | Validate, save, then await a submit action |
