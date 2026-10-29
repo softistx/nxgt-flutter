@@ -36,10 +36,7 @@ class RadioGroupField<T> extends ChoiceFieldBase<T?> {
 
   @override
   Widget build(BuildContext context) {
-    assert(
-      initialValue == null || options.any((o) => o.value == initialValue),
-      'RadioGroupField.initialValue must be one of the options.',
-    );
+    assertInOptions(options, initialValue, 'RadioGroupField');
     final unique = uniqueOptions(options, 'RadioGroupField');
     final firstEnabled = firstEnabledOption(unique, fieldEnabled: enabled);
     return buildChoice(

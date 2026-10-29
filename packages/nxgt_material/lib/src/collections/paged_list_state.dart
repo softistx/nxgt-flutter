@@ -61,13 +61,13 @@ class PagedListState<T> extends State<PagedList<T>> {
     super.dispose();
   }
 
-  void _report(Object error, StackTrace stack, String what) {
+  void _report(Object error, StackTrace stack, String context) {
     FlutterError.reportError(
       FlutterErrorDetails(
         exception: error,
         stack: stack,
         library: 'nxgt_material',
-        context: ErrorDescription('while $what of a PagedList'),
+        context: ErrorDescription(context),
       ),
     );
   }
@@ -85,7 +85,7 @@ class PagedListState<T> extends State<PagedList<T>> {
     } on Object catch (error, stack) {
       _loadBase = null;
       _loadError = error;
-      _report(error, stack, 'loading more items');
+      _report(error, stack, 'while loading more items of a PagedList');
     } finally {
       _running = false;
       if (mounted) {
@@ -102,7 +102,7 @@ class PagedListState<T> extends State<PagedList<T>> {
     try {
       await widget.onRefresh!();
     } on Object catch (error, stack) {
-      _report(error, stack, 'refreshing');
+      _report(error, stack, 'while refreshing a PagedList');
       return;
     }
     if (!mounted) return;

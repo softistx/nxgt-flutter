@@ -46,7 +46,9 @@ if (deleted) context.showToast('Invoice deleted');
 - **`destructive`.** The confirm action is drawn with the error tone
   (`context.tones.error`, AA in light and dark; the theme's disabled look
   applies when disabled) and the focus starts on Cancel. Otherwise the focus
-  starts on Confirm.
+  starts on Confirm. The filled error button, unlike the soft error container
+  of a destructive `EntityHeader` action, is deliberate: the dialog is the last
+  step before the action.
 - **Strings.** Cancel and Confirm are localized (`actionsCancel`,
   `actionsConfirm`); `confirmLabel` replaces Confirm. Reword them with
   `NxgtMaterialLocalizationsDelegate(reword:)`.

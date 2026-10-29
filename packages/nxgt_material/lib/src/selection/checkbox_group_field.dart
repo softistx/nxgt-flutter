@@ -39,10 +39,7 @@ class CheckboxGroupField<T> extends ChoiceFieldBase<Set<T>> {
 
   @override
   Widget build(BuildContext context) {
-    assert(
-      (initialValue ?? const {}).every((v) => options.any((o) => o.value == v)),
-      'CheckboxGroupField.initialValue must only hold values of the options.',
-    );
+    assertSetInOptions(options, initialValue, 'CheckboxGroupField');
     final unique = uniqueOptions(options, 'CheckboxGroupField');
     final firstEnabled = firstEnabledOption(unique, fieldEnabled: enabled);
     return buildChoice(

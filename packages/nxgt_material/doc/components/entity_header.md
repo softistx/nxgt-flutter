@@ -42,7 +42,10 @@ EntityHeader(
   wider than that clips.
 - A long title or subtitle wraps; nothing overflows at a 2x text scale.
 - A `destructive` action uses the error tone (container and on-container
-  colours, AA contrast) in both forms.
+  colours, AA contrast) in both forms. It stays an outlined button with a
+  soft error container, unlike the filled error button of `ConfirmDialog`; the
+  difference is deliberate, since an action in a header is less final than a
+  confirmation.
 - Insets and alignment are directional, so it mirrors in right-to-left.
 
 ## Accessibility

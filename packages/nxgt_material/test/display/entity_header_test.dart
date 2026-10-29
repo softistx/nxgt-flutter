@@ -288,4 +288,18 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  test('asserts on an empty title', () {
+    final title = ''.trim();
+    expect(
+      () => EntityHeader(title: title),
+      throwsA(
+        isA<AssertionError>().having(
+          (e) => e.message,
+          'message',
+          'EntityHeader.title must not be empty.',
+        ),
+      ),
+    );
+  });
 }

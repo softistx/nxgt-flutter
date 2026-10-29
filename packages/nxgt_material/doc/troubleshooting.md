@@ -295,6 +295,19 @@ reader. A release build does not assert: `EntityHeader` leaves that action out.
 EntityAction(label: 'Edit', icon: Icons.edit, onPressed: edit)
 ```
 
+## EntityHeader.title must not be empty.
+
+**When:** in a debug build, an `EntityHeader` is built with an empty `title`.
+
+**Why:** the title is the heading of the page for a screen reader. A release
+build does not assert: the header draws no title.
+
+**Fix:** give the header the name of the entity.
+
+```dart
+EntityHeader(title: patient.name, subtitle: patient.email)
+```
+
 ## ConfirmDialog.title must not be empty.
 
 **When:** in a debug build, a `ConfirmDialog` (or `context.confirm`) is given an
@@ -564,6 +577,27 @@ SearchField(controller: controller, onChanged: filter)
 
 **Fix:** pass `Duration.zero` for no debounce, or a positive duration.
 
+## while loading more items of a PagedList
+
+**When:** the `onLoadMore` of a `PagedList` threw. The text is the `context` of
+the report in the console.
+
+**Why:** the list keeps its items, shows a retry row (never the exception) and
+reports the error to `FlutterError.onError`.
+
+**Fix:** handle the error in `onLoadMore` if it is expected; the user can retry
+from the row.
+
+## while refreshing a PagedList
+
+**When:** the `onRefresh` of a `PagedList` threw. The text is the `context` of
+the report in the console.
+
+**Why:** the list keeps its items and the error is reported to
+`FlutterError.onError`.
+
+**Fix:** handle the error in `onRefresh` if it is expected.
+
 ## PagedList.hasMore is true but onLoadMore is null.
 
 **When:** in a debug build, a `PagedList` has `hasMore: true` and no
@@ -583,7 +617,7 @@ PagedList<Patient>(
 )
 ```
 
-## ResponsiveTable.columns is empty.
+## ResponsiveTable.columns must not be empty.
 
 **When:** in a debug build, a `ResponsiveTable` has no columns.
 

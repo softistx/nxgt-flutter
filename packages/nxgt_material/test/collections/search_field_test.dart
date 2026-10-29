@@ -238,6 +238,19 @@ void main() {
       handle.dispose();
     });
 
+    testWidgets('keeps an accessible name once text is typed', (tester) async {
+      final handle = tester.ensureSemantics();
+      await pump(tester, field(debounce: Duration.zero));
+      await tester.enterText(find.byType(TextField), 'ana');
+      await tester.pump();
+      final data = tester
+          .getSemantics(find.byType(EditableText))
+          .getSemanticsData();
+      expect(data.value, 'ana');
+      expect(data.label, contains('Search'));
+      handle.dispose();
+    });
+
     testWidgets('the node is a text field of the search input type', (
       tester,
     ) async {

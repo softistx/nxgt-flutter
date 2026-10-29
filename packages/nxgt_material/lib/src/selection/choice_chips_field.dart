@@ -39,10 +39,7 @@ class ChoiceChipsField<T> extends ChoiceFieldBase<T?> {
 
   @override
   Widget build(BuildContext context) {
-    assert(
-      initialValue == null || options.any((o) => o.value == initialValue),
-      'ChoiceChipsField.initialValue must be one of the options.',
-    );
+    assertInOptions(options, initialValue, 'ChoiceChipsField');
     final unique = uniqueOptions(options, 'ChoiceChipsField');
     final firstEnabled = firstEnabledOption(unique, fieldEnabled: enabled);
     return buildChoice(
@@ -120,10 +117,7 @@ class FilterChipsField<T> extends ChoiceFieldBase<Set<T>> {
 
   @override
   Widget build(BuildContext context) {
-    assert(
-      (initialValue ?? const {}).every((v) => options.any((o) => o.value == v)),
-      'FilterChipsField.initialValue must only hold values of the options.',
-    );
+    assertSetInOptions(options, initialValue, 'FilterChipsField');
     final unique = uniqueOptions(options, 'FilterChipsField');
     final firstEnabled = firstEnabledOption(unique, fieldEnabled: enabled);
     return buildChoice(

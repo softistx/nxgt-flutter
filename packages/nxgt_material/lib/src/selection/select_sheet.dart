@@ -66,7 +66,7 @@ class _SelectSheetListState<T> extends State<SelectSheetList<T>> {
                 container: true,
                 liveRegion: liveRegionUnderRole,
                 child: Text(
-                  context.materialL10n.fieldsSelectNoResults,
+                  context.materialL10n.selectionNoResults,
                   textAlign: TextAlign.center,
                 ),
               ),

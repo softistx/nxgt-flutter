@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 
 /// A main action with a menu of related actions beside it.
@@ -42,7 +43,7 @@ class SplitButton extends StatelessWidget {
     final radii = context.radii;
     final outer = Radius.circular(radii.xl);
     final inner = Radius.circular(radii.xs);
-    final mainStyle = ButtonStyle(
+    final mainStyle = targetStyle.copyWith(
       shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(
           borderRadius: BorderRadiusDirectional.horizontal(
@@ -52,7 +53,7 @@ class SplitButton extends StatelessWidget {
         ),
       ),
     );
-    final arrowStyle = ButtonStyle(
+    final arrowStyle = targetStyle.copyWith(
       shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(
           borderRadius: BorderRadiusDirectional.horizontal(

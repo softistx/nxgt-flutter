@@ -1,9 +1,9 @@
 name: nxgt_material
 description: >-
-  Material 3 components for Flutter that fill what the framework leaves out:
-  adaptive layout, fields and forms, feedback states, themes. Intent-named,
-  accessible, French and English.
-version: 0.1.0
+  Material 3 components for Flutter: adaptive layout, forms and fields,
+  display, overlays, selection, collections, feedback, themes. Accessible,
+  French and English.
+version: 0.2.0
 homepage: https://github.com/softistx/nxgt-flutter/tree/develop/packages/nxgt_material
 repository: https://github.com/softistx/nxgt-flutter
 issue_tracker: https://github.com/softistx/nxgt-flutter/issues

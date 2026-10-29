@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/layout/text_scale.dart';
 import 'package:nxgt_material/src/layout/window_size.dart';
 import 'package:nxgt_material/src/theme/targets.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 import 'package:nxgt_material/src/theme/tone_colors.dart';
+import 'package:nxgt_material/src/theme/tone_style.dart';
 
 /// An action of an [EntityHeader]: a [label], an optional [icon] and what
 /// happens on [onPressed].
@@ -12,6 +14,7 @@ import 'package:nxgt_material/src/theme/tone_colors.dart';
 /// of its "More options" menu on compact. A [destructive] action (delete,
 /// archive) is tinted with the error tone, never by colour alone: keep the
 /// label explicit.
+@immutable
 class EntityAction {
   /// Creates an EntityAction.
   const new({
@@ -44,21 +47,14 @@ const _inlineMaxTextScale = 1.5;
 const _textFlex = 3;
 const _actionsFlex = 2;
 
-/// The error tone while enabled; `null` when disabled, so the theme's
-/// disabled look applies.
-WidgetStateProperty<Color?> _whenEnabled(Color color) =>
-    WidgetStateProperty.resolveWith(
-      (states) => states.contains(WidgetState.disabled) ? null : color,
+ButtonStyle _actionStyle(EntityAction action, ToneColors error) =>
+    targetStyle.copyWith(
+      backgroundColor: action.destructive ? whenEnabled(error.container) : null,
+      foregroundColor: action.destructive
+          ? whenEnabled(error.onContainer)
+          : null,
+      iconColor: action.destructive ? whenEnabled(error.onContainer) : null,
     );
-
-ButtonStyle _actionStyle(EntityAction action, ToneColors error) => ButtonStyle(
-  minimumSize: const WidgetStatePropertyAll(minTarget),
-  tapTargetSize: MaterialTapTargetSize.padded,
-  visualDensity: VisualDensity.standard,
-  backgroundColor: action.destructive ? _whenEnabled(error.container) : null,
-  foregroundColor: action.destructive ? _whenEnabled(error.onContainer) : null,
-  iconColor: action.destructive ? _whenEnabled(error.onContainer) : null,
-);
 
 Widget _actionButton(EntityAction action, ToneColors error) {
   final style = _actionStyle(action, error);
@@ -106,7 +102,7 @@ class EntityHeader extends StatelessWidget {
     this.status,
     this.actions = const [],
     super.key,
-  });
+  }) : assert(title != '', 'EntityHeader.title must not be empty.');
 
   /// The name of the entity, a semantics header.
   final String title;
@@ -132,7 +128,7 @@ class EntityHeader extends StatelessWidget {
     ];
     final inline =
         context.windowSize.isAtLeast(WindowSize.medium) &&
-        MediaQuery.textScalerOf(context).scale(14) / 14 <= _inlineMaxTextScale;
+        textScaleAtMost(context, _inlineMaxTextScale);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16,
@@ -155,15 +151,16 @@ class EntityHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4,
       children: [
-        Semantics(
-          header: true,
-          child: Text(
-            title,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: theme.colorScheme.onSurface,
+        if (title.isNotEmpty)
+          Semantics(
+            header: true,
+            child: Text(
+              title,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
             ),
           ),
-        ),
         if (sub != null && sub.isNotEmpty)
           Text(
             sub,
@@ -199,11 +196,7 @@ class EntityHeader extends StatelessWidget {
         tooltip: tooltip,
         onPressed: () =>
             controller.isOpen ? controller.close() : controller.open(),
-        style: IconButton.styleFrom(
-          minimumSize: minTarget,
-          tapTargetSize: MaterialTapTargetSize.padded,
-          visualDensity: VisualDensity.standard,
-        ),
+        style: targetStyle,
         icon: const Icon(Icons.more_vert),
       ),
     );

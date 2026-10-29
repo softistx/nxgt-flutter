@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/feedback/feedback_tone.dart';
 import 'package:nxgt_material/src/feedback/live_region.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 import 'package:nxgt_material/src/theme/tone_colors.dart';
 
@@ -87,6 +88,7 @@ class InlineAlert extends StatelessWidget {
                   onPressed: onDismiss,
                   tooltip: l10n.actionsClose,
                   color: colors.onContainer,
+                  style: targetStyle,
                   icon: const Icon(Icons.close),
                 ),
             ],

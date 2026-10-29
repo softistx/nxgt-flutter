@@ -357,19 +357,13 @@ abstract class NxgtMaterialLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Clear selection'**
-  String get fieldsSelectClear;
-
-  /// Label of the search box in the sheet of a select field.
-  ///
-  /// In en, this message translates to:
-  /// **'Search'**
-  String get fieldsSelectSearch;
+  String get selectionClear;
 
   /// Message shown in the sheet of a select field when the search matches no option.
   ///
   /// In en, this message translates to:
   /// **'No results'**
-  String get fieldsSelectNoResults;
+  String get selectionNoResults;
 
   /// Placeholder and screen reader label of an empty search field.
   ///

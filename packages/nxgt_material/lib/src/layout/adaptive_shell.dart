@@ -5,6 +5,7 @@ import 'package:nxgt_material/src/layout/shell_destination.dart';
 import 'package:nxgt_material/src/layout/shell_navigation.dart';
 import 'package:nxgt_material/src/layout/shell_validation.dart';
 import 'package:nxgt_material/src/layout/window_size.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 
 /// The frame of an app: its [destinations] as a navigation bar, a rail or a
 /// drawer, whichever the window's size asks for.
@@ -121,6 +122,7 @@ class _AdaptiveShellState extends State<AdaptiveShell> {
               tooltip: openLabel,
               icon: const Icon(Icons.menu),
               onPressed: () => _scaffold.currentState?.openDrawer(),
+              style: targetStyle,
             )
           : null,
     );

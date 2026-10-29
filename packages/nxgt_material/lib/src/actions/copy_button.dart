@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 
 /// An icon button that copies [value] to the clipboard and shows a check
 /// mark for a moment.
@@ -84,6 +85,7 @@ class _CopyButtonState extends State<CopyButton> {
           excludeFromSemantics: true,
           child: IconButton(
             onPressed: _copy,
+            style: targetStyle,
             icon: Icon(_copied ? Icons.check : Icons.content_copy_outlined),
           ),
         ),
