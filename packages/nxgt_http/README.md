@@ -141,6 +141,7 @@ try {
 
 ## Documentation
 
+- [Example: a client with token refresh](example/main.dart)
 - [Getting started](doc/guide/getting-started.md)
 - [Errors](doc/guide/errors.md)
 - [Authentication](doc/guide/auth.md)

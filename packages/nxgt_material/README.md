@@ -338,6 +338,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
 
 ## Documentation
 
+- [Example: an adaptive sign-up screen](example/main.dart)
 - [Theme](doc/guide/theme.md)
 - [Forms](doc/guide/forms.md)
 - [Localization](doc/guide/localization.md)

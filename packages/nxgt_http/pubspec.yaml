@@ -7,6 +7,12 @@ homepage: https://github.com/softistx/nxgt-flutter/tree/develop/packages/nxgt_ht
 repository: https://github.com/softistx/nxgt-flutter
 issue_tracker: https://github.com/softistx/nxgt-flutter/issues
 
+topics:
+  - http
+  - dio
+  - network
+  - authentication
+
 resolution: workspace
 
 environment:
