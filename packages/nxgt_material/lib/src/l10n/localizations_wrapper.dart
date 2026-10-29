@@ -111,4 +111,6 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   String get fieldsSelectClear => base.fieldsSelectClear;
   @override
   String get fieldsSelectSearch => base.fieldsSelectSearch;
+  @override
+  String get fieldsSelectNoResults => base.fieldsSelectNoResults;
 }

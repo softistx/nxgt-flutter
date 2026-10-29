@@ -2,6 +2,7 @@ import 'dart:ui' show Tristate;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/selection.dart';
@@ -133,17 +134,61 @@ void main() {
     expect(find.byTooltip('Clear selection'), findsNothing);
   });
 
-  testWidgets('the clear action is offered to screen readers', (tester) async {
+  Future<void> performClear(WidgetTester tester) async {
+    tester.semantics.performAction(
+      find.semantics.byPredicate(
+        (node) =>
+            node.getSemanticsData().customSemanticsActionIds != null &&
+            node.getSemanticsData().customSemanticsActionIds!.isNotEmpty,
+      ),
+      SemanticsAction.customAction,
+      args: CustomSemanticsAction.getIdentifier(
+        const CustomSemanticsAction(label: 'Clear selection'),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  for (final (name, width) in [('menu', 800.0), ('sheet', 400.0)]) {
+    testWidgets('the clear semantics action clears in $name mode', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      final changes = <String?>[];
+      await pump(
+        tester,
+        field(searchable: true, initialValue: 'a', onChanged: changes.add),
+        width: width,
+      );
+      await performClear(tester);
+      expect(changes, [null]);
+      handle.dispose();
+    });
+  }
+
+  testWidgets('a searchable menu drops unchosen typed text on blur', (
+    tester,
+  ) async {
+    await pump(tester, field(searchable: true, initialValue: 'a'));
+    await tester.enterText(find.byType(TextField), 'bet');
+    await tester.pump();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    final menu = tester.widget<DropdownMenu<String>>(
+      find.byType(DropdownMenu<String>),
+    );
+    expect(menu.controller!.text, 'Alpha');
+  });
+
+  testWidgets('the sheet-mode field reads as a button', (tester) async {
     final handle = tester.ensureSemantics();
-    final changes = <String?>[];
-    await pump(tester, field(initialValue: 'a', onChanged: changes.add));
-    final id = tester.getSemantics(find.text('Letter')).id;
-    final actions = tester
-        .getSemantics(find.text('Letter'))
-        .getSemanticsData()
-        .customSemanticsActionIds;
-    expect(actions, isNotEmpty);
-    expect(id, isNonZero);
+    await pump(tester, field(searchable: true, initialValue: 'b'), width: 400);
+    final data = tester.getSemantics(find.text('Letter')).getSemanticsData();
+    expect(data.flagsCollection.isButton, isTrue);
+    expect(data.flagsCollection.isTextField, isFalse);
+    expect(data.label, contains('Letter'));
+    expect(data.value, 'Beta');
+    expect(data.hasAction(SemanticsAction.tap), isTrue);
     handle.dispose();
   });
 
@@ -312,6 +357,16 @@ void main() {
         greaterThanOrEqualTo(48),
       );
       handle.dispose();
+    });
+
+    testWidgets('no match shows a message', (tester) async {
+      await pump(tester, field(searchable: true), width: 400);
+      await tester.tap(find.byType(TextField));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.widgetWithText(TextField, 'Search'), 'zzz');
+      await tester.pumpAndSettle();
+      expect(find.text('No results'), findsOneWidget);
+      expect(find.text('Alpha'), findsNothing);
     });
 
     testWidgets('a disabled option is not chosen', (tester) async {

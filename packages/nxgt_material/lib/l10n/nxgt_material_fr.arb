@@ -46,5 +46,6 @@
   "overlaysDiscardMessage": "Vos modifications n'ont pas été enregistrées. Si vous fermez maintenant, elles seront perdues.",
   "overlaysDiscardConfirm": "Abandonner",
   "fieldsSelectClear": "Effacer le choix",
-  "fieldsSelectSearch": "Rechercher"
+  "fieldsSelectSearch": "Rechercher",
+  "fieldsSelectNoResults": "Aucun résultat"
 }

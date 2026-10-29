@@ -20,7 +20,12 @@ work in a `Form`.
   options**: tapping the field opens `context.showAdaptiveSheet` titled with
   the label, holding a search box (case- and accent-insensitive) and the
   options as 48 dp tiles; the chosen one is marked. Choosing closes the sheet
-  and sets the value; closing it any other way keeps the old value.
+  and sets the value; closing it any other way keeps the old value. When
+  nothing matches the search, the sheet shows (and announces) "No results" /
+  "Aucun résultat" (`fieldsSelectNoResults`). The folding covers common Latin
+  accents (é, ç, ñ, ü...), not ligatures such as œ, æ or ß, nor decomposed
+  (NFD) accents. In a searchable menu, text typed without choosing an option
+  is dropped when the field loses focus.
 
 ## Example
 
@@ -58,7 +63,7 @@ to the error colour. When a clear button is shown, "Clear selection" is also a
 custom semantics action of the field. The field and the clear button are at
 least 48 dp on every platform. Enter or Space opens the menu (Enter alone while
 `searchable`, since Space types), the arrows move in it, Enter chooses and
-Escape closes. On a compact window, Enter, Space or the down arrow opens the
+Escape closes; the down arrow does not open the closed menu (Flutter's `DropdownMenu` binds it to the highlight). On a compact window, Enter, Space or the down arrow opens the
 sheet. Disabled options stay visible and cannot be chosen. The layout fills the
 parent's width, mirrors in right-to-left and holds at large text sizes.
 

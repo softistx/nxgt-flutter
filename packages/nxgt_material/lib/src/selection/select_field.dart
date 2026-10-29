@@ -112,6 +112,35 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
   );
   final MenuController _menu = MenuController();
   List<DropdownMenuEntry<T>>? _entries;
+  ThemeData? _entriesTheme;
+  FocusNode? _ownNode;
+  FocusNode? _watched;
+
+  /// The node whose loss of focus puts the typed text back: the caller's, or
+  /// our own for a searchable menu.
+  FocusNode? get _node =>
+      widget.focusNode ??
+      (widget.searchable && !widget.sheet ? (_ownNode ??= FocusNode()) : null);
+
+  void _watch() {
+    final node = _node;
+    if (identical(node, _watched)) return;
+    _watched?.removeListener(_onFocus);
+    _watched = node?..addListener(_onFocus);
+  }
+
+  /// Without a choice, text typed to search does not stay in the field.
+  void _onFocus() {
+    if (!(_watched?.hasFocus ?? true)) {
+      _controller.text = _labelOf(widget.value);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _watch();
+  }
 
   String _labelOf(T? value) {
     if (value == null) return '';
@@ -126,6 +155,7 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
     super.didUpdateWidget(oldWidget);
     final optionsChanged = !identical(oldWidget.options, widget.options);
     if (optionsChanged) _entries = null;
+    _watch();
     if (oldWidget.value != widget.value || optionsChanged) {
       _controller.text = _labelOf(widget.value);
     }
@@ -133,6 +163,8 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
 
   @override
   void dispose() {
+    _watched?.removeListener(_onFocus);
+    _ownNode?.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -164,6 +196,14 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
     }
     _menu.open();
     return KeyEventResult.handled;
+  }
+
+  List<DropdownMenuEntry<T>> _entriesFor(ThemeData theme) {
+    if (_entries == null || !identical(_entriesTheme, theme)) {
+      _entriesTheme = theme;
+      _entries = selectEntries(widget.options, theme);
+    }
+    return _entries!;
   }
 
   bool get _canClear =>
@@ -202,16 +242,27 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
           data: errorTheme == null
               ? theme
               : theme.copyWith(inputDecorationTheme: errorTheme),
-          child: TextField(
-            controller: _controller,
-            readOnly: true,
+          // One button that opens the sheet; the clear action stays a custom
+          // action of the field (see below).
+          child: Semantics(
+            button: true,
             enabled: widget.enabled,
-            focusNode: widget.focusNode,
-            onTap: _openSheet,
-            mouseCursor: widget.enabled ? SystemMouseCursors.click : null,
-            decoration: InputDecoration(
-              labelText: widget.label,
-              suffixIcon: _trailing(open: false),
+            label: widget.label,
+            value: _controller.text,
+            onTap: widget.enabled ? _openSheet : null,
+            child: ExcludeSemantics(
+              child: TextField(
+                controller: _controller,
+                readOnly: true,
+                enabled: widget.enabled,
+                focusNode: widget.focusNode,
+                onTap: _openSheet,
+                mouseCursor: widget.enabled ? SystemMouseCursors.click : null,
+                decoration: InputDecoration(
+                  labelText: widget.label,
+                  suffixIcon: _trailing(open: false),
+                ),
+              ),
             ),
           ),
         ),
@@ -229,17 +280,14 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
           enabled: widget.enabled,
           label: Text(widget.label),
           expandedInsets: EdgeInsets.zero,
-          focusNode: widget.focusNode,
+          focusNode: _node,
           requestFocusOnTap: widget.searchable ? true : null,
           enableFilter: widget.searchable,
           enableSearch: widget.searchable,
           trailingIcon: _trailing(open: false),
           selectedTrailingIcon: _trailing(open: true),
           inputDecorationTheme: errorTheme,
-          dropdownMenuEntries: _entries ??= selectEntries(
-            widget.options,
-            Theme.of(context),
-          ),
+          dropdownMenuEntries: _entriesFor(Theme.of(context)),
           onSelected: (value) {
             if (value != null && widget.enabled) widget.onPick(value);
           },

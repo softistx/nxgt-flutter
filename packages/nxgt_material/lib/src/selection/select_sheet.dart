@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+import 'package:nxgt_material/src/feedback/live_region.dart';
+import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/selection/choice_option.dart';
 import 'package:nxgt_material/src/theme/targets.dart';
 
 /// The content of the sheet: a search box above the options as 48 dp tiles.
 class SelectSheetList<T> extends StatefulWidget {
+  /// Creates the content of the sheet.
   const new({
     required this.options,
     required this.selected,
@@ -50,6 +54,24 @@ class _SelectSheetListState<T> extends State<SelectSheetList<T>> {
             onChanged: (value) => setState(() => _query = value),
           ),
         ),
+        if (shown.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            // The role and the live region sit on two nodes: Flutter refuses
+            // both on one.
+            child: Semantics(
+              container: true,
+              role: SemanticsRole.status,
+              child: Semantics(
+                container: true,
+                liveRegion: liveRegionUnderRole,
+                child: Text(
+                  context.materialL10n.fieldsSelectNoResults,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
         for (final option in shown)
           ListTile(
             minTileHeight: minTarget.height,

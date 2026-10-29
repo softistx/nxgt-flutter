@@ -87,5 +87,7 @@
   "fieldsSelectClear": "Clear selection",
   "@fieldsSelectClear": {"description": "Tooltip and screen reader label of the button that clears the choice of a select field."},
   "fieldsSelectSearch": "Search",
-  "@fieldsSelectSearch": {"description": "Label of the search box in the sheet of a select field."}
+  "@fieldsSelectSearch": {"description": "Label of the search box in the sheet of a select field."},
+  "fieldsSelectNoResults": "No results",
+  "@fieldsSelectNoResults": {"description": "Message shown in the sheet of a select field when the search matches no option."}
 }

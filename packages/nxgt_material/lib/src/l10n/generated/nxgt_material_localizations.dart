@@ -364,6 +364,12 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Search'**
   String get fieldsSelectSearch;
+
+  /// Message shown in the sheet of a select field when the search matches no option.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get fieldsSelectNoResults;
 }
 
 class _NxgtMaterialLocalizationsDelegate
