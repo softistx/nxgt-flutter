@@ -168,6 +168,15 @@ Form(
   ),
 )
 
+// A web address; normalize adds https:// when the scheme is missing.
+UrlField(
+  label: 'Website',
+  onSaved: (v) => site = UrlField.normalize(v ?? ''),
+)
+
+// A one-time code in digit slots; fires once when it is complete.
+OtpField(label: 'Code', onCompleted: verify)
+
 // A phone number, filtered to what a number can contain.
 const PhoneField(label: 'Phone')
 
@@ -400,6 +409,13 @@ RadioGroupField<String>(
     ChoiceOption(value: 'yearly', label: 'Yearly', description: '2 months free'),
   ],
   onChanged: (plan) => setState(() => _plan = plan),
+)
+```
+
+```dart
+SwitchField(
+  label: 'Enable notifications',
+  onChanged: (on) => setState(() => _notify = on),
 )
 ```
 
