@@ -66,7 +66,7 @@ void main() {
   testWidgets('a tap on the label toggles and reports the change', (
     tester,
   ) async {
-    final changes = <bool?>[];
+    final changes = <bool>[];
     await pump(tester, CheckboxField(label: 'Accept', onChanged: changes.add));
 
     await tester.tap(find.text('Accept'));
@@ -187,7 +187,7 @@ void main() {
 
   testWidgets('disabled ignores taps and skips validation', (tester) async {
     final handle = tester.ensureSemantics();
-    final changes = <bool?>[];
+    final changes = <bool>[];
     await pump(
       tester,
       CheckboxField(
@@ -297,5 +297,53 @@ void main() {
     key.currentState!.validate();
     await tester.pump();
     expect(find.text('Ce champ est obligatoire'), findsOneWidget);
+  });
+
+  testWidgets('a disabled field shows no error', (tester) async {
+    await pump(
+      tester,
+      const CheckboxField(
+        label: 'Accept',
+        required: true,
+        autovalidateMode: AutovalidateMode.always,
+      ),
+    );
+    final alert = find.byWidgetPredicate(
+      (w) => w is Semantics && w.properties.role == SemanticsRole.alert,
+    );
+    expect(find.text('This field is required'), findsOneWidget);
+    expect(alert, findsOneWidget);
+
+    await pump(
+      tester,
+      const CheckboxField(
+        label: 'Accept',
+        required: true,
+        enabled: false,
+        autovalidateMode: AutovalidateMode.always,
+      ),
+    );
+    expect(find.text('This field is required'), findsNothing);
+    expect(alert, findsNothing);
+  });
+
+  testWidgets('the checkbox reads the error, then the helper text, as hint', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    await pump(
+      tester,
+      const CheckboxField(label: 'Accept', required: true, helperText: 'Help'),
+    );
+    expect(
+      tester.getSemantics(find.byType(Checkbox)).getSemanticsData().hint,
+      'Help',
+    );
+    key.currentState!.validate();
+    await tester.pump();
+    final node = tester.getSemantics(find.byType(Checkbox)).getSemanticsData();
+    expect(node.label, 'Accept');
+    expect(node.hint, 'This field is required');
+    handle.dispose();
   });
 }

@@ -352,7 +352,7 @@ import 'package:nxgt_material/selection.dart';
 CheckboxField(
   label: 'I accept the terms of service',
   required: true,
-  onChanged: (accepted) => setState(() => _accepted = accepted ?? false),
+  onChanged: (accepted) => setState(() => _accepted = accepted),
 )
 ```
 

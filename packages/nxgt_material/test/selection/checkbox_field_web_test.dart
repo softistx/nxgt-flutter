@@ -23,11 +23,21 @@ void main() {
     key.currentState!.validate();
     await tester.pump();
 
-    final data = tester
-        .getSemantics(find.text('This field is required'))
-        .getSemanticsData();
-    expect(data.role, SemanticsRole.alert);
-    expect(data.flagsCollection.isLiveRegion, isFalse);
+    final alert = find.ancestor(
+      of: find.text('This field is required'),
+      matching: find.byWidgetPredicate(
+        (w) => w is Semantics && w.properties.role == SemanticsRole.alert,
+      ),
+    );
+    expect(alert, findsOneWidget);
+    expect(
+      tester
+          .getSemantics(find.text('This field is required'))
+          .getSemanticsData()
+          .flagsCollection
+          .isLiveRegion,
+      isFalse,
+    );
     handle.dispose();
   });
 }

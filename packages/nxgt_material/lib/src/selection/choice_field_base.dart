@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:nxgt_material/src/feedback/live_region.dart';
+import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
 /// The parameters every choice field of this package shares.
 ///
 /// Internal, like `TextFieldBase`: a field extends it, forwards the shared
 /// parameters with `super.` and builds its `FormField` with [buildChoice],
-/// which adds the helper text and the announced error below the field.
-abstract class ChoiceFieldBase<T> extends StatelessWidget {
+/// which adds the required check, the helper text and the announced error.
+///
+/// [V] is the value as the callbacks see it: `bool` for a checkbox, a `Set`
+/// for a group (never null, empty means nothing chosen), `T?` for a select.
+abstract class ChoiceFieldBase<V> extends StatelessWidget {
   /// Creates the shared parameters.
   const new({
     required this.label,
     this.initialValue,
+    this.focusNode,
     this.onChanged,
     this.onSaved,
     this.validator,
     this.autovalidateMode,
     this.enabled = true,
+    this.required = false,
     this.helperText,
     super.key,
   });
@@ -25,62 +31,95 @@ abstract class ChoiceFieldBase<T> extends StatelessWidget {
   final String label;
 
   /// The value the field starts with, and returns to on `Form.reset`.
-  final T? initialValue;
+  final V? initialValue;
+
+  /// The focus node of the control.
+  final FocusNode? focusNode;
 
   /// Called with the new value at every change.
-  final ValueChanged<T?>? onChanged;
+  final ValueChanged<V>? onChanged;
 
   /// Called by `FormState.save` with the value.
-  final FormFieldSetter<T>? onSaved;
+  final FormFieldSetter<V>? onSaved;
 
-  /// An extra validator, run after the built-in ones.
-  final FormFieldValidator<T>? validator;
+  /// An extra validator, run after the required check.
+  final FormFieldValidator<V>? validator;
 
   /// When to validate; `null` follows the enclosing [Form].
   final AutovalidateMode? autovalidateMode;
 
-  /// Whether the field accepts input.
+  /// Whether the field accepts input. A disabled field is never validated
+  /// and shows no error.
   final bool enabled;
+
+  /// Whether an empty value (see [isEmpty]) is an error.
+  final bool required;
 
   /// A hint shown under the field while there is no error.
   final String? helperText;
 
-  /// The `FormField` of this field. [composed] is its validator once the
-  /// built-in ones are added to [validator]; [builder] draws the choice
-  /// itself from the state and reports a change through
-  /// `FormFieldState.didChange`.
+  /// Whether [value] counts as nothing chosen. `null` always does.
   @protected
-  Widget buildChoice({
-    required FormFieldValidator<T> composed,
-    required Widget Function(BuildContext context, FormFieldState<T> state)
+  bool isEmpty(V value) => value == null;
+
+  /// The `FormField` of this field. [builder] draws the choice itself from
+  /// the state and reports a change through [change].
+  @protected
+  Widget buildChoice(
+    BuildContext context, {
+    required Widget Function(BuildContext context, FormFieldState<V> state)
     builder,
   }) {
-    return FormField<T>(
+    final requiredMessage = required
+        ? context.materialL10n.fieldsRequired
+        : null;
+    final extra = validator;
+    String? validate(V? value) {
+      if (requiredMessage != null && (value == null || isEmpty(value))) {
+        return requiredMessage;
+      }
+      return extra?.call(value as V);
+    }
+
+    return FormField<V>(
       initialValue: initialValue,
       onSaved: onSaved,
-      validator: composed,
+      validator: enabled ? validate : (_) => null,
       autovalidateMode: autovalidateMode,
       enabled: enabled,
-      builder: (state) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          builder(state.context, state),
-          _Footer(helperText: helperText, errorText: state.errorText),
-        ],
-      ),
+      builder: (state) {
+        final error = enabled ? state.errorText : null;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // The error, or the helper text, is the hint of the control, so
+            // the focused control reads label, state, then it.
+            MergeSemantics(
+              child: Semantics(
+                hint: error ?? helperText,
+                child: builder(state.context, state),
+              ),
+            ),
+            _Footer(helperText: helperText, errorText: error),
+          ],
+        );
+      },
     );
   }
 
   /// Reports [value] to the form and to [onChanged].
   @protected
-  void change(FormFieldState<T> state, T? value) {
+  void change(FormFieldState<V> state, V value) {
     state.didChange(value);
     onChanged?.call(value);
   }
 }
 
 /// The helper text, replaced by the announced error when there is one.
+///
+/// The 16 dp start inset matches the padding of a `ListTile`, so the text
+/// lines up with the tile's content edge.
 class _Footer extends StatelessWidget {
   const new({required this.helperText, required this.errorText});
 

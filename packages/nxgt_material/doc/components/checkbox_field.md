@@ -17,7 +17,7 @@ CheckboxField(
   label: 'I accept the terms of service',
   required: true,
   helperText: 'You can read them on our website',
-  onChanged: (accepted) => setState(() => _accepted = accepted ?? false),
+  onChanged: (accepted) => setState(() => _accepted = accepted),
 )
 ```
 
@@ -44,10 +44,11 @@ skipped by validation.
 | --- | --- | --- |
 | `label` | `String` | The text beside the box, tappable, read by screen readers. |
 | `required` | `bool` | The box must be checked to be valid. Default `false`. |
-| `initialValue` | `bool?` | Starting value, restored by `Form.reset`. Default `false`. |
-| `onChanged` | `ValueChanged<bool?>?` | Called at every change. |
+| `initialValue` | `bool` | Starting value, restored by `Form.reset`. Default `false`. |
+| `onChanged` | `ValueChanged<bool>?` | Called at every change. |
 | `onSaved` | `FormFieldSetter<bool>?` | Called by `FormState.save`. |
 | `validator` | `FormFieldValidator<bool>?` | Extra validator, after `required`. |
 | `autovalidateMode` | `AutovalidateMode?` | When to validate; `null` follows the `Form`. |
-| `enabled` | `bool` | Whether it accepts input. Default `true`. |
+| `enabled` | `bool` | Whether it accepts input; a disabled field is not validated and shows no error. Default `true`. |
+| `focusNode` | `FocusNode?` | The focus node of the checkbox. |
 | `helperText` | `String?` | A hint under the tile, replaced by the error. |
