@@ -124,4 +124,16 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get displayPresenceOnline => 'En ligne';
+
+  @override
+  String get displayPresenceAway => 'Absent';
+
+  @override
+  String get displayPresenceBusy => 'Occupé';
+
+  @override
+  String get displayPresenceOffline => 'Hors ligne';
 }

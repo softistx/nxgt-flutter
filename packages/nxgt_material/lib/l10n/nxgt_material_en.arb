@@ -57,5 +57,13 @@
   "layoutNavigation": "Navigation",
   "@layoutNavigation": {"description": "Label of the navigation region of the adaptive shell (bar, rail or drawer), read by screen readers."},
   "displayCount": "{count, plural, =1{1 item} other{{count} items}}",
-  "@displayCount": {"description": "Screen reader text of a count badge: how many items the count stands for.", "placeholders": {"count": {"type": "int"}}}
+  "@displayCount": {"description": "Screen reader text of a count badge: how many items the count stands for.", "placeholders": {"count": {"type": "int"}}},
+  "displayPresenceOnline": "Online",
+  "@displayPresenceOnline": {"description": "Screen reader text of an avatar's presence dot: the person is available now."},
+  "displayPresenceAway": "Away",
+  "@displayPresenceAway": {"description": "Screen reader text of an avatar's presence dot: the person is signed in but away."},
+  "displayPresenceBusy": "Busy",
+  "@displayPresenceBusy": {"description": "Screen reader text of an avatar's presence dot: the person is do not disturb."},
+  "displayPresenceOffline": "Offline",
+  "@displayPresenceOffline": {"description": "Screen reader text of an avatar's presence dot: the person is not signed in."}
 }

@@ -1,6 +1,7 @@
 ## Unreleased
 
 - `display.dart`: `StatusIndicator` (a dot or the tone icon and a label in AA tone colours from `FeedbackTone`, the tone spoken first) and `CountBadge` (a count on `Badge.count`: `99+` above `max`, hidden at 0, spoken with a plural label; asserts a negative count and a non-positive `max`). New string `displayCount` in fr and en.
+- `display.dart`: `UserAvatar` (a `CircleAvatar` with the picture or the name's initials, also when the image fails, on a theme tone picked from the name with AA contrast, an optional `AvatarPresence` dot spoken after the name; an empty name draws a person icon; asserts a non-positive `size`). New strings `displayPresenceOnline`, `displayPresenceAway`, `displayPresenceBusy`, `displayPresenceOffline` in fr and en.
 
 ## 0.1.0
 

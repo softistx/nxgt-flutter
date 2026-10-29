@@ -128,6 +128,14 @@ void main() {
     expect(wrapper.displayCount(3), '3 items');
   });
 
+  test('the wrapper forwards the presence strings', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.displayPresenceOnline, 'Online');
+    expect(wrapper.displayPresenceAway, 'Away');
+    expect(wrapper.displayPresenceBusy, 'Busy');
+    expect(wrapper.displayPresenceOffline, 'Offline');
+  });
+
   test('the delegate reloads only when the override changes', () {
     const a = NxgtMaterialLocalizationsDelegate();
     expect(a.shouldReload(const NxgtMaterialLocalizationsDelegate()), isFalse);
@@ -158,4 +166,8 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.layoutCloseNavigation,
   s.layoutNavigation,
   s.displayCount(2),
+  s.displayPresenceOnline,
+  s.displayPresenceAway,
+  s.displayPresenceBusy,
+  s.displayPresenceOffline,
 ];

@@ -268,3 +268,16 @@ make every count read `0+`. A release build treats `max` as 1.
 ```dart
 CountBadge(count: unread, max: 9, child: const Icon(Icons.mail_outline))
 ```
+
+## UserAvatar.size must be positive.
+
+**When:** in a debug build, a `UserAvatar` is built with a `size` of 0 or less.
+
+**Why:** `size` is the avatar's diameter. A release build does not assert: it
+draws the avatar at the default size of 40.
+
+**Fix:** pass a positive size, or leave the default.
+
+```dart
+UserAvatar(name: user.name, size: 56)
+```
