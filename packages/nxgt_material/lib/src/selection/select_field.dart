@@ -6,6 +6,8 @@ import 'package:nxgt_material/src/layout/window_size.dart';
 import 'package:nxgt_material/src/overlays/adaptive_sheet.dart';
 import 'package:nxgt_material/src/selection/choice_field_base.dart';
 import 'package:nxgt_material/src/selection/choice_option.dart';
+import 'package:nxgt_material/src/selection/select_menu.dart';
+import 'package:nxgt_material/src/selection/select_sheet.dart';
 import 'package:nxgt_material/src/theme/targets.dart';
 
 /// More options than this open a searchable sheet on a compact window.
@@ -119,29 +121,6 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
     return '';
   }
 
-  List<DropdownMenuEntry<T>> _buildEntries(BuildContext context) => [
-    for (final option in widget.options)
-      DropdownMenuEntry<T>(
-        value: option.value,
-        label: option.label,
-        enabled: option.enabled,
-        style: targetStyle,
-        labelWidget: option.description == null
-            ? null
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(option.label),
-                  Text(
-                    option.description!,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-      ),
-  ];
-
   @override
   void didUpdateWidget(_SelectControl<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -163,7 +142,7 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
     final searchLabel = context.materialL10n.fieldsSelectSearch;
     final picked = await context.showAdaptiveSheet<(T,)>(
       title: widget.label,
-      builder: (_) => _SheetList<T>(
+      builder: (_) => SelectSheetList<T>(
         options: widget.options,
         selected: widget.value,
         searchLabel: searchLabel,
@@ -207,23 +186,9 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
     );
   }
 
-  InputDecorationThemeData? _errorTheme(BuildContext context) {
-    if (!widget.hasError) return null;
-    final color = Theme.of(context).colorScheme.error;
-    OutlineInputBorder border(double width) => OutlineInputBorder(
-      borderSide: BorderSide(color: color, width: width),
-    );
-    return InputDecorationThemeData(
-      border: border(1),
-      enabledBorder: border(1),
-      focusedBorder: border(2),
-      floatingLabelStyle: TextStyle(color: color),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final errorTheme = _errorTheme(context);
+    final errorTheme = widget.hasError ? selectErrorTheme(context) : null;
     final Widget field;
     if (widget.sheet) {
       final theme = Theme.of(context);
@@ -271,7 +236,10 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
           trailingIcon: _trailing(open: false),
           selectedTrailingIcon: _trailing(open: true),
           inputDecorationTheme: errorTheme,
-          dropdownMenuEntries: _entries ??= _buildEntries(context),
+          dropdownMenuEntries: _entries ??= selectEntries(
+            widget.options,
+            Theme.of(context),
+          ),
           onSelected: (value) {
             if (value != null && widget.enabled) widget.onPick(value);
           },
@@ -289,82 +257,4 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
       child: field,
     );
   }
-}
-
-/// The content of the sheet: a search box above the options as 48 dp tiles.
-class _SheetList<T> extends StatefulWidget {
-  const new({
-    required this.options,
-    required this.selected,
-    required this.searchLabel,
-  });
-
-  final List<ChoiceOption<T>> options;
-  final T? selected;
-  final String searchLabel;
-
-  @override
-  State<_SheetList<T>> createState() => _SheetListState<T>();
-}
-
-class _SheetListState<T> extends State<_SheetList<T>> {
-  String _query = '';
-
-  @override
-  Widget build(BuildContext context) {
-    final needle = _fold(_query.trim());
-    final shown = [
-      for (final option in widget.options)
-        if (needle.isEmpty || _fold(option.label).contains(needle)) option,
-    ];
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: TextField(
-            autofocus: true,
-            textInputAction: TextInputAction.search,
-            decoration: InputDecoration(
-              labelText: widget.searchLabel,
-              prefixIcon: const Icon(Icons.search),
-            ),
-            onChanged: (value) => setState(() => _query = value),
-          ),
-        ),
-        for (final option in shown)
-          ListTile(
-            minTileHeight: minTarget.height,
-            contentPadding: EdgeInsets.zero,
-            enabled: option.enabled,
-            selected: option.value == widget.selected,
-            title: Text(option.label),
-            subtitle: option.description == null
-                ? null
-                : Text(option.description!),
-            trailing: option.value == widget.selected
-                ? const Icon(Icons.check)
-                : null,
-            onTap: option.enabled
-                ? () => Navigator.of(context).pop<(T,)>((option.value,))
-                : null,
-          ),
-      ],
-    );
-  }
-}
-
-const _from = 'àáâãäåçèéêëìíîïñòóôõöùúûüýÿ';
-const _to = 'aaaaaaceeeeiiiinooooouuuuyy';
-
-/// Lower case without the common Latin accents, to compare labels.
-String _fold(String text) {
-  final buffer = StringBuffer();
-  for (final rune in text.toLowerCase().runes) {
-    final char = String.fromCharCode(rune);
-    final i = _from.indexOf(char);
-    buffer.write(i == -1 ? char : _to[i]);
-  }
-  return buffer.toString();
 }
