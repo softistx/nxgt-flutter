@@ -17,8 +17,8 @@ that load page by page use `PagedList`; for the details of one record use
   is wider than its space. Compact: a `Card` per row built on a
   `DescriptionList`, each `TableColumn.label` naming its value, with a sort
   menu above the cards when a column sorts.
-- The table fills the width of the window (`MediaQuery`), so inside a parent
-  narrower than the window it scrolls sideways rather than shrinking.
+- The table takes its content's width; it scrolls sideways when wider than
+  its parent.
 - `TableColumn.cell` builds a widget (a status chip, an icon) for the table's
   cell; `value` stays required, as the text of the compact card (a
   `DescriptionItem` holds text, so a card never shows the `cell` widget) and

@@ -41,23 +41,6 @@ void main() {
       );
     });
 
-    testWidgets('fills the available width', (tester) async {
-      await pumpTable(
-        tester,
-        tableHost(
-          ResponsiveTable<(String, String, String)>(
-            columns: [
-              for (final label in ['A', 'B', 'C'])
-                TableColumn(label: label, value: (r) => r.$1),
-            ],
-            rows: const [('x', 'y', 'z')],
-          ),
-        ),
-      );
-
-      expect(tester.getSize(find.byType(DataTable)).width, closeTo(800, 0.01));
-    });
-
     testWidgets('draws a column cell builder instead of the text', (
       tester,
     ) async {
@@ -201,8 +184,10 @@ void main() {
         tester.getTopRight(find.text('Name')).dx,
         greaterThan(tester.getTopRight(find.text('Age')).dx),
       );
-      expect(tester.getTopRight(find.text('Name')).dx, greaterThan(400));
-      expect(tester.getTopLeft(find.text('Age')).dx, lessThan(400));
+      expect(
+        tester.getTopLeft(find.text('Age')).dx,
+        lessThan(tester.getTopLeft(find.text('Name')).dx),
+      );
     });
 
     testWidgets('survives text scale 2', (tester) async {

@@ -38,29 +38,23 @@ class ResponsiveTableGrid<T> extends StatelessWidget {
     final tap = onRowTap;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minWidth: MediaQuery.sizeOf(context).width),
-        child: DataTable(
-          sortColumnIndex: sortColumnIndex,
-          sortAscending: sortAscending,
-          showCheckboxColumn: false,
-          columns: [
-            for (var i = 0; i < columns.length; i++) _column(context, i),
-          ],
-          rows: [
-            for (final row in rows)
-              DataRow(
-                onSelectChanged: tap == null ? null : (_) => tap(row),
-                cells: [
-                  for (final column in columns)
-                    DataCell(
-                      column.cell?.call(context, row) ??
-                          Text(column.value(row)),
-                    ),
-                ],
-              ),
-          ],
-        ),
+      child: DataTable(
+        sortColumnIndex: sortColumnIndex,
+        sortAscending: sortAscending,
+        showCheckboxColumn: false,
+        columns: [for (var i = 0; i < columns.length; i++) _column(context, i)],
+        rows: [
+          for (final row in rows)
+            DataRow(
+              onSelectChanged: tap == null ? null : (_) => tap(row),
+              cells: [
+                for (final column in columns)
+                  DataCell(
+                    column.cell?.call(context, row) ?? Text(column.value(row)),
+                  ),
+              ],
+            ),
+        ],
       ),
     );
   }
