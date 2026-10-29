@@ -346,4 +346,20 @@ void main() {
     expect(node.hint, 'This field is required');
     handle.dispose();
   });
+
+  testWidgets('works inside a coloured ancestor', (tester) async {
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpWidget(
+      themedHost(
+        const ColoredBox(
+          color: Colors.amber,
+          child: CheckboxField(label: 'Accept'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Accept'));
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
 }

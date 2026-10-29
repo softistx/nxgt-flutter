@@ -98,7 +98,12 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
             MergeSemantics(
               child: Semantics(
                 hint: error ?? helperText,
-                child: builder(state.context, state),
+                // Its own Material, so a coloured ancestor neither hides the
+                // ink splashes nor trips the ListTile assertion.
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: builder(state.context, state),
+                ),
               ),
             ),
             _Footer(helperText: helperText, errorText: error),
