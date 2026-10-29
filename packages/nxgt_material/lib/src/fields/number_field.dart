@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nxgt_material/src/fields/field_input.dart';
 import 'package:nxgt_material/src/fields/number_parse.dart';
+import 'package:nxgt_material/src/fields/text_field_base.dart';
 import 'package:nxgt_material/src/fields/validators.dart';
 
 /// A text field for a number, with an optional range.
@@ -10,21 +10,21 @@ import 'package:nxgt_material/src/fields/validators.dart';
 /// a number. A comma is accepted as the decimal separator, since French
 /// keyboards have no dot on the numeric keypad: read the value with
 /// [NumberField.parse], not `num.parse`.
-class NumberField extends StatelessWidget {
+class NumberField extends TextFieldBase {
   /// Creates a NumberField.
   const new({
-    required this.label,
-    this.controller,
-    this.initialValue,
-    this.focusNode,
-    this.onChanged,
-    this.onSaved,
-    this.onFieldSubmitted,
-    this.validator,
-    this.autovalidateMode,
-    this.enabled = true,
-    this.helperText,
-    this.hintText,
+    required super.label,
+    super.controller,
+    super.initialValue,
+    super.focusNode,
+    super.onChanged,
+    super.onSaved,
+    super.onFieldSubmitted,
+    super.validator,
+    super.autovalidateMode,
+    super.enabled = true,
+    super.helperText,
+    super.hintText,
     this.required = false,
     this.min,
     this.max,
@@ -32,43 +32,6 @@ class NumberField extends StatelessWidget {
     this.textInputAction = TextInputAction.next,
     super.key,
   });
-
-  /// The label, floating above the value once the field has one, and read by
-  /// screen readers.
-  final String label;
-
-  /// Controls the text; mutually exclusive with [initialValue].
-  final TextEditingController? controller;
-
-  /// The text the field starts with.
-  final String? initialValue;
-
-  /// The focus node of the input.
-  final FocusNode? focusNode;
-
-  /// Called with the new text at every edit.
-  final ValueChanged<String>? onChanged;
-
-  /// Called by `FormState.save` with the text.
-  final FormFieldSetter<String>? onSaved;
-
-  /// Called when the user submits from the keyboard.
-  final ValueChanged<String>? onFieldSubmitted;
-
-  /// An extra validator, run after the built-in ones.
-  final FormFieldValidator<String>? validator;
-
-  /// When to validate; `null` follows the enclosing [Form].
-  final AutovalidateMode? autovalidateMode;
-
-  /// Whether the field accepts input.
-  final bool enabled;
-
-  /// A hint shown under the field while there is no error.
-  final String? helperText;
-
-  /// A placeholder shown while the field is empty and focused.
-  final String? hintText;
 
   /// Whether an empty value is an error.
   final bool required;
@@ -101,19 +64,8 @@ class NumberField extends StatelessWidget {
     final sign = signed ? '-?' : '';
     final fraction = allowDecimal ? r'[.,]?\d*' : '';
     final shape = RegExp('^$sign\\d*$fraction\$');
-    return FieldInput(
-      label: label,
-      controller: controller,
-      initialValue: initialValue,
-      focusNode: focusNode,
-      onChanged: onChanged,
-      onSaved: onSaved,
-      onFieldSubmitted: onFieldSubmitted,
-      autovalidateMode: autovalidateMode,
-      enabled: enabled,
-      helperText: helperText,
-      hintText: hintText,
-      validator: v.compose([
+    return buildInput(
+      composed: v.compose([
         if (required) v.required(),
         v.number(min: min, max: max),
         validator,
