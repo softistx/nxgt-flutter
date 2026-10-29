@@ -1,3 +1,5 @@
+import 'dart:ui' show Tristate;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -59,10 +61,10 @@ void main() {
       handle.dispose();
     });
 
-    for (final (trend, word) in [
-      (StatTrend.up, 'up'),
-      (StatTrend.down, 'down'),
-      (StatTrend.flat, 'unchanged'),
+    for (final (trend, word, trendIcon) in [
+      (StatTrend.up, 'up', Icons.trending_up),
+      (StatTrend.down, 'down', Icons.trending_down),
+      (StatTrend.flat, 'unchanged', Icons.trending_flat),
     ]) {
       testWidgets('say "$word" for $trend, with its own icon', (tester) async {
         final handle = tester.ensureSemantics();
@@ -72,7 +74,7 @@ void main() {
           find.bySemanticsLabel('Revenue, 1 200, $word 4 %'),
           findsOneWidget,
         );
-        expect(find.byIcon(trend.icon), findsOneWidget);
+        expect(find.byIcon(trendIcon), findsOneWidget);
         handle.dispose();
       });
     }
@@ -109,6 +111,7 @@ void main() {
         find.bySemanticsLabel('Revenue, 1 200, up 4 %'),
       );
       expect(node.flagsCollection.isButton, isTrue);
+      expect(node.flagsCollection.isFocused, isNot(Tristate.none));
       expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
 
       await tester.tap(find.byType(StatCard));
@@ -133,6 +136,7 @@ void main() {
         find.bySemanticsLabel('Revenue, 1 200, up 4 %'),
       );
       expect(node.flagsCollection.isButton, isFalse);
+      expect(node.flagsCollection.isFocused, Tristate.none);
       expect(find.byType(InkWell), findsNothing);
       handle.dispose();
     });
@@ -216,12 +220,15 @@ void main() {
 
     for (final brightness in Brightness.values) {
       testWidgets('reach AA contrast in ${brightness.name}', (tester) async {
-        await tester.pumpApp(themedHost(card(), brightness: brightness));
-        final tones = tester.element(find.byType(StatCard)).tones;
-
         for (final trend in StatTrend.values) {
           for (final positiveIsUp in [true, false]) {
-            final colors = trend.colors(tones, positiveIsUp: positiveIsUp);
+            await tester.pumpApp(
+              themedHost(
+                card(trend: trend, positiveIsUp: positiveIsUp),
+                brightness: brightness,
+              ),
+            );
+            final colors = pill(tester)!;
             expect(
               wcagContrast(colors.onContainer, colors.container),
               greaterThanOrEqualTo(4.5),

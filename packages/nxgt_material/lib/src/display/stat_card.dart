@@ -7,39 +7,43 @@ import 'package:nxgt_material/src/theme/tones.dart';
 
 /// The direction a [StatCard]'s figure moved.
 ///
-/// Each direction has its own icon and a spoken word, so the trend never rests
-/// on colour alone.
+/// Each direction is drawn with its own icon and spoken as a word, so the
+/// trend never rests on colour alone.
 enum StatTrend {
   /// The figure rose.
-  up(Icons.trending_up),
+  up,
 
   /// The figure fell.
-  down(Icons.trending_down),
+  down,
 
   /// The figure did not move.
-  flat(Icons.trending_flat);
-
-  new(this.icon);
-
-  /// The icon drawn before the delta.
-  final IconData icon;
-
-  /// The localized word a screen reader says before the delta.
-  String label(NxgtMaterialLocalizations l10n) => switch (this) {
-    StatTrend.up => l10n.displayTrendUp,
-    StatTrend.down => l10n.displayTrendDown,
-    StatTrend.flat => l10n.displayTrendFlat,
-  };
-
-  /// The tone colours of this trend: success when it rises, error when it
-  /// falls, neutral when flat. With [positiveIsUp] `false` (a cost, a delay)
-  /// a rise is bad and a fall is good.
-  ToneColors colors(Tones tones, {bool positiveIsUp = true}) => switch (this) {
-    StatTrend.flat => tones.neutral,
-    StatTrend.up => positiveIsUp ? tones.success : tones.error,
-    StatTrend.down => positiveIsUp ? tones.error : tones.success,
-  };
+  flat,
 }
+
+IconData _trendIcon(StatTrend trend) => switch (trend) {
+  StatTrend.up => Icons.trending_up,
+  StatTrend.down => Icons.trending_down,
+  StatTrend.flat => Icons.trending_flat,
+};
+
+String _trendLabel(NxgtMaterialLocalizations l10n, StatTrend trend) =>
+    switch (trend) {
+      StatTrend.up => l10n.displayTrendUp,
+      StatTrend.down => l10n.displayTrendDown,
+      StatTrend.flat => l10n.displayTrendFlat,
+    };
+
+/// Success when it rises, error when it falls, neutral when flat; swapped
+/// when a rise is bad ([positiveIsUp] `false`).
+ToneColors _trendColors(
+  Tones tones,
+  StatTrend trend, {
+  required bool positiveIsUp,
+}) => switch (trend) {
+  StatTrend.flat => tones.neutral,
+  StatTrend.up => positiveIsUp ? tones.success : tones.error,
+  StatTrend.down => positiveIsUp ? tones.error : tones.success,
+};
 
 /// A key figure in a card: a [label], its [value] and how it moved.
 ///
@@ -99,6 +103,7 @@ class StatCard extends StatelessWidget {
     return Semantics(
       container: true,
       button: tap != null,
+      focusable: tap != null,
       label: _spokenLabel(context),
       onTap: tap,
       excludeSemantics: true,
@@ -110,7 +115,11 @@ class StatCard extends StatelessWidget {
   }
 
   String _spokenLabel(BuildContext context) {
-    final change = [?trend?.label(context.materialL10n), ?delta].join(' ');
+    final direction = trend;
+    final change = [
+      if (direction != null) _trendLabel(context.materialL10n, direction),
+      ?delta,
+    ].join(' ');
     return [label, value, if (change.isNotEmpty) change].join(', ');
   }
 
@@ -152,9 +161,9 @@ class StatCard extends StatelessWidget {
     final text = delta;
     final direction = trend;
     if (text == null && direction == null) return null;
-    final colors =
-        direction?.colors(context.tones, positiveIsUp: positiveIsUp) ??
-        context.tones.neutral;
+    final colors = direction == null
+        ? context.tones.neutral
+        : _trendColors(context.tones, direction, positiveIsUp: positiveIsUp);
     return DecoratedBox(
       decoration: ShapeDecoration(
         color: colors.container,
@@ -170,7 +179,7 @@ class StatCard extends StatelessWidget {
           spacing: 4,
           children: [
             if (direction != null)
-              Icon(direction.icon, size: 16, color: colors.onContainer),
+              Icon(_trendIcon(direction), size: 16, color: colors.onContainer),
             if (text != null)
               Flexible(
                 child: Text(
