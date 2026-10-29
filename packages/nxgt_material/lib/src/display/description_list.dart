@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/actions/copy_button.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/layout/text_scale.dart';
 import 'package:nxgt_material/src/layout/window_size.dart';
 
 /// One row of a [DescriptionList]: a [label], its [value] and whether the
@@ -53,7 +54,7 @@ class DescriptionList extends StatelessWidget {
   /// column would then leave the value too little width.
   bool _sideBySide(BuildContext context) =>
       context.windowSize.isAtLeast(WindowSize.medium) &&
-      MediaQuery.textScalerOf(context).scale(16) <= 24;
+      textScaleAtMost(context, 1.5, fontSize: 16);
 
   Widget _row(
     BuildContext context,

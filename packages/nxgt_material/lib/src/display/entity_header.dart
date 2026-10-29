@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/layout/text_scale.dart';
 import 'package:nxgt_material/src/layout/window_size.dart';
 import 'package:nxgt_material/src/theme/targets.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
@@ -126,7 +127,7 @@ class EntityHeader extends StatelessWidget {
     ];
     final inline =
         context.windowSize.isAtLeast(WindowSize.medium) &&
-        MediaQuery.textScalerOf(context).scale(14) / 14 <= _inlineMaxTextScale;
+        textScaleAtMost(context, _inlineMaxTextScale);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16,
