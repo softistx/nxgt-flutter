@@ -7,10 +7,9 @@ import 'package:nxgt_material/src/selection/choice_field_parts.dart';
 /// change it: the shared base of `DateField`, `TimeField` and
 /// `DateRangeField`. Internal, not exported.
 ///
-/// [V] is the picked value. The subclass-free design: a field builds this
-/// widget with [format] (value to text) and [pick] (open the picker), and
-/// gets the decorated, focusable, announced control, the 48 dp clear button,
-/// the required check and the form behaviour.
+/// [V] is the picked value. A field builds this widget with [format] (value
+/// to text) and [pick] (open the picker), and gets the decorated, focusable, announced control, the 48 dp
+/// clear button, the required check and the form behaviour.
 class PickerFieldBase<V> extends StatelessWidget {
   /// Creates the field.
   const new({

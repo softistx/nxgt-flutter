@@ -51,7 +51,8 @@ class DateField extends StatelessWidget {
   /// Called by `FormState.save` with the date.
   final FormFieldSetter<DateTime>? onSaved;
 
-  /// An extra validator, run after the required and range checks.
+  /// An extra validator, run after the required and range checks. It is only
+  /// called with a date: an empty field is valid unless [required].
   final FormFieldValidator<DateTime>? validator;
 
   /// When to validate; `null` follows the enclosing [Form].

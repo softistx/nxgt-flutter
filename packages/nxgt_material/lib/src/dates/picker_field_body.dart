@@ -65,34 +65,57 @@ class PickerFieldBody extends StatefulWidget {
   State<PickerFieldBody> createState() => _PickerFieldBodyState();
 }
 
+// The trailing icon and its gap: the clear button sits just before them.
+const _iconSize = 24.0;
+const _iconGap = 12.0;
+
 class _PickerFieldBodyState extends State<PickerFieldBody> {
   bool _focused = false;
+
+  InputDecoration _decoration(BuildContext context) {
+    final theme = Theme.of(context);
+    final errorTheme = widget.hasError ? selectErrorTheme(context) : null;
+    return InputDecoration(
+      labelText: widget.label,
+      hintText: widget.hintText,
+      floatingLabelBehavior: widget.hintText == null
+          ? null
+          : FloatingLabelBehavior.always,
+      enabled: widget.enabled,
+      // Room for the clear button, which sits above the decorator.
+      suffixIcon: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.canClear) SizedBox.fromSize(size: minTarget),
+          Icon(widget.icon, size: _iconSize),
+          const SizedBox(width: _iconGap),
+        ],
+      ),
+      // A null `constraints` does not pin the suffix; this does.
+      suffixIconConstraints: const BoxConstraints(),
+    ).applyDefaults(errorTheme ?? theme.inputDecorationTheme);
+  }
+
+  Widget _clearButton() => PositionedDirectional(
+    end: _iconSize + _iconGap,
+    top: 0,
+    bottom: 0,
+    child: Center(
+      child: IconButton(
+        icon: const Icon(Icons.clear),
+        tooltip: widget.clearLabel,
+        onPressed: widget.onClear,
+        style: targetStyle,
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final text = widget.text;
     final enabled = widget.enabled;
-    final errorTheme = widget.hasError ? selectErrorTheme(context) : null;
-    final decoration = InputDecoration(
-      labelText: widget.label,
-      hintText: widget.hintText,
-      floatingLabelBehavior: widget.hintText == null
-          ? null
-          : FloatingLabelBehavior.always,
-      enabled: enabled,
-      // Room for the clear button, which sits above the decorator.
-      suffixIcon: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.canClear) SizedBox.fromSize(size: minTarget),
-          Icon(widget.icon),
-          const SizedBox(width: 12),
-        ],
-      ),
-      // A null `constraints` does not pin the suffix; this does.
-      suffixIconConstraints: const BoxConstraints(),
-    ).applyDefaults(errorTheme ?? theme.inputDecorationTheme);
+    final decoration = _decoration(context);
     return Material(
       type: MaterialType.transparency,
       child: Stack(
@@ -133,20 +156,7 @@ class _PickerFieldBodyState extends State<PickerFieldBody> {
               ),
             ),
           ),
-          if (widget.canClear)
-            PositionedDirectional(
-              end: 36,
-              top: 0,
-              bottom: 0,
-              child: Center(
-                child: IconButton(
-                  icon: const Icon(Icons.clear),
-                  tooltip: widget.clearLabel,
-                  onPressed: widget.onClear,
-                  style: targetStyle,
-                ),
-              ),
-            ),
+          if (widget.canClear) _clearButton(),
         ],
       ),
     );

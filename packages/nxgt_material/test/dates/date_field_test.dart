@@ -300,7 +300,9 @@ void main() {
     handle.dispose();
   });
 
-  testWidgets('the error is the hint, announced once', (tester) async {
+  testWidgets('the error is the hint; the footer is the only live region', (
+    tester,
+  ) async {
     final handle = tester.ensureSemantics();
     await pump(
       tester,
@@ -308,12 +310,37 @@ void main() {
     );
     key.currentState!.validate();
     await tester.pump();
-    expect(find.bySemanticsLabel('This field is required'), findsOneWidget);
     expect(
       tester.getSemantics(find.byType(InputDecorator)).hint,
       'This field is required',
     );
+    final live = find.byWidgetPredicate(
+      (w) => w is Semantics && w.properties.liveRegion == true,
+    );
+    expect(live, findsOneWidget);
+    expect(
+      find.descendant(of: live, matching: find.text('This field is required')),
+      findsOneWidget,
+    );
     handle.dispose();
+  });
+
+  testWidgets('an empty optional field does not call the validator', (
+    tester,
+  ) async {
+    var calls = 0;
+    await pump(
+      tester,
+      DateField(
+        label: label,
+        validator: (date) {
+          calls++;
+          return 'bad';
+        },
+      ),
+    );
+    expect(key.currentState!.validate(), isTrue);
+    expect(calls, 0);
   });
 
   testWidgets('lays out inside an IntrinsicHeight', (tester) async {

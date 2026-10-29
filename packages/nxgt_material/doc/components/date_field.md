@@ -10,8 +10,7 @@ A date as a read-only field that opens Material's date picker, as a
 A birth date, a due date, a start date: one day in a form, worded in the
 user's language. The value is a `DateTime` at midnight
 (`DateUtils.dateOnly`), so two dates compare equal whatever the time of day.
-For a time of day use `TimeField`, for a period `DateRangeField`; for a bare
-picker without form behaviour call Flutter's `showDatePicker`.
+For a bare picker without form behaviour call Flutter's `showDatePicker`.
 
 ## Example
 
@@ -33,7 +32,7 @@ to `localizationsDelegates` for a language other than English (see
 ```dart
 DateField(
   label: 'Due',
-  formatter: (date) => DateFormat.yMMMMd('fr').format(date),
+  formatter: (d) => '${d.day}/${d.month}/${d.year}',
 )
 ```
 

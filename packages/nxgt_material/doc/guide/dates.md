@@ -1,8 +1,8 @@
 # Dates
 
-`package:nxgt_material/dates.dart` holds the fields that pick a date. Each is
-a `FormField` that shows its value as read-only text, opens Material's picker
-on tap, Enter or Space, and follows the app's locale.
+`package:nxgt_material/dates.dart` holds the field that picks a date,
+`DateField`: a `FormField` that shows its value as read-only text, opens
+Material's picker on tap, Enter or Space, and follows the app's locale.
 
 ## Setup
 

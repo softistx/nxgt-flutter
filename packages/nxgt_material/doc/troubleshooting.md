@@ -660,7 +660,8 @@ English dates and the picker's buttons read "Cancel" and "OK".
 `MaterialLocalizations`, which the app adds with
 `GlobalMaterialLocalizations.delegate` and a `supportedLocales` entry for the
 language. `NxgtMaterialLocalizationsDelegate` only supplies this package's own
-strings (the clear button, the range errors).
+strings (the clear button, and the `datesBefore` and `datesAfter` range
+errors of `firstDate` and `lastDate`).
 
 **Fix:** add Flutter's delegates next to this package's, and list the locale.
 
