@@ -152,6 +152,9 @@ void main() {
     final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
     expect(wrapper.actionsCancel, 'Cancel');
     expect(wrapper.actionsConfirm, 'Confirm');
+    expect(wrapper.overlaysDiscardTitle, 'Discard changes?');
+    expect(wrapper.overlaysDiscardMessage, contains('lost'));
+    expect(wrapper.overlaysDiscardConfirm, 'Discard');
   });
 
   test('the delegate reloads only when the override changes', () {
@@ -194,4 +197,7 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.displayPresenceOffline,
   s.actionsCancel,
   s.actionsConfirm,
+  s.overlaysDiscardTitle,
+  s.overlaysDiscardMessage,
+  s.overlaysDiscardConfirm,
 ];

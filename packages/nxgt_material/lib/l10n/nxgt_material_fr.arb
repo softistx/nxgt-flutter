@@ -41,5 +41,8 @@
   "displayPresenceBusy": "Occupé",
   "displayPresenceOffline": "Hors ligne",
   "actionsCancel": "Annuler",
-  "actionsConfirm": "Confirmer"
+  "actionsConfirm": "Confirmer",
+  "overlaysDiscardTitle": "Abandonner les modifications ?",
+  "overlaysDiscardMessage": "Vos modifications n'ont pas été enregistrées. Si vous fermez maintenant, elles seront perdues.",
+  "overlaysDiscardConfirm": "Abandonner"
 }
