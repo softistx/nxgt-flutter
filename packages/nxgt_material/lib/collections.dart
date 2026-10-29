@@ -6,6 +6,11 @@
 /// names.
 library;
 
+import 'package:nxgt_material/collections.dart'
+    show PagedList, ResponsiveTable, SearchField;
+import 'package:nxgt_material/nxgt_material.dart'
+    show PagedList, ResponsiveTable, SearchField;
+
 export 'src/collections/paged_list.dart';
 export 'src/collections/responsive_table.dart';
 export 'src/collections/search_field.dart';

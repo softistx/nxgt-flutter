@@ -4,12 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/actions/async_button.dart';
 import 'package:nxgt_material/src/forms/submit_button.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
-import 'package:nxgt_material/src/layout/window_size.dart';
 import 'package:nxgt_material/src/overlays/confirm_dialog.dart';
-import 'package:nxgt_material/src/theme/targets.dart';
-
-/// The widest the dialog grows, in logical pixels, from the medium size up.
-const _dialogWidth = 560.0;
+import 'package:nxgt_material/src/overlays/form_dialog_layouts.dart';
 
 /// A form in a dialog: full-screen with a top app bar on a compact window,
 /// a dialog with its actions at the bottom from the medium size up.
@@ -142,7 +138,7 @@ class _FormDialogState<T> extends State<FormDialog<T>> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.materialL10n;
-    final submit = _withTargets(
+    final submit = withTargets(
       theme,
       SubmitButton(
         label: widget.submitLabel ?? l10n.actionsConfirm,
@@ -153,199 +149,34 @@ class _FormDialogState<T> extends State<FormDialog<T>> {
       ),
     );
     final body = widget.fullscreen
-        ? _fullscreen(context, theme, submit)
-        : _dialog(context, theme, submit);
-    return _guard(
+        ? formDialogFullscreen(
+            context: context,
+            theme: theme,
+            title: widget.title,
+            child: widget.child,
+            submit: submit,
+            busy: _busy,
+            close: _close,
+            focus: _focus,
+          )
+        : formDialogDialog(
+            context: context,
+            title: widget.title,
+            child: widget.child,
+            submit: submit,
+            busy: _busy,
+            close: _close,
+          );
+    return formDialogGuard(
+      busy: _busy,
       fullscreen: false,
+      close: _close,
       child: PopScope(
         canPop: !_busy && !_dirty,
         onPopInvokedWithResult: (didPop, _) {
           if (!didPop) unawaited(_askToDiscard());
         },
         child: Form(onChanged: _changed, child: body),
-      ),
-    );
-  }
-
-  /// Escape, locked while busy. A page route has no dismissible barrier to
-  /// take the key, so on the full-screen layout the dialog takes it itself;
-  /// the `Scaffold` has its own `Actions` for `DismissIntent`, so there it
-  /// wraps the app bar and the body, not the `Scaffold`.
-  Widget _guard({required bool fullscreen, required Widget child}) {
-    final actions = <Type, Action<Intent>>{
-      if (_busy)
-        DismissIntent: DoNothingAction()
-      else if (fullscreen)
-        DismissIntent: CallbackAction<DismissIntent>(
-          onInvoke: (_) {
-            _close();
-            return null;
-          },
-        ),
-    };
-    return Actions(actions: actions, child: child);
-  }
-
-  Widget _fullscreen(BuildContext context, ThemeData theme, Widget submit) {
-    final l10n = context.materialL10n;
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: _guard(
-          fullscreen: true,
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            leading: _withTargets(
-              theme,
-              IconButton(
-                icon: const Icon(Icons.close),
-                tooltip: l10n.actionsClose,
-                onPressed: _busy ? null : _close,
-                style: targetStyle,
-              ),
-            ),
-            title: Semantics(
-              header: true,
-              child: Text(
-                widget.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(end: 8),
-                child: submit,
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: _guard(
-        fullscreen: true,
-        child: Focus(
-          focusNode: _focus,
-          skipTraversal: true,
-          child: SafeArea(
-            top: false,
-            child: SingleChildScrollView(
-              padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 24, 24),
-              child: widget.child,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _dialog(BuildContext context, ThemeData theme, Widget submit) {
-    return AlertDialog(
-      title: Semantics(header: true, child: Text(widget.title)),
-      content: SizedBox(width: _dialogWidth, child: widget.child),
-      scrollable: true,
-      semanticLabel: widget.title,
-      constraints: const BoxConstraints(minWidth: 280, maxWidth: _dialogWidth),
-      actions: [
-        TextButton(
-          onPressed: _busy ? null : _close,
-          style: targetStyle,
-          child: Text(context.materialL10n.actionsCancel),
-        ),
-        submit,
-      ],
-    );
-  }
-}
-
-/// [child] with the buttons below it kept at 48 dp on every platform.
-Widget _withTargets(ThemeData theme, Widget child) {
-  ButtonStyle merged(ButtonStyle? base) =>
-      base?.merge(targetStyle) ?? targetStyle;
-  return Theme(
-    data: theme.copyWith(
-      filledButtonTheme: FilledButtonThemeData(
-        style: merged(theme.filledButtonTheme.style),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: merged(theme.textButtonTheme.style),
-      ),
-    ),
-    child: child,
-  );
-}
-
-/// The full-screen route: no animation under reduced motion.
-class _FormRoute<T> extends MaterialPageRoute<T> {
-  new({required super.builder, required this.reduceMotion})
-    : super(fullscreenDialog: true);
-
-  final bool reduceMotion;
-
-  @override
-  Duration get transitionDuration =>
-      reduceMotion ? Duration.zero : super.transitionDuration;
-
-  @override
-  Duration get reverseTransitionDuration =>
-      reduceMotion ? Duration.zero : super.reverseTransitionDuration;
-}
-
-/// `context.showFormDialog`, shows a form in a dialog that fits the window.
-extension FormDialogContext on BuildContext {
-  /// Shows the form built by [builder] under [title] and returns the value
-  /// [onSubmit] completed with, or `null` when the user closed it.
-  ///
-  /// On a compact window (under 600 dp) the form is full-screen, with a top
-  /// app bar holding the close button, the title and the submit action. From
-  /// the medium size up it is a dialog up to 560 dp wide with Cancel and the
-  /// submit action at the bottom. The size is read when the dialog opens.
-  ///
-  /// The builder's content is placed in a `Form`; the submit action validates
-  /// it (an invalid form stays open, nothing is sent), saves it and runs
-  /// [onSubmit], which returns the value to pop. If [onSubmit] throws, the
-  /// error is reported with [FlutterError.reportError] and the dialog stays
-  /// open. When a field has changed, closing the dialog asks to discard the
-  /// changes first; the answer "Cancel" keeps it open. Focus returns to the
-  /// control that opened it.
-  ///
-  /// ```dart
-  /// final created = await context.showFormDialog<Invoice>(
-  ///   title: 'New invoice',
-  ///   submitLabel: 'Create',
-  ///   builder: (context) => InvoiceFields(controller: controller),
-  ///   onSubmit: () => repository.create(controller.draft),
-  /// );
-  /// ```
-  ///
-  /// Throws without a `Navigator` above (any `MaterialApp` provides one).
-  Future<T?> showFormDialog<T>({
-    required String title,
-    required WidgetBuilder builder,
-    required Future<T> Function() onSubmit,
-    String? submitLabel,
-  }) {
-    final fullscreen = windowSize == WindowSize.compact;
-    final reduceMotion = MediaQuery.disableAnimationsOf(this);
-    final dialog = FormDialog<T>(
-      title: title,
-      onSubmit: onSubmit,
-      submitLabel: submitLabel,
-      fullscreen: fullscreen,
-      child: Builder(builder: builder),
-    );
-    if (!fullscreen) {
-      return showDialog<T>(
-        context: this,
-        animationStyle: reduceMotion ? AnimationStyle.noAnimation : null,
-        builder: (_) => dialog,
-      );
-    }
-    final navigator = Navigator.of(this, rootNavigator: true);
-    final themes = InheritedTheme.capture(from: this, to: navigator.context);
-    return navigator.push(
-      _FormRoute<T>(
-        reduceMotion: reduceMotion,
-        builder: (_) => themes.wrap(dialog),
       ),
     );
   }
