@@ -1,6 +1,7 @@
 // Fails when a package's line coverage (coverage/lcov.info) is below a
-// threshold. A package with no lcov file or no instrumented lines is skipped:
-// nothing to cover yet.
+// threshold. A package with a test/ folder but no lcov file fails (the tests
+// did not write coverage). A package without test/ or without instrumented
+// lines is skipped: nothing to cover yet.
 //
 // Usage: dart run tool/check_coverage.dart <percent> <package dir>...
 import 'dart:io';
@@ -15,7 +16,15 @@ void main(List<String> args) {
   for (final dir in args.skip(1)) {
     final file = File('$dir/coverage/lcov.info');
     if (!file.existsSync()) {
-      stdout.writeln('$dir: no coverage/lcov.info, skipped');
+      if (Directory('$dir/test').existsSync()) {
+        stderr.writeln(
+          '$dir: has a test/ folder but no coverage/lcov.info '
+          '(run the tests with coverage first)',
+        );
+        failed = true;
+      } else {
+        stdout.writeln('$dir: no test/ folder, skipped');
+      }
       continue;
     }
     var found = 0;
