@@ -2,7 +2,11 @@
 
 ## Now
 
-Nothing in progress.
+- **nxgt_material 0.3**: dates and field gaps. Pick a date, a time or a
+  date range in fields that follow the locale and the `Form`; switch an option
+  on or off with a `SwitchField`; enter a web address in a `UrlField` and a
+  one-time code in an `OtpField`, each with 48 dp targets, announced errors
+  and localized messages.
 
 ## Next
 
@@ -10,7 +14,7 @@ Nothing in progress.
 
 ## Later
 
-- Dates, media.
+- Media.
 
 ## Shipped
 

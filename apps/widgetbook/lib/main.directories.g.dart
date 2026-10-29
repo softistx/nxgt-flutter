@@ -89,6 +89,8 @@ import 'package:nxgt_widgetbook/selection/radio_group_field.usecase.dart'
     as _nxgt_widgetbook_selection_radio_group_field_usecase;
 import 'package:nxgt_widgetbook/selection/select_field.usecase.dart'
     as _nxgt_widgetbook_selection_select_field_usecase;
+import 'package:nxgt_widgetbook/selection/switch_field.usecase.dart'
+    as _nxgt_widgetbook_selection_switch_field_usecase;
 import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
     as _nxgt_widgetbook_theme_token_sheet_usecase;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
@@ -533,6 +535,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_selection_select_field_usecase
                 .buildSelectFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'SwitchField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_switch_field_usecase
+                .buildSwitchFieldDefault,
           ),
         ],
       ),
