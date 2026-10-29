@@ -35,6 +35,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
 | `overlays.dart` | Dialogs and sheets: `ConfirmDialog` and `context.confirm`, `AdaptiveSheet` and `context.showAdaptiveSheet`, `FormDialog` and `context.showFormDialog` |
+| `selection.dart` | Choice fields built on `FormField`: `CheckboxField` |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
 ## Theme
@@ -336,6 +337,26 @@ final invoice = await context.showFormDialog<Invoice>(
 Pages: [AdaptiveSheet](doc/components/adaptive_sheet.md),
 [ConfirmDialog](doc/components/confirm_dialog.md),
 [FormDialog](doc/components/form_dialog.md).
+
+## Selection
+
+`package:nxgt_material/selection.dart`.
+
+| Component | What it adds |
+| --- | --- |
+| `CheckboxField` | A `FormField<bool>` on a full-width 48 dp tile; `required` means checked, with a localized, announced error |
+
+```dart
+import 'package:nxgt_material/selection.dart';
+
+CheckboxField(
+  label: 'I accept the terms of service',
+  required: true,
+  onChanged: (accepted) => setState(() => _accepted = accepted ?? false),
+)
+```
+
+Page: [CheckboxField](doc/components/checkbox_field.md).
 
 ## Layout
 
