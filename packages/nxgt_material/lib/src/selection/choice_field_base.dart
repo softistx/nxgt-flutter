@@ -62,6 +62,13 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
   @protected
   bool isEmpty(V value) => value == null;
 
+  /// Whether the field is a group of options named by [label]. A group shows
+  /// [label] as a visible title and exposes it as the label of a container
+  /// node holding one node per option (with the error or helper text as its
+  /// hint), instead of merging everything into one node.
+  @protected
+  bool get isGroup => false;
+
   /// The `FormField` of this field. [builder] draws the choice itself from
   /// the state and reports a change through [change].
   @protected
@@ -93,19 +100,57 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // The error, or the helper text, is the hint of the control, so
-            // the focused control reads label, state, then it.
-            MergeSemantics(
-              child: Semantics(
+            if (isGroup)
+              Semantics(
+                container: true,
+                explicitChildNodes: true,
+                label: label,
                 hint: error ?? helperText,
-                // Its own Material, so a coloured ancestor neither hides the
-                // ink splashes nor trips the ListTile assertion.
                 child: Material(
                   type: MaterialType.transparency,
-                  child: builder(state.context, state),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // The visible title; the container node carries it.
+                      ExcludeSemantics(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            12,
+                            16,
+                            4,
+                          ),
+                          child: Text(
+                            label,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  color: error == null
+                                      ? null
+                                      : Theme.of(context).colorScheme.error,
+                                ),
+                          ),
+                        ),
+                      ),
+                      builder(state.context, state),
+                    ],
+                  ),
+                ),
+              )
+            else
+              // The error, or the helper text, is the hint of the control, so
+              // the focused control reads label, state, then it.
+              MergeSemantics(
+                child: Semantics(
+                  hint: error ?? helperText,
+                  // Its own Material, so a coloured ancestor neither hides
+                  // the ink splashes nor trips the ListTile assertion.
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: builder(state.context, state),
+                  ),
                 ),
               ),
-            ),
             _Footer(helperText: helperText, errorText: error),
           ],
         );

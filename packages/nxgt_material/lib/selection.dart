@@ -4,3 +4,6 @@
 library;
 
 export 'src/selection/checkbox_field.dart';
+export 'src/selection/checkbox_group_field.dart';
+export 'src/selection/choice_option.dart';
+export 'src/selection/radio_group_field.dart';
