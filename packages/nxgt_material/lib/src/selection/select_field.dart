@@ -51,10 +51,7 @@ class SelectField<T> extends ChoiceFieldBase<T?> {
 
   @override
   Widget build(BuildContext context) {
-    assert(
-      initialValue == null || options.any((o) => o.value == initialValue),
-      'SelectField.initialValue must be one of the options.',
-    );
+    assertInOptions(options, initialValue, 'SelectField');
     final unique = uniqueOptions(options, 'SelectField');
     final sheet =
         context.windowSize == WindowSize.compact &&

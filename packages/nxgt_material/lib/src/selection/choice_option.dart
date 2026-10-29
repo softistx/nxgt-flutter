@@ -45,6 +45,32 @@ List<ChoiceOption<T>> uniqueOptions<T>(
   ];
 }
 
+/// In a debug build, asserts that [initialValue] is null or the value of one of
+/// [options], with [owner] (the widget name) in the message.
+void assertInOptions<T>(
+  List<ChoiceOption<T>> options,
+  T? initialValue,
+  String owner,
+) {
+  assert(
+    initialValue == null || options.any((o) => o.value == initialValue),
+    '$owner.initialValue must be one of the options.',
+  );
+}
+
+/// In a debug build, asserts that every value of [initialValue] is the value of
+/// an option of [options], with [owner] (the widget name) in the message.
+void assertSetInOptions<T>(
+  List<ChoiceOption<T>> options,
+  Set<T>? initialValue,
+  String owner,
+) {
+  assert(
+    (initialValue ?? const {}).every((v) => options.any((o) => o.value == v)),
+    '$owner.initialValue must only hold values of the options.',
+  );
+}
+
 /// The index of the option that receives the field's `focusNode`: the first
 /// enabled option of an enabled field, or -1 (the node then stays unattached).
 int firstEnabledOption<T>(
