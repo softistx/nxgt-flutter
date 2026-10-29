@@ -45,7 +45,7 @@ AuthOptions(
 )
 ```
 
-## `StatusError: GET /me (status 404)` on a 3xx or 4xx reply
+## `StatusError: GET /me (status 404)` on a 3xx, 4xx or 5xx reply
 
 `send`, like `get` and `post`, only returns 2xx replies; every other status is
 thrown as a `StatusError` (`error.status`, `error.data`, `error.response`).
