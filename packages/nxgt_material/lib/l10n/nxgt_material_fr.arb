@@ -44,5 +44,7 @@
   "actionsConfirm": "Confirmer",
   "overlaysDiscardTitle": "Abandonner les modifications ?",
   "overlaysDiscardMessage": "Vos modifications n'ont pas été enregistrées. Si vous fermez maintenant, elles seront perdues.",
-  "overlaysDiscardConfirm": "Abandonner"
+  "overlaysDiscardConfirm": "Abandonner",
+  "fieldsSelectClear": "Effacer le choix",
+  "fieldsSelectSearch": "Rechercher"
 }

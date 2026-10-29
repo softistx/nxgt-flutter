@@ -352,6 +352,18 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Discard'**
   String get overlaysDiscardConfirm;
+
+  /// Tooltip and screen reader label of the button that clears the choice of a select field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear selection'**
+  String get fieldsSelectClear;
+
+  /// Label of the search box in the sheet of a select field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get fieldsSelectSearch;
 }
 
 class _NxgtMaterialLocalizationsDelegate

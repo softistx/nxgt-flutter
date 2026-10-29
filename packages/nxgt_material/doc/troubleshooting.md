@@ -505,3 +505,36 @@ A release build keeps that value in the form's value, reports it at the end of
 the set after the first change, and counts it for `required`.
 
 **Fix:** start from values that are in `options`.
+
+## SelectField.options must have unique values.
+
+**When:** in a debug build, two options of a `SelectField` share a value.
+
+**Why:** see [RadioGroupField.options must have unique values.](#radiogroupfieldoptions-must-have-unique-values).
+A release build keeps the first option of each value.
+
+**Fix:** give each option its own value.
+
+## SelectField.options must not be empty.
+
+**When:** in a debug build, `options` of a `SelectField` is an empty list.
+
+**Why:** see [RadioGroupField.options must not be empty.](#radiogroupfieldoptions-must-not-be-empty).
+A release build shows an empty menu, and `required` can never be satisfied.
+
+**Fix:** pass at least one option, or do not show the field.
+
+## SelectField.initialValue must be one of the options.
+
+**When:** in a debug build, `initialValue` of a `SelectField` is not the value
+of any option.
+
+**Why:** the field shows the label of the chosen option, so the value must be
+one of them. A release build keeps the value in the form but shows an empty
+field.
+
+**Fix:** start from a value that is in `options`, or from `null`.
+
+```dart
+SelectField<String>(label: 'Country', options: countries, initialValue: 'fr')
+```

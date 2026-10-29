@@ -83,5 +83,9 @@
   "overlaysDiscardMessage": "Your changes have not been saved. If you close now, they are lost.",
   "@overlaysDiscardMessage": {"description": "Message of the dialog that asks whether to close a form dialog that has unsaved changes."},
   "overlaysDiscardConfirm": "Discard",
-  "@overlaysDiscardConfirm": {"description": "Label of the button that closes a form dialog and loses its unsaved changes."}
+  "@overlaysDiscardConfirm": {"description": "Label of the button that closes a form dialog and loses its unsaved changes."},
+  "fieldsSelectClear": "Clear selection",
+  "@fieldsSelectClear": {"description": "Tooltip and screen reader label of the button that clears the choice of a select field."},
+  "fieldsSelectSearch": "Search",
+  "@fieldsSelectSearch": {"description": "Label of the search box in the sheet of a select field."}
 }
