@@ -65,6 +65,7 @@ print(response.headers.value('x-total-count')); // case-insensitive
 print(response.data.length);
 ```
 
+`decode` is a `Decode<T>`, a function from the JSON body to your type.
 `ApiResponse<T>` holds `data`, `statusCode` and `headers`. A non-2xx reply is
 still thrown as a `StatusError`.
 
@@ -72,7 +73,9 @@ still thrown as a `StatusError`.
 
 Every failure is an `ApiError`, a sealed class: `NetworkError`, `TimeoutError`,
 `StatusError`, `DecodeError` and `CancelledError`. The `switch` above is
-exhaustive, so the compiler tells you when a case is missing. See the
+exhaustive, so the compiler tells you when a case is missing. A
+`TimeoutError` carries a `TimeoutStage` (`connect`, `send` or `receive`), and
+`isCancelled(error)` is true for a cancellation, typed or raw. See the
 [errors guide](doc/guide/errors.md).
 
 ## Authentication
@@ -112,7 +115,7 @@ final client = ApiClient(
 );
 ```
 
-One record per attempt: method, URL, status, duration and error type. The
+One `HttpLogRecord` per attempt: method, URL, status, duration and error type. The
 `authorization`, `proxy-authorization`, `cookie`, `set-cookie` and `x-api-key`
 headers are always redacted; bodies are
 logged only with `bodies: true`. Interceptors run logger, auth, retry, then

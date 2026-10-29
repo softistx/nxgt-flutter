@@ -2,14 +2,14 @@
 
 Entries are added as problems are found: the exact message, when, why, the fix.
 
-## A call fails with `NetworkError` in the browser but works elsewhere
+## `NetworkError: GET /me` in the browser but not elsewhere
 
 On the web, a request the browser blocks (CORS, mixed content) reaches the
 client as a connection failure, so it is a `NetworkError` whose `cause` has no
 status. Check the browser console for the blocked origin and allow it on the
 server.
 
-## `DecodeError` on a call that returned 200
+## `DecodeError: GET /me (decode failed: …)` on a call that returned 200
 
 The body arrived, but `decode` threw or the body is not of type `T`. The
 original exception is in `error.cause` and its trace in `error.stackTrace`.
@@ -19,13 +19,13 @@ Pass a `decode` function for anything other than a raw JSON `Map` or `List`:
 final user = await client.get('/me', decode: User.fromJson);
 ```
 
-## A 401 is thrown even though `refresh` ran
+## `StatusError: POST /me (status 401)` even though `refresh` ran
 
 `refresh` ran but `token` returned the same value (or null), so the request was
 not replayed and the 401 is thrown. Make `refresh` store the new token where
 `token` reads it, before it completes.
 
-## A call fails with `NetworkError` whose `cause` is your own exception
+## `NetworkError: GET /me` whose `cause` is your own exception
 
 The `token` callback of `AuthOptions` threw (a locked keychain, a storage read
 that failed). The request is never sent: the exception is rejected before the
@@ -45,11 +45,37 @@ AuthOptions(
 )
 ```
 
-## `send` rejects a call with a 3xx or 4xx status
+## `StatusError: GET /me (status 404)` on a 3xx, 4xx or 5xx reply
 
 `send`, like `get` and `post`, only returns 2xx replies; every other status is
 thrown as a `StatusError` (`error.status`, `error.data`, `error.response`).
 Redirects are followed by Dio first. Catch the error to read the reply.
+
+## `TimeoutError: GET /me (receive timeout after 0:00:10.000000)`
+
+A phase of the request ran out of time. `error.stage` says which one:
+`connect` (the connection was not opened), `send` (the body was not sent in
+time) or `receive` (the server did not answer or finish answering); `timeout`
+is the limit that was exceeded. A timeout is never retried, because the
+request may have reached the server. Set the limits on the client, and
+`sendTimeout` on its `dio`:
+
+```dart
+final client = ApiClient(
+  baseUrl: Uri.parse('https://api.example.com/v1/'),
+  connectTimeout: const Duration(seconds: 10),
+  receiveTimeout: const Duration(seconds: 30),
+);
+client.dio.options.sendTimeout = const Duration(seconds: 30);
+```
+
+Without a limit there is no timeout. Catch it to offer a retry yourself:
+
+```dart
+on TimeoutError catch (error) {
+  print('Timed out in the ${error.stage.name} stage.');
+}
+```
 
 ## A request was not retried
 
@@ -61,7 +87,7 @@ error or a status in `statuses` (timeouts are never retried); the body is not a
 as is. A `Retry-After` in a format other than seconds or an RFC 1123 date is
 ignored and the backoff is used.
 
-## A call throws `CancelledError` that nobody cancelled
+## `CancelledError: GET /me (cancelled)` that nobody cancelled
 
 Something cancelled it: a `latest:` key reused by a newer call (the reason is
 `superseded by a newer call`), `cancel()` on the client or a group (this also
