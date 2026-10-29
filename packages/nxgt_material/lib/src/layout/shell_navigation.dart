@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/layout/safe_sides.dart';
 import 'package:nxgt_material/src/layout/shell_destination.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 
 /// What the navigation widgets of an `AdaptiveShell` share.
 class ShellNavigationData {
@@ -134,6 +135,7 @@ Widget buildShellModalDrawer(
           tooltip: closeLabel,
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).maybePop(),
+          style: targetStyle,
         ),
       ),
     ),

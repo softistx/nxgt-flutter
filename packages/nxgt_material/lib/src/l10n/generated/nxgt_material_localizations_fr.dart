@@ -22,6 +22,11 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
   String get actionsCopy => 'Copier';
 
   @override
+  String actionsCopyItem(String label) {
+    return 'Copier « $label »';
+  }
+
+  @override
   String get actionsCopied => 'Copié';
 
   @override
@@ -113,4 +118,88 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
 
   @override
   String get layoutNavigation => 'Navigation';
+
+  @override
+  String displayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count éléments',
+      one: '1 élément',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get displayTrendUp => 'en hausse';
+
+  @override
+  String get displayTrendDown => 'en baisse';
+
+  @override
+  String get displayTrendFlat => 'stable';
+
+  @override
+  String get displayPresenceOnline => 'En ligne';
+
+  @override
+  String get displayPresenceAway => 'Absent';
+
+  @override
+  String get displayPresenceBusy => 'Occupé';
+
+  @override
+  String get displayPresenceOffline => 'Hors ligne';
+
+  @override
+  String get actionsCancel => 'Annuler';
+
+  @override
+  String get actionsConfirm => 'Confirmer';
+
+  @override
+  String get overlaysDiscardTitle => 'Abandonner les modifications ?';
+
+  @override
+  String get overlaysDiscardMessage =>
+      'Vos modifications n’ont pas été enregistrées. Si vous fermez maintenant, elles seront perdues.';
+
+  @override
+  String get overlaysDiscardConfirm => 'Abandonner';
+
+  @override
+  String get selectionClear => 'Effacer le choix';
+
+  @override
+  String get selectionNoResults => 'Aucun résultat';
+
+  @override
+  String get collectionsSearchHint => 'Rechercher';
+
+  @override
+  String get collectionsSearchClear => 'Effacer la recherche';
+
+  @override
+  String collectionsLoadedMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count éléments de plus chargés',
+      one: '1 élément de plus chargé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get collectionsSortBy => 'Trier par';
+
+  @override
+  String collectionsSortedAscending(String column) {
+    return '$column, tri croissant';
+  }
+
+  @override
+  String collectionsSortedDescending(String column) {
+    return '$column, tri décroissant';
+  }
 }

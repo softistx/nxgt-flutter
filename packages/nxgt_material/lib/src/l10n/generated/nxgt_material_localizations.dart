@@ -125,13 +125,19 @@ abstract class NxgtMaterialLocalizations {
   /// **'Copy'**
   String get actionsCopy;
 
+  /// Tooltip and screen reader label of a copy button that names what it copies, such as a description list row.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy {label}'**
+  String actionsCopyItem(String label);
+
   /// Label of the copy button after the value was copied, and what a screen reader announces.
   ///
   /// In en, this message translates to:
   /// **'Copied'**
   String get actionsCopied;
 
-  /// Tooltip and screen reader label of the arrow button of a split button that opens its menu.
+  /// Tooltip and screen reader label of a button that opens an overflow menu (split button arrow, entity header).
   ///
   /// In en, this message translates to:
   /// **'More options'**
@@ -268,6 +274,132 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Navigation'**
   String get layoutNavigation;
+
+  /// Screen reader text of a count badge: how many items the count stands for.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String displayCount(int count);
+
+  /// Screen reader text of a stat card's trend when the figure rose, spoken before the change.
+  ///
+  /// In en, this message translates to:
+  /// **'up'**
+  String get displayTrendUp;
+
+  /// Screen reader text of a stat card's trend when the figure fell, spoken before the change.
+  ///
+  /// In en, this message translates to:
+  /// **'down'**
+  String get displayTrendDown;
+
+  /// Screen reader text of a stat card's trend when the figure did not move, spoken before the change.
+  ///
+  /// In en, this message translates to:
+  /// **'unchanged'**
+  String get displayTrendFlat;
+
+  /// Screen reader text of an avatar's presence dot: the person is available now.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get displayPresenceOnline;
+
+  /// Screen reader text of an avatar's presence dot: the person is signed in but away.
+  ///
+  /// In en, this message translates to:
+  /// **'Away'**
+  String get displayPresenceAway;
+
+  /// Screen reader text of an avatar's presence dot: the person asked not to be disturbed.
+  ///
+  /// In en, this message translates to:
+  /// **'Busy'**
+  String get displayPresenceBusy;
+
+  /// Screen reader text of an avatar's presence dot: the person is not signed in.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get displayPresenceOffline;
+
+  /// Label of the button that dismisses a dialog without doing its action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get actionsCancel;
+
+  /// Default label of the button that accepts a confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get actionsConfirm;
+
+  /// Title of the dialog that asks whether to close a form dialog that has unsaved changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get overlaysDiscardTitle;
+
+  /// Message of the dialog that asks whether to close a form dialog that has unsaved changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Your changes have not been saved. If you close now, they are lost.'**
+  String get overlaysDiscardMessage;
+
+  /// Label of the button that closes a form dialog and loses its unsaved changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get overlaysDiscardConfirm;
+
+  /// Tooltip and screen reader label of the button that clears the choice of a select field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear selection'**
+  String get selectionClear;
+
+  /// Message shown in the sheet of a select field when the search matches no option.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get selectionNoResults;
+
+  /// Placeholder and screen reader label of an empty search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get collectionsSearchHint;
+
+  /// Tooltip and screen reader label of the button that clears the text of a search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get collectionsSearchClear;
+
+  /// Screen reader announcement after a page of a paged list landed: how many items were added.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more loaded} other{{count} more loaded}}'**
+  String collectionsLoadedMore(int count);
+
+  /// Tooltip and screen reader label of the button that opens the sort menu of a responsive table on a compact window.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get collectionsSortBy;
+
+  /// Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in ascending order.
+  ///
+  /// In en, this message translates to:
+  /// **'{column}, sorted ascending'**
+  String collectionsSortedAscending(String column);
+
+  /// Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in descending order.
+  ///
+  /// In en, this message translates to:
+  /// **'{column}, sorted descending'**
+  String collectionsSortedDescending(String column);
 }
 
 class _NxgtMaterialLocalizationsDelegate

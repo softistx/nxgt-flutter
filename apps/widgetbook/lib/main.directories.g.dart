@@ -19,6 +19,24 @@ import 'package:nxgt_widgetbook/actions/load_more_button.usecase.dart'
     as _nxgt_widgetbook_actions_load_more_button_usecase;
 import 'package:nxgt_widgetbook/actions/split_button.usecase.dart'
     as _nxgt_widgetbook_actions_split_button_usecase;
+import 'package:nxgt_widgetbook/collections/paged_list.usecase.dart'
+    as _nxgt_widgetbook_collections_paged_list_usecase;
+import 'package:nxgt_widgetbook/collections/responsive_table.usecase.dart'
+    as _nxgt_widgetbook_collections_responsive_table_usecase;
+import 'package:nxgt_widgetbook/collections/search_field.usecase.dart'
+    as _nxgt_widgetbook_collections_search_field_usecase;
+import 'package:nxgt_widgetbook/display/count_badge.usecase.dart'
+    as _nxgt_widgetbook_display_count_badge_usecase;
+import 'package:nxgt_widgetbook/display/description_list.usecase.dart'
+    as _nxgt_widgetbook_display_description_list_usecase;
+import 'package:nxgt_widgetbook/display/entity_header.usecase.dart'
+    as _nxgt_widgetbook_display_entity_header_usecase;
+import 'package:nxgt_widgetbook/display/stat_card.usecase.dart'
+    as _nxgt_widgetbook_display_stat_card_usecase;
+import 'package:nxgt_widgetbook/display/status_indicator.usecase.dart'
+    as _nxgt_widgetbook_display_status_indicator_usecase;
+import 'package:nxgt_widgetbook/display/user_avatar.usecase.dart'
+    as _nxgt_widgetbook_display_user_avatar_usecase;
 import 'package:nxgt_widgetbook/feedback/async_view.usecase.dart'
     as _nxgt_widgetbook_feedback_async_view_usecase;
 import 'package:nxgt_widgetbook/feedback/empty_state.usecase.dart'
@@ -55,6 +73,22 @@ import 'package:nxgt_widgetbook/layout/responsive_grid.usecase.dart'
     as _nxgt_widgetbook_layout_responsive_grid_usecase;
 import 'package:nxgt_widgetbook/layout/window_size.usecase.dart'
     as _nxgt_widgetbook_layout_window_size_usecase;
+import 'package:nxgt_widgetbook/overlays/adaptive_sheet.usecase.dart'
+    as _nxgt_widgetbook_overlays_adaptive_sheet_usecase;
+import 'package:nxgt_widgetbook/overlays/confirm_dialog.usecase.dart'
+    as _nxgt_widgetbook_overlays_confirm_dialog_usecase;
+import 'package:nxgt_widgetbook/overlays/form_dialog.usecase.dart'
+    as _nxgt_widgetbook_overlays_form_dialog_usecase;
+import 'package:nxgt_widgetbook/selection/checkbox_field.usecase.dart'
+    as _nxgt_widgetbook_selection_checkbox_field_usecase;
+import 'package:nxgt_widgetbook/selection/checkbox_group_field.usecase.dart'
+    as _nxgt_widgetbook_selection_checkbox_group_field_usecase;
+import 'package:nxgt_widgetbook/selection/choice_chips_field.usecase.dart'
+    as _nxgt_widgetbook_selection_choice_chips_field_usecase;
+import 'package:nxgt_widgetbook/selection/radio_group_field.usecase.dart'
+    as _nxgt_widgetbook_selection_radio_group_field_usecase;
+import 'package:nxgt_widgetbook/selection/select_field.usecase.dart'
+    as _nxgt_widgetbook_selection_select_field_usecase;
 import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
     as _nxgt_widgetbook_theme_token_sheet_usecase;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
@@ -100,6 +134,106 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_actions_split_button_usecase
                 .buildSplitButtonDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Collections',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'PagedList',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_collections_paged_list_usecase
+                .buildPagedListDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ResponsiveTable',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_collections_responsive_table_usecase
+                .buildResponsiveTableDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'SearchField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_collections_search_field_usecase
+                .buildSearchFieldDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Display',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'CountBadge',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_count_badge_usecase
+                .buildCountBadgeDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'DescriptionList',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_description_list_usecase
+                .buildDescriptionListDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'EntityHeader',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_entity_header_usecase
+                .buildEntityHeaderDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'StatCard',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_display_stat_card_usecase.buildStatCardDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'StatusIndicator',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_status_indicator_usecase
+                .buildStatusIndicatorDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'UserAvatar',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_user_avatar_usecase
+                .buildUserAvatarDefault,
           ),
         ],
       ),
@@ -299,6 +433,106 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_layout_window_size_usecase
                 .buildWindowSizeDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Overlays',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'AdaptiveSheet',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_overlays_adaptive_sheet_usecase
+                .buildAdaptiveSheetDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ConfirmDialog',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_overlays_confirm_dialog_usecase
+                .buildConfirmDialogDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'FormDialog',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_overlays_form_dialog_usecase
+                .buildFormDialogDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Selection',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'CheckboxField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_checkbox_field_usecase
+                .buildCheckboxFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'CheckboxGroupField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_checkbox_group_field_usecase
+                .buildCheckboxGroupFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ChoiceChipsField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_choice_chips_field_usecase
+                .buildChoiceChipsFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'FilterChipsField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Multiple',
+            builder: _nxgt_widgetbook_selection_choice_chips_field_usecase
+                .buildFilterChipsFieldMultiple,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'RadioGroupField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_radio_group_field_usecase
+                .buildRadioGroupFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'SelectField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_select_field_usecase
+                .buildSelectFieldDefault,
           ),
         ],
       ),

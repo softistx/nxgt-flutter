@@ -32,9 +32,21 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String get actionsCopy => base.actionsCopy;
   @override
+  String actionsCopyItem(String label) => base.actionsCopyItem(label);
+  @override
   String get actionsCopied => base.actionsCopied;
   @override
   String get actionsMoreOptions => base.actionsMoreOptions;
+  @override
+  String get actionsCancel => base.actionsCancel;
+  @override
+  String get actionsConfirm => base.actionsConfirm;
+  @override
+  String get overlaysDiscardTitle => base.overlaysDiscardTitle;
+  @override
+  String get overlaysDiscardMessage => base.overlaysDiscardMessage;
+  @override
+  String get overlaysDiscardConfirm => base.overlaysDiscardConfirm;
   @override
   String get fieldsRequired => base.fieldsRequired;
   @override
@@ -79,4 +91,38 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   String get layoutCloseNavigation => base.layoutCloseNavigation;
   @override
   String get layoutNavigation => base.layoutNavigation;
+  @override
+  String displayCount(int count) => base.displayCount(count);
+  @override
+  String get displayTrendUp => base.displayTrendUp;
+  @override
+  String get displayTrendDown => base.displayTrendDown;
+  @override
+  String get displayTrendFlat => base.displayTrendFlat;
+  @override
+  String get displayPresenceOnline => base.displayPresenceOnline;
+  @override
+  String get displayPresenceAway => base.displayPresenceAway;
+  @override
+  String get displayPresenceBusy => base.displayPresenceBusy;
+  @override
+  String get displayPresenceOffline => base.displayPresenceOffline;
+  @override
+  String get selectionClear => base.selectionClear;
+  @override
+  String get selectionNoResults => base.selectionNoResults;
+  @override
+  String get collectionsSearchHint => base.collectionsSearchHint;
+  @override
+  String get collectionsSearchClear => base.collectionsSearchClear;
+  @override
+  String collectionsLoadedMore(int count) => base.collectionsLoadedMore(count);
+  @override
+  String get collectionsSortBy => base.collectionsSortBy;
+  @override
+  String collectionsSortedAscending(String column) =>
+      base.collectionsSortedAscending(column);
+  @override
+  String collectionsSortedDescending(String column) =>
+      base.collectionsSortedDescending(column);
 }

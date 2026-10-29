@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/l10n.dart';
+import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations_en.dart';
+import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations_fr.dart';
 
 class _Reworded extends NxgtMaterialLocalizationsWrapper {
   new(super.base);
@@ -121,6 +123,67 @@ void main() {
     expect(second.actionsRetry, 'Try again');
   });
 
+  test('the wrapper forwards the plural displayCount', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.displayCount(1), '1 item');
+    expect(wrapper.displayCount(3), '3 items');
+  });
+
+  test('the wrapper forwards the plural collectionsLoadedMore', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.collectionsLoadedMore(1), '1 more loaded');
+    expect(wrapper.collectionsLoadedMore(3), '3 more loaded');
+    final fr = _Reworded(NxgtMaterialLocalizationsFr());
+    expect(fr.collectionsLoadedMore(1), '1 élément de plus chargé');
+    expect(fr.collectionsLoadedMore(3), '3 éléments de plus chargés');
+  });
+
+  test('the wrapper forwards the presence strings', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.displayPresenceOnline, 'Online');
+    expect(wrapper.displayPresenceAway, 'Away');
+    expect(wrapper.displayPresenceBusy, 'Busy');
+    expect(wrapper.displayPresenceOffline, 'Offline');
+  });
+
+  test('the wrapper forwards actionsCopyItem', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.actionsCopyItem('Invoice'), 'Copy Invoice');
+  });
+
+  test('the wrapper forwards the sort strings', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.collectionsSortBy, 'Sort by');
+    expect(
+      wrapper.collectionsSortedAscending('Name'),
+      'Name, sorted ascending',
+    );
+    expect(
+      wrapper.collectionsSortedDescending('Name'),
+      'Name, sorted descending',
+    );
+  });
+
+  test('the wrapper forwards the trend strings', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.displayTrendUp, 'up');
+    expect(wrapper.displayTrendDown, 'down');
+    expect(wrapper.displayTrendFlat, 'unchanged');
+  });
+
+  test('the wrapper forwards the dialog strings', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.actionsCancel, 'Cancel');
+    expect(wrapper.actionsConfirm, 'Confirm');
+    expect(wrapper.overlaysDiscardTitle, 'Discard changes?');
+    expect(wrapper.overlaysDiscardMessage, contains('lost'));
+    expect(wrapper.overlaysDiscardConfirm, 'Discard');
+    expect(wrapper.selectionClear, 'Clear selection');
+    expect(wrapper.selectionNoResults, 'No results');
+    expect(wrapper.collectionsSearchHint, 'Search');
+    expect(wrapper.collectionsSearchClear, 'Clear search');
+  });
+
   test('the delegate reloads only when the override changes', () {
     const a = NxgtMaterialLocalizationsDelegate();
     expect(a.shouldReload(const NxgtMaterialLocalizationsDelegate()), isFalse);
@@ -150,4 +213,26 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.layoutOpenNavigation,
   s.layoutCloseNavigation,
   s.layoutNavigation,
+  s.actionsCopyItem('x'),
+  s.displayCount(2),
+  s.displayTrendUp,
+  s.displayTrendDown,
+  s.displayTrendFlat,
+  s.displayPresenceOnline,
+  s.displayPresenceAway,
+  s.displayPresenceBusy,
+  s.displayPresenceOffline,
+  s.actionsCancel,
+  s.actionsConfirm,
+  s.overlaysDiscardTitle,
+  s.overlaysDiscardMessage,
+  s.overlaysDiscardConfirm,
+  s.selectionClear,
+  s.selectionNoResults,
+  s.collectionsSearchHint,
+  s.collectionsSearchClear,
+  s.collectionsLoadedMore(2),
+  s.collectionsSortBy,
+  s.collectionsSortedAscending('x'),
+  s.collectionsSortedDescending('x'),
 ];

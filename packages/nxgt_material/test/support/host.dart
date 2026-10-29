@@ -45,13 +45,15 @@ Widget formHost(
 
 /// A [MaterialApp] with the package's localizations and a theme built from
 /// `ThemePresets.ocean`, around [child] in a [Scaffold]. [plainTheme] uses a
-/// bare `ThemeData` instead, to check the fallbacks of components.
+/// bare `ThemeData` instead, to check the fallbacks of components. A
+/// [direction] forces the text direction of the whole app, routes included.
 Widget themedHost(
   Widget child, {
   Locale locale = const Locale('en'),
   Brightness brightness = Brightness.light,
   bool disableAnimations = false,
   bool plainTheme = false,
+  TextDirection? direction,
 }) {
   const preset = ThemePresets.ocean;
   return _app(
@@ -59,11 +61,16 @@ Widget themedHost(
     theme: plainTheme
         ? ThemeData()
         : (brightness == Brightness.light ? preset.light() : preset.dark()),
-    builder: (context, app) => MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(disableAnimations: disableAnimations),
-      child: app!,
-    ),
+    builder: (context, app) {
+      final media = MediaQuery(
+        data: MediaQuery.of(context)
+            .copyWith(disableAnimations: disableAnimations),
+        child: app!,
+      );
+      return direction == null
+          ? media
+          : Directionality(textDirection: direction, child: media);
+    },
     home: Scaffold(body: child),
   );
 }

@@ -47,3 +47,4 @@ AsyncButton(label: 'Save', loading: state.isSaving, onPressed: cubit.save)
 | `icon` | `Widget?` | Shown before the label; replaced by the spinner while busy. |
 | `variant` | `AsyncButtonVariant` | `filled` (default), `tonal`, `outlined`, `text`. |
 | `loading` | `bool?` | Forces the busy state; `null` tracks `onPressed` itself. |
+| `autofocus` | `bool` | Takes the focus when first built. Default `false`. |
