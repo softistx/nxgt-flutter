@@ -1,3 +1,24 @@
+## 0.3.0
+
+Adds the `dates.dart` library and three fields: `SwitchField`, `UrlField` and `OtpField`.
+
+### Breaking
+
+- `NxgtMaterialLocalizations` gains the getters `datesClear`, `datesBefore`, `datesAfter`, `datesRangeValue`, `fieldsInvalidUrl` and `fieldsOtpIncomplete`. Only a class that implements or extends `NxgtMaterialLocalizations` directly no longer compiles; extend `NxgtMaterialLocalizationsWrapper` instead, which forwards every string. Apps that only use the delegate, `context.materialL10n` or a `reword:` subclass of the wrapper are not affected.
+
+### Fixed
+
+- `CheckboxField` (and the other choice fields) no longer let a screen reader read the helper text twice, once as the control's hint and once as separate text.
+
+### Added
+
+- `dates.dart` (new library): `DateField` (a date as a read-only field that opens `showDatePicker` with its calendar and typed-entry toggle: `DateTime` at midnight, text from `MaterialLocalizations.formatMediumDate` or a `formatter`, `firstDate` and `lastDate` clamping the picker and naming the bound in an error, `required`, `clearable` with a 48 dp clear button, one semantics node with the error or helper text as its hint). New strings `datesClear`, `datesBefore` and `datesAfter` in fr and en. A `lastDate` before `firstDate` asserts in debug (a release build reads it as `lastDate == firstDate`); the bound in an error is worded through `formatter`.
+- `dates.dart`: `DateRangeField` (a range of dates as a read-only field that opens `showDateRangePicker` with its calendar and typed-entry toggle: Flutter's `DateTimeRange` value with both ends at midnight, text and spoken value "start to end" from `MaterialLocalizations.formatMediumDate` or a `formatter`, `firstDate` and `lastDate` naming the bound in an error, `required`, `clearable` with a 48 dp clear button, one semantics node). New string `datesRangeValue` in fr and en. A `lastDate` before `firstDate` asserts in debug (a release build reads it as `lastDate == firstDate`); the bound in an error is worded through `formatter` (called with a one-day range).
+- `dates.dart`: `TimeField` (a time of day as a read-only field that opens `showTimePicker` with its dial and typed-entry toggle: `TimeOfDay` value, text from `MaterialLocalizations.formatTimeOfDay` or a `formatter`, `use24HourFormat` to force the 12 or 24 hour clock in the text and the picker (`null` follows `MediaQuery.alwaysUse24HourFormat`), `required`, `clearable` with a 48 dp clear button, one semantics node). Reuses the `datesClear` string.
+- `fields.dart`: `OtpField` (a one-time code as one real input with invisible text over `length` 48 dp slots: native paste stripped to digits and cut at `length`, `AutofillHints.oneTimeCode`, one semantics node, slots left to right in RTL; `onCompleted` fires once per completion and never submits the form; built-in incomplete and `required` checks). New string `fieldsOtpIncomplete` in fr and en. A pasted or autofilled chunk of `length` digits or more replaces the whole code, over typed digits and into a full field; `onCompleted` also fires when a full code is replaced by another; `autovalidateMode` is passed to the form field.
+- `fields.dart`: `UrlField` (URL keyboard, `url` autofill, no capitalization, autocorrect off, `required`, `textInputAction`; keeps the text as typed) and `UrlField.normalize` (trims, adds `https://` when there is no scheme, `null` when invalid). `Validators.url()` accepts http and https addresses with a dotted host and an optional scheme. New string `fieldsInvalidUrl` in fr and en. Hosts with combining marks, such as `मेरा.भारत`, are accepted.
+- `selection.dart`: `SwitchField` (a `FormField<bool>` on a full-width `SwitchListTile` at least 48 dp high, off by default; a `validator` expresses "must be on", the error has the `alert` role and replaces the helper text, which with the error is the switch's semantics hint; works with `Form` validate, save and reset and with `autovalidateMode`; directional layout). Reuses the strings of the other choice fields; no new string. The helper text is the control's hint and is read once.
+
 ## 0.2.0
 
 Adds four libraries: `display.dart`, `overlays.dart`, `selection.dart` and `collections.dart`.

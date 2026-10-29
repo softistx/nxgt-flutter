@@ -203,6 +203,8 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.actionsShowMore,
   s.fieldsRequired,
   s.fieldsInvalidEmail,
+  s.fieldsInvalidUrl,
+  s.fieldsOtpIncomplete(6),
   s.fieldsMinLength(2),
   s.fieldsMaxLength(2),
   s.feedbackLoading,
@@ -235,4 +237,8 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.collectionsSortBy,
   s.collectionsSortedAscending('x'),
   s.collectionsSortedDescending('x'),
+  s.datesClear('x'),
+  s.datesBefore('x'),
+  s.datesAfter('x'),
+  s.datesRangeValue('x', 'y'),
 ];

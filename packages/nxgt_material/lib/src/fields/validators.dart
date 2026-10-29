@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:nxgt_material/src/fields/number_parse.dart';
+import 'package:nxgt_material/src/fields/url_parse.dart';
 import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 
@@ -49,6 +50,17 @@ class Validators {
     return text.isEmpty || _email.hasMatch(text)
         ? null
         : l10n.fieldsInvalidEmail;
+  };
+
+  /// Fails when a non-empty value is not an http or https web address.
+  ///
+  /// The scheme is optional (`example.com` passes) and the host needs a dot
+  /// (`localhost` fails). Hosts are domain names, international ones included;
+  /// a bare IP address, credentials and a port outside 1 to 65535 fail. Other
+  /// schemes such as `ftp://` fail.
+  FormFieldValidator<String> url() => (value) {
+    final text = value?.trim() ?? '';
+    return text.isEmpty || isWebUrl(text) ? null : l10n.fieldsInvalidUrl;
   };
 
   /// Fails when a non-empty value has fewer than [count] characters.

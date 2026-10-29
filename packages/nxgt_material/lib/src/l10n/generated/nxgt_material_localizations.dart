@@ -173,6 +173,18 @@ abstract class NxgtMaterialLocalizations {
   /// **'Enter a valid phone number'**
   String get fieldsInvalidPhone;
 
+  /// Error shown under a URL field whose value is not a web address (http or https).
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid web address'**
+  String get fieldsInvalidUrl;
+
+  /// Error shown under a one-time code field that is only partly filled; count is the code length.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Enter the digit} other{Enter all {count} digits}}'**
+  String fieldsOtpIncomplete(int count);
+
   /// Error shown under a number field whose value is not a number.
   ///
   /// In en, this message translates to:
@@ -400,6 +412,30 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'{column}, sorted descending'**
   String collectionsSortedDescending(String column);
+
+  /// Tooltip and screen reader label of the button that clears a date, time or range field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear {label}'**
+  String datesClear(String label);
+
+  /// Error of a date field whose date is earlier than the first allowed date.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date on or after {date}'**
+  String datesBefore(String date);
+
+  /// Error of a date field whose date is later than the last allowed date.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date on or before {date}'**
+  String datesAfter(String date);
+
+  /// Value of a date range field, read aloud and shown: the first and the last date.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} to {end}'**
+  String datesRangeValue(String start, String end);
 }
 
 class _NxgtMaterialLocalizationsDelegate

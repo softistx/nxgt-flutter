@@ -10,10 +10,18 @@ Nothing in progress.
 
 ## Later
 
-- Dates, media.
+- Media.
 
 ## Shipped
 
+- **nxgt_material 0.3**: dates and field gaps. Pick a date, a time or a
+  date range in fields that follow the locale and the `Form`; switch an option
+  on or off with a `SwitchField`; enter a web address in a `UrlField` and a
+  one-time code in an `OtpField`, each with 48 dp targets, announced errors
+  and localized messages. Published on
+  [pub.dev](https://pub.dev/packages/nxgt_material) as 0.3.0
+  ([#98](https://github.com/softistx/nxgt-flutter/issues/98),
+  [#99](https://github.com/softistx/nxgt-flutter/issues/99)).
 - **nxgt_material 0.2**: collections (search, paged lists, responsive
   tables), display (status, badges, avatars, stat cards, description lists,
   entity headers), selection (checkboxes, radios, chips, select) and overlays

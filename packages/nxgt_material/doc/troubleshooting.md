@@ -650,3 +650,63 @@ ResponsiveTable<Patient>(
   sortColumnIndex: 0, // < columns.length
 )
 ```
+
+## DateField, DateRangeField or TimeField shows English text, or the picker is in English
+
+**When:** the app is in French (or another language) but a `DateField`,
+`DateRangeField` or `TimeField` shows English dates or times and the picker's
+buttons read "Cancel" and "OK".
+
+**Why:** the date and time text and the pickers come from Flutter's
+`MaterialLocalizations`, which the app adds with
+`GlobalMaterialLocalizations.delegate` and a `supportedLocales` entry for the
+language. `NxgtMaterialLocalizationsDelegate` only supplies this package's own
+strings (the clear button, the `datesRangeValue` joiner of a range, and the
+`datesBefore` and `datesAfter` range errors of `firstDate` and `lastDate`).
+
+**Fix:** add Flutter's delegates next to this package's, and list the locale.
+
+```dart
+MaterialApp(
+  localizationsDelegates: const [
+    NxgtMaterialLocalizationsDelegate(),
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: NxgtMaterialLocalizations.supportedLocales,
+)
+```
+
+## lastDate must not be before firstDate
+
+**When:** in a debug build, a `DateField` or `DateRangeField` is built with a
+`lastDate` earlier than its `firstDate`.
+
+**Why:** no date can be picked in an empty span. A release build reads the
+reversed pair as `lastDate == firstDate`.
+
+**Fix:** pass `firstDate` first, or leave one bound out for its default
+(1 January 1900 to 31 December 2100).
+
+```dart
+DateField(
+  label: 'Birth date',
+  firstDate: DateTime(1900),
+  lastDate: DateTime.now(), // not before firstDate
+)
+```
+
+## length must be 1 to 12
+
+**When:** in a debug build, an `OtpField` is created with `length: 0` or
+`length: 13` (or any value outside 1 to 12).
+
+**Why:** the field draws one 48 dp slot per digit and asserts a usable range.
+A release build does not check it.
+
+**Fix:** pass a `length` from 1 to 12.
+
+```dart
+OtpField(label: 'Code', length: 6) // 1 to 12
+```

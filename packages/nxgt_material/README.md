@@ -26,6 +26,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | --- | --- |
 | `actions.dart` | Buttons and menus that trigger something |
 | `collections.dart` | Search and list-shaped data: `SearchField`, `PagedList`, `ResponsiveTable` and `TableColumn` |
+| `dates.dart` | Date and time fields built on `FormField`: `DateField`, `DateRangeField`, `TimeField` |
 | `display.dart` | Read-only record display: `StatusIndicator`, `CountBadge`, `UserAvatar`, `StatCard`, `DescriptionList`, `EntityHeader` |
 | `feedback.dart` | Empty, loading and error states, toasts, banners, progress |
 | `fields.dart` | Single-value inputs built on `FormField` |
@@ -33,7 +34,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
 | `overlays.dart` | Dialogs and sheets: `ConfirmDialog` and `context.confirm`, `AdaptiveSheet` and `context.showAdaptiveSheet`, `FormDialog` and `context.showFormDialog` |
-| `selection.dart` | Choice fields built on `FormField`: `CheckboxField`, `RadioGroupField`, `CheckboxGroupField`, `ChoiceChipsField`, `FilterChipsField`, `SelectField`, `ChoiceOption` |
+| `selection.dart` | Choice fields built on `FormField`: `CheckboxField`, `RadioGroupField`, `CheckboxGroupField`, `ChoiceChipsField`, `FilterChipsField`, `SelectField`, `SwitchField`, `ChoiceOption` |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
 ## Theme
@@ -138,12 +139,14 @@ Pages: [AsyncButton](doc/components/async_button.md),
 | --- | --- |
 | `EmailField` | Email keyboard, autofill and validation |
 | `PasswordField` | Obscured text with a localized show/hide toggle |
+| `UrlField` | URL keyboard, autofill and validation; `UrlField.normalize` adds `https://` |
+| `OtpField` | One-time code: digit slots over one input, paste, SMS autofill, `onCompleted` |
 | `PhoneField` | Phone keypad, character filter and validation |
 | `NumberField` | Numeric keypad, comma or point, min and max |
 | `TextAreaField` | Growing multi-line text with an optional counter |
 | `FormSection` | A heading and its fields |
 | `SubmitButton` | Validates, saves, then awaits the action |
-| `Validators` | `required`, `email`, `minLength`, `maxLength`, `phone`, `number`, `compose`, localized |
+| `Validators` | `required`, `email`, `minLength`, `maxLength`, `url`, `phone`, `number`, `compose`, localized |
 
 ```dart
 import 'package:nxgt_material/fields.dart';
@@ -164,6 +167,15 @@ Form(
     ],
   ),
 )
+
+// A web address; normalize adds https:// when the scheme is missing.
+UrlField(
+  label: 'Website',
+  onSaved: (v) => site = UrlField.normalize(v ?? ''),
+)
+
+// A one-time code in digit slots; fires once when it is complete.
+OtpField(label: 'Code', onCompleted: verify)
 
 // A phone number, filtered to what a number can contain.
 const PhoneField(label: 'Phone')
@@ -187,9 +199,11 @@ TextFormField(validator: v.compose([v.required(), v.minLength(3)]));
 Guide: [Forms](doc/guide/forms.md). Pages:
 [EmailField](doc/components/email_field.md),
 [PasswordField](doc/components/password_field.md),
+[OtpField](doc/components/otp_field.md),
 [PhoneField](doc/components/phone_field.md),
 [NumberField](doc/components/number_field.md),
 [TextAreaField](doc/components/text_area_field.md),
+[UrlField](doc/components/url_field.md),
 [FormSection](doc/components/form_section.md),
 [SubmitButton](doc/components/submit_button.md).
 
@@ -337,6 +351,32 @@ Guide: [Overlays](doc/guide/overlays.md). Pages:
 [ConfirmDialog](doc/components/confirm_dialog.md),
 [FormDialog](doc/components/form_dialog.md).
 
+## Dates
+
+`package:nxgt_material/dates.dart`. Built on Material 3 `showDatePicker`,
+`showDateRangePicker`, `showTimePicker` and `InputDecorator`.
+
+| Component | What it adds |
+| --- | --- |
+| `DateField` | A `FormField<DateTime>` that opens the date picker: value at midnight, text in the locale's medium date (or a `formatter`), `firstDate` and `lastDate` with a named-bound error, `required`, a 48 dp clear button, one announced node |
+| `DateRangeField` | A `FormField<DateTimeRange>` that opens the date range picker: both ends at midnight, "start to end" spoken in the locale (or a `formatter`), `firstDate` and `lastDate` with a named-bound error, `required`, a 48 dp clear button, one announced node |
+| `TimeField` | A `FormField<TimeOfDay>` that opens the time picker: text in the locale's format (or a `formatter`), `use24HourFormat` to force the 12 or 24 hour clock in the text and the picker, `required`, a 48 dp clear button, one announced node |
+
+```dart
+import 'package:nxgt_material/dates.dart';
+
+DateField(
+  label: 'Birth date',
+  required: true,
+  lastDate: DateTime.now(),
+  onChanged: (date) => setState(() => _birth = date),
+)
+```
+
+Pages: [DateField](doc/components/date_field.md),
+[DateRangeField](doc/components/date_range_field.md),
+[TimeField](doc/components/time_field.md), [dates guide](doc/guide/dates.md).
+
 ## Selection
 
 `package:nxgt_material/selection.dart`.
@@ -344,6 +384,7 @@ Guide: [Overlays](doc/guide/overlays.md). Pages:
 | Component | What it adds |
 | --- | --- |
 | `CheckboxField` | A `FormField<bool>` on a full-width 48 dp tile; `required` means checked, with a localized, announced error |
+| `SwitchField` | A `FormField<bool>` on a full-width 48 dp `SwitchListTile`; off by default, a `validator` for "must be on", error and helper text as the switch's hint |
 | `RadioGroupField` | A single choice among `ChoiceOption`s on Flutter's `RadioGroup`: group label, 48 dp tiles, arrow-key navigation, `required` with an announced error |
 | `CheckboxGroupField` | Several choices as a `FormField<Set<T>>`, same group semantics; reports new unmodifiable sets |
 | `SelectField` | A single choice in a list as a `FormField<T?>` on Material 3 `DropdownMenu`; on a compact window a searchable sheet for a long list; `required`, or a clear button |
@@ -371,11 +412,19 @@ RadioGroupField<String>(
 )
 ```
 
+```dart
+SwitchField(
+  label: 'Enable notifications',
+  onChanged: (on) => setState(() => _notify = on),
+)
+```
+
 Pages: [CheckboxField](doc/components/checkbox_field.md),
 [RadioGroupField](doc/components/radio_group_field.md),
 [CheckboxGroupField](doc/components/checkbox_group_field.md),
 [ChoiceChipsField and FilterChipsField](doc/components/choice_chips_field.md),
-[SelectField](doc/components/select_field.md).
+[SelectField](doc/components/select_field.md),
+[SwitchField](doc/components/switch_field.md).
 
 ## Collections
 
@@ -509,6 +558,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
 - [Forms](doc/guide/forms.md)
 - [Localization](doc/guide/localization.md)
 - [Adaptive layout](doc/guide/adaptive.md)
+- [Dates](doc/guide/dates.md)
 - [Overlays: dialog or sheet](doc/guide/overlays.md)
 - [Roadmap](doc/roadmap.md)
 - [Troubleshooting](doc/troubleshooting.md)
@@ -524,6 +574,8 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [CopyButton](doc/components/copy_button.md),
   [CountBadge](doc/components/count_badge.md),
   [DescriptionList](doc/components/description_list.md),
+  [DateField](doc/components/date_field.md),
+  [DateRangeField](doc/components/date_range_field.md),
   [EmailField](doc/components/email_field.md),
   [EmptyState](doc/components/empty_state.md),
   [EntityHeader](doc/components/entity_header.md),
@@ -535,6 +587,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [LoadMoreButton](doc/components/load_more_button.md),
   [LoadingState](doc/components/loading_state.md),
   [NumberField](doc/components/number_field.md),
+  [OtpField](doc/components/otp_field.md),
   [PageBody](doc/components/page_body.md),
   [PagedList](doc/components/paged_list.md),
   [PasswordField](doc/components/password_field.md),
@@ -548,8 +601,11 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [StatCard](doc/components/stat_card.md),
   [StatusIndicator](doc/components/status_indicator.md),
   [SubmitButton](doc/components/submit_button.md),
+  [SwitchField](doc/components/switch_field.md),
   [TextAreaField](doc/components/text_area_field.md),
+  [TimeField](doc/components/time_field.md),
   [Toast](doc/components/toast.md),
+  [UrlField](doc/components/url_field.md),
   [UserAvatar](doc/components/user_avatar.md),
   [WindowSize](doc/components/window_size.md).
 - Live catalogue: Widgetbook, published on GitHub Pages from `develop`.

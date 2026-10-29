@@ -58,6 +58,10 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String get fieldsInvalidPhone => base.fieldsInvalidPhone;
   @override
+  String get fieldsInvalidUrl => base.fieldsInvalidUrl;
+  @override
+  String fieldsOtpIncomplete(int count) => base.fieldsOtpIncomplete(count);
+  @override
   String get fieldsInvalidNumber => base.fieldsInvalidNumber;
   @override
   String fieldsMinValue(String min) => base.fieldsMinValue(min);
@@ -125,4 +129,13 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String collectionsSortedDescending(String column) =>
       base.collectionsSortedDescending(column);
+  @override
+  String datesClear(String label) => base.datesClear(label);
+  @override
+  String datesBefore(String date) => base.datesBefore(date);
+  @override
+  String datesAfter(String date) => base.datesAfter(date);
+  @override
+  String datesRangeValue(String start, String end) =>
+      base.datesRangeValue(start, end);
 }

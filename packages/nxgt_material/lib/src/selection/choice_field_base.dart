@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nxgt_material/src/forms/field_footer.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/selection/choice_field_parts.dart';
 
@@ -120,12 +121,7 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
                   ),
                 ),
               ),
-            ChoiceFooter(
-              helperText: helperText,
-              errorText: error,
-              // A group's helper text is already the hint of its container.
-              excludeHelper: isGroup,
-            ),
+            ChoiceFooter(helperText: helperText, errorText: error),
           ],
         );
       },

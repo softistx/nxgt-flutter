@@ -64,6 +64,20 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
   String get fieldsInvalidPhone => 'Enter a valid phone number';
 
   @override
+  String get fieldsInvalidUrl => 'Enter a valid web address';
+
+  @override
+  String fieldsOtpIncomplete(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Enter all $count digits',
+      one: 'Enter the digit',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get fieldsInvalidNumber => 'Enter a valid number';
 
   @override
@@ -201,5 +215,25 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
   @override
   String collectionsSortedDescending(String column) {
     return '$column, sorted descending';
+  }
+
+  @override
+  String datesClear(String label) {
+    return 'Clear $label';
+  }
+
+  @override
+  String datesBefore(String date) {
+    return 'Choose a date on or after $date';
+  }
+
+  @override
+  String datesAfter(String date) {
+    return 'Choose a date on or before $date';
+  }
+
+  @override
+  String datesRangeValue(String start, String end) {
+    return '$start to $end';
   }
 }

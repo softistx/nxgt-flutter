@@ -25,6 +25,12 @@ import 'package:nxgt_widgetbook/collections/responsive_table.usecase.dart'
     as _nxgt_widgetbook_collections_responsive_table_usecase;
 import 'package:nxgt_widgetbook/collections/search_field.usecase.dart'
     as _nxgt_widgetbook_collections_search_field_usecase;
+import 'package:nxgt_widgetbook/dates/date_field.usecase.dart'
+    as _nxgt_widgetbook_dates_date_field_usecase;
+import 'package:nxgt_widgetbook/dates/date_range_field.usecase.dart'
+    as _nxgt_widgetbook_dates_date_range_field_usecase;
+import 'package:nxgt_widgetbook/dates/time_field.usecase.dart'
+    as _nxgt_widgetbook_dates_time_field_usecase;
 import 'package:nxgt_widgetbook/display/count_badge.usecase.dart'
     as _nxgt_widgetbook_display_count_badge_usecase;
 import 'package:nxgt_widgetbook/display/description_list.usecase.dart'
@@ -53,12 +59,16 @@ import 'package:nxgt_widgetbook/fields/email_field.usecase.dart'
     as _nxgt_widgetbook_fields_email_field_usecase;
 import 'package:nxgt_widgetbook/fields/number_field.usecase.dart'
     as _nxgt_widgetbook_fields_number_field_usecase;
+import 'package:nxgt_widgetbook/fields/otp_field.usecase.dart'
+    as _nxgt_widgetbook_fields_otp_field_usecase;
 import 'package:nxgt_widgetbook/fields/password_field.usecase.dart'
     as _nxgt_widgetbook_fields_password_field_usecase;
 import 'package:nxgt_widgetbook/fields/phone_field.usecase.dart'
     as _nxgt_widgetbook_fields_phone_field_usecase;
 import 'package:nxgt_widgetbook/fields/text_area_field.usecase.dart'
     as _nxgt_widgetbook_fields_text_area_field_usecase;
+import 'package:nxgt_widgetbook/fields/url_field.usecase.dart'
+    as _nxgt_widgetbook_fields_url_field_usecase;
 import 'package:nxgt_widgetbook/forms/form_section.usecase.dart'
     as _nxgt_widgetbook_forms_form_section_usecase;
 import 'package:nxgt_widgetbook/forms/submit_button.usecase.dart'
@@ -89,6 +99,8 @@ import 'package:nxgt_widgetbook/selection/radio_group_field.usecase.dart'
     as _nxgt_widgetbook_selection_radio_group_field_usecase;
 import 'package:nxgt_widgetbook/selection/select_field.usecase.dart'
     as _nxgt_widgetbook_selection_select_field_usecase;
+import 'package:nxgt_widgetbook/selection/switch_field.usecase.dart'
+    as _nxgt_widgetbook_selection_switch_field_usecase;
 import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
     as _nxgt_widgetbook_theme_token_sheet_usecase;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
@@ -169,6 +181,41 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_collections_search_field_usecase
                 .buildSearchFieldDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Dates',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'DateField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_dates_date_field_usecase.buildDateFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'DateRangeField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_dates_date_range_field_usecase
+                .buildDateRangeFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'TimeField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_dates_time_field_usecase.buildTimeFieldDefault,
           ),
         ],
       ),
@@ -327,6 +374,16 @@ final directories = <_widgetbook.WidgetbookNode>[
         ],
       ),
       _widgetbook.WidgetbookComponent(
+        name: 'OtpField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_fields_otp_field_usecase.buildOtpFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
         name: 'PasswordField',
         useCases: [
           _widgetbook.WidgetbookUseCase(
@@ -353,6 +410,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_fields_text_area_field_usecase
                 .buildTextAreaFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'UrlField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_fields_url_field_usecase.buildUrlFieldDefault,
           ),
         ],
       ),
@@ -533,6 +600,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_selection_select_field_usecase
                 .buildSelectFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'SwitchField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_switch_field_usecase
+                .buildSwitchFieldDefault,
           ),
         ],
       ),

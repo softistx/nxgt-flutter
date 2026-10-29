@@ -24,6 +24,10 @@
   "@fieldsMaxLength": {"description": "Error shown under a field whose text is longer than its maximum length.", "placeholders": {"count": {"type": "int"}}},
   "fieldsInvalidPhone": "Enter a valid phone number",
   "@fieldsInvalidPhone": {"description": "Error shown under a phone field whose value is not a phone number."},
+  "fieldsInvalidUrl": "Enter a valid web address",
+  "@fieldsInvalidUrl": {"description": "Error shown under a URL field whose value is not a web address (http or https)."},
+  "fieldsOtpIncomplete": "{count, plural, =1{Enter the digit} other{Enter all {count} digits}}",
+  "@fieldsOtpIncomplete": {"description": "Error shown under a one-time code field that is only partly filled; count is the code length.", "placeholders": {"count": {"type": "int"}}},
   "fieldsInvalidNumber": "Enter a valid number",
   "@fieldsInvalidNumber": {"description": "Error shown under a number field whose value is not a number."},
   "fieldsMinValue": "Enter a value of at least {min}",
@@ -99,5 +103,13 @@
   "collectionsSortedAscending": "{column}, sorted ascending",
   "@collectionsSortedAscending": {"description": "Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in ascending order.", "placeholders": {"column": {"type": "String"}}},
   "collectionsSortedDescending": "{column}, sorted descending",
-  "@collectionsSortedDescending": {"description": "Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in descending order.", "placeholders": {"column": {"type": "String"}}}
+  "@collectionsSortedDescending": {"description": "Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in descending order.", "placeholders": {"column": {"type": "String"}}},
+  "datesClear": "Clear {label}",
+  "@datesClear": {"description": "Tooltip and screen reader label of the button that clears a date, time or range field.", "placeholders": {"label": {"type": "String"}}},
+  "datesBefore": "Choose a date on or after {date}",
+  "@datesBefore": {"description": "Error of a date field whose date is earlier than the first allowed date.", "placeholders": {"date": {"type": "String"}}},
+  "datesAfter": "Choose a date on or before {date}",
+  "@datesAfter": {"description": "Error of a date field whose date is later than the last allowed date.", "placeholders": {"date": {"type": "String"}}},
+  "datesRangeValue": "{start} to {end}",
+  "@datesRangeValue": {"description": "Value of a date range field, read aloud and shown: the first and the last date.", "placeholders": {"start": {"type": "String"}, "end": {"type": "String"}}}
 }

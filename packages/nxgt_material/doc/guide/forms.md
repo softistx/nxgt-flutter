@@ -32,9 +32,15 @@ Form(
 | --- | --- | --- |
 | `EmailField` | fields | Email keyboard, autofill, validation |
 | `PasswordField` | fields | Obscured text, show/hide toggle, new-password hint |
+| `UrlField` | fields | URL keyboard, autofill, validation, `normalize` |
+| `OtpField` | fields | One-time code: digit slots, paste, SMS autofill, `onCompleted` |
 | `PhoneField` | fields | Phone keypad, character filter, validation |
 | `NumberField` | fields | Numeric keypad, comma or point, min and max |
 | `TextAreaField` | fields | Growing multi-line text with an optional counter |
+| `DateField` | dates | A date picked in Material's date picker, as a `FormField<DateTime>` |
+| `DateRangeField` | dates | A range of dates picked in Material's range picker, as a `FormField<DateTimeRange>` |
+| `TimeField` | dates | A time of day picked in Material's time picker, as a `FormField<TimeOfDay>` |
+| `SwitchField` | selection | An on/off switch tile as a `FormField<bool>`; off by default |
 | `FormSection` | forms | A heading and its fields |
 | `SubmitButton` | forms | Validate, save, then await a submit action |
 
@@ -66,6 +72,7 @@ TextFormField(
 | --- | --- |
 | `required()` | the value is null or blank |
 | `email()` | a non-empty value is not an email |
+| `url()` | a non-empty value is not an http or https web address (scheme optional, dotted host) |
 | `minLength(n)` / `maxLength(n)` | the length is below / above `n` |
 | `phone()` | a non-empty value is not a phone number (7 to 15 digits) |
 | `number(min:, max:)` | a non-empty value is not a number or is out of range |
