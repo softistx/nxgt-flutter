@@ -17,6 +17,12 @@ void main() {
       expect(find.text('36'), findsOneWidget);
     });
 
+    testWidgets('starts at the left edge in LTR', (tester) async {
+      await pumpTable(tester, tableHost(buildTable()));
+
+      expect(tester.getRect(find.byType(DataTable)).left, closeTo(0, 1));
+    });
+
     testWidgets('right-aligns the numeric column', (tester) async {
       await pumpTable(tester, tableHost(buildTable()));
 
@@ -188,6 +194,8 @@ void main() {
         tester.getTopLeft(find.text('Age')).dx,
         lessThan(tester.getTopLeft(find.text('Name')).dx),
       );
+      expect(tester.getRect(find.byType(DataTable)).right, closeTo(800, 1));
+      expect(tester.getTopRight(find.text('Name')).dx, greaterThan(700));
     });
 
     testWidgets('survives text scale 2', (tester) async {

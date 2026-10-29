@@ -36,25 +36,33 @@ class ResponsiveTableGrid<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tap = onRowTap;
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        sortColumnIndex: sortColumnIndex,
-        sortAscending: sortAscending,
-        showCheckboxColumn: false,
-        columns: [for (var i = 0; i < columns.length; i++) _column(context, i)],
-        rows: [
-          for (final row in rows)
-            DataRow(
-              onSelectChanged: tap == null ? null : (_) => tap(row),
-              cells: [
-                for (final column in columns)
-                  DataCell(
-                    column.cell?.call(context, row) ?? Text(column.value(row)),
-                  ),
-              ],
-            ),
-        ],
+    // Align: under loose width the scroll view shrinks to the table and
+    // would sit at the left in right-to-left; this keeps it at the start.
+    return Align(
+      alignment: AlignmentDirectional.topStart,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          sortColumnIndex: sortColumnIndex,
+          sortAscending: sortAscending,
+          showCheckboxColumn: false,
+          columns: [
+            for (var i = 0; i < columns.length; i++) _column(context, i),
+          ],
+          rows: [
+            for (final row in rows)
+              DataRow(
+                onSelectChanged: tap == null ? null : (_) => tap(row),
+                cells: [
+                  for (final column in columns)
+                    DataCell(
+                      column.cell?.call(context, row) ??
+                          Text(column.value(row)),
+                    ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
