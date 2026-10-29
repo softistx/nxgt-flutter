@@ -135,4 +135,7 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   String datesBefore(String date) => base.datesBefore(date);
   @override
   String datesAfter(String date) => base.datesAfter(date);
+  @override
+  String datesRangeValue(String start, String end) =>
+      base.datesRangeValue(start, end);
 }

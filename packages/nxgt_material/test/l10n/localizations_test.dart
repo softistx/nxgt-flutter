@@ -240,4 +240,5 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.datesClear('x'),
   s.datesBefore('x'),
   s.datesAfter('x'),
+  s.datesRangeValue('x', 'y'),
 ];

@@ -231,4 +231,9 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
   String datesAfter(String date) {
     return 'Choisissez une date jusqu\'au $date';
   }
+
+  @override
+  String datesRangeValue(String start, String end) {
+    return 'du $start au $end';
+  }
 }

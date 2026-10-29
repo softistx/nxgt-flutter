@@ -26,7 +26,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | --- | --- |
 | `actions.dart` | Buttons and menus that trigger something |
 | `collections.dart` | Search and list-shaped data: `SearchField`, `PagedList`, `ResponsiveTable` and `TableColumn` |
-| `dates.dart` | Date and time fields built on `FormField`: `DateField`, `TimeField` |
+| `dates.dart` | Date and time fields built on `FormField`: `DateField`, `DateRangeField`, `TimeField` |
 | `display.dart` | Read-only record display: `StatusIndicator`, `CountBadge`, `UserAvatar`, `StatCard`, `DescriptionList`, `EntityHeader` |
 | `feedback.dart` | Empty, loading and error states, toasts, banners, progress |
 | `fields.dart` | Single-value inputs built on `FormField` |
@@ -345,11 +345,12 @@ Guide: [Overlays](doc/guide/overlays.md). Pages:
 ## Dates
 
 `package:nxgt_material/dates.dart`. Built on Material 3 `showDatePicker`,
-`showTimePicker` and `InputDecorator`.
+`showDateRangePicker`, `showTimePicker` and `InputDecorator`.
 
 | Component | What it adds |
 | --- | --- |
 | `DateField` | A `FormField<DateTime>` that opens the date picker: value at midnight, text in the locale's medium date (or a `formatter`), `firstDate` and `lastDate` with a named-bound error, `required`, a 48 dp clear button, one announced node |
+| `DateRangeField` | A `FormField<DateTimeRange>` that opens the date range picker: both ends at midnight, "start to end" spoken in the locale (or a `formatter`), `firstDate` and `lastDate` with a named-bound error, `required`, a 48 dp clear button, one announced node |
 | `TimeField` | A `FormField<TimeOfDay>` that opens the time picker: text in the locale's format (or a `formatter`), `use24HourFormat` to force the 12 or 24 hour clock in the text and the picker, `required`, a 48 dp clear button, one announced node |
 
 ```dart
@@ -364,6 +365,7 @@ DateField(
 ```
 
 Pages: [DateField](doc/components/date_field.md),
+[DateRangeField](doc/components/date_range_field.md),
 [TimeField](doc/components/time_field.md), [dates guide](doc/guide/dates.md).
 
 ## Selection
@@ -556,6 +558,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [CountBadge](doc/components/count_badge.md),
   [DescriptionList](doc/components/description_list.md),
   [DateField](doc/components/date_field.md),
+  [DateRangeField](doc/components/date_range_field.md),
   [EmailField](doc/components/email_field.md),
   [EmptyState](doc/components/empty_state.md),
   [EntityHeader](doc/components/entity_header.md),
