@@ -22,7 +22,7 @@ work in a `Form`.
   options as 48 dp tiles; the chosen one is marked. Choosing closes the sheet
   and sets the value; closing it any other way keeps the old value. When
   nothing matches the search, the sheet shows (and announces) "No results" /
-  "Aucun résultat" (`fieldsSelectNoResults`). The folding covers common Latin
+  "Aucun résultat" (`selectionNoResults`). The folding covers common Latin
   accents (é, ç, ñ, ü...), not ligatures such as œ, æ or ß, nor decomposed
   (NFD) accents. In a searchable menu, text typed without choosing an option
   is dropped when the field loses focus.

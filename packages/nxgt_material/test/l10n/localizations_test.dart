@@ -178,9 +178,8 @@ void main() {
     expect(wrapper.overlaysDiscardTitle, 'Discard changes?');
     expect(wrapper.overlaysDiscardMessage, contains('lost'));
     expect(wrapper.overlaysDiscardConfirm, 'Discard');
-    expect(wrapper.fieldsSelectClear, 'Clear selection');
-    expect(wrapper.fieldsSelectSearch, 'Search');
-    expect(wrapper.fieldsSelectNoResults, 'No results');
+    expect(wrapper.selectionClear, 'Clear selection');
+    expect(wrapper.selectionNoResults, 'No results');
     expect(wrapper.collectionsSearchHint, 'Search');
     expect(wrapper.collectionsSearchClear, 'Clear search');
   });
@@ -228,9 +227,8 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.overlaysDiscardTitle,
   s.overlaysDiscardMessage,
   s.overlaysDiscardConfirm,
-  s.fieldsSelectClear,
-  s.fieldsSelectSearch,
-  s.fieldsSelectNoResults,
+  s.selectionClear,
+  s.selectionNoResults,
   s.collectionsSearchHint,
   s.collectionsSearchClear,
   s.collectionsLoadedMore(2),

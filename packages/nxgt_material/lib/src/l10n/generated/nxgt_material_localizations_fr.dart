@@ -162,19 +162,16 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
 
   @override
   String get overlaysDiscardMessage =>
-      'Vos modifications n\'ont pas été enregistrées. Si vous fermez maintenant, elles seront perdues.';
+      'Vos modifications n’ont pas été enregistrées. Si vous fermez maintenant, elles seront perdues.';
 
   @override
   String get overlaysDiscardConfirm => 'Abandonner';
 
   @override
-  String get fieldsSelectClear => 'Effacer le choix';
+  String get selectionClear => 'Effacer le choix';
 
   @override
-  String get fieldsSelectSearch => 'Rechercher';
-
-  @override
-  String get fieldsSelectNoResults => 'Aucun résultat';
+  String get selectionNoResults => 'Aucun résultat';
 
   @override
   String get collectionsSearchHint => 'Rechercher';

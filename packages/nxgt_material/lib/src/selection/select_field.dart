@@ -171,7 +171,7 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
 
   Future<void> _openSheet() async {
     if (!widget.enabled) return;
-    final searchLabel = context.materialL10n.fieldsSelectSearch;
+    final searchLabel = context.materialL10n.collectionsSearchHint;
     final picked = await context.showAdaptiveSheet<(T,)>(
       title: widget.label,
       builder: (_) => SelectSheetList<T>(
@@ -216,7 +216,7 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
         if (_canClear)
           IconButton(
             icon: const Icon(Icons.clear),
-            tooltip: context.materialL10n.fieldsSelectClear,
+            tooltip: context.materialL10n.selectionClear,
             onPressed: () => widget.onPick(null),
             style: targetStyle,
           ),
@@ -298,7 +298,7 @@ class _SelectControlState<T> extends State<_SelectControl<T>> {
       customSemanticsActions: {
         if (_canClear)
           CustomSemanticsAction(
-            label: context.materialL10n.fieldsSelectClear,
+            label: context.materialL10n.selectionClear,
           ): () =>
               widget.onPick(null),
       },

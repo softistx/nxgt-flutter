@@ -168,13 +168,10 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
   String get overlaysDiscardConfirm => 'Discard';
 
   @override
-  String get fieldsSelectClear => 'Clear selection';
+  String get selectionClear => 'Clear selection';
 
   @override
-  String get fieldsSelectSearch => 'Search';
-
-  @override
-  String get fieldsSelectNoResults => 'No results';
+  String get selectionNoResults => 'No results';
 
   @override
   String get collectionsSearchHint => 'Search';
