@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/actions.dart';
@@ -18,6 +19,28 @@ void main() {
     await tester.pump();
     expect(calls, 1);
   });
+
+  for (final platform in [TargetPlatform.android, TargetPlatform.macOS]) {
+    testWidgets('is at least 48 dp high on $platform', (tester) async {
+      debugDefaultTargetPlatformOverride = platform;
+      try {
+        await tester.pumpWidget(host(LoadMoreButton(onPressed: () async {})));
+        expect(
+          tester.getSize(find.byType(AsyncButton)).height,
+          greaterThanOrEqualTo(48),
+        );
+        await tester.tap(find.byType(LoadMoreButton));
+        await tester.pump();
+        expect(
+          tester.getSize(find.byType(AsyncButton)).height,
+          greaterThanOrEqualTo(48),
+        );
+        await tester.pumpAndSettle();
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+      }
+    });
+  }
 
   testWidgets('builds nothing once there is no more', (tester) async {
     await tester.pumpWidget(

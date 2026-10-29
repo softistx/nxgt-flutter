@@ -380,6 +380,25 @@ void main() {
       await tester.pump(const Duration(seconds: 3));
     });
 
+    testWidgets('switching from button to onScroll starts loading on scroll', (
+      tester,
+    ) async {
+      Widget app(LoadMoreMode mode) => themedHost(
+        _Harness(initial: 30, mode: mode, load: (_) async => _items(40, 30)),
+      );
+      await tester.pumpApp(app(LoadMoreMode.button));
+      await scrollToEnd(tester);
+      final state = tester.state<_HarnessState>(find.byType(_Harness));
+      expect(state.calls, 0);
+      expect(showMore, findsOneWidget);
+
+      await tester.pumpApp(app(LoadMoreMode.onScroll));
+      expect(showMore, findsNothing);
+      expect(state.calls, 1);
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 3));
+    });
+
     testWidgets('hasMore false does not trigger', (tester) async {
       await tester.pumpApp(
         themedHost(
@@ -483,6 +502,37 @@ void main() {
       expect(controller.dispose, returnsNormally);
     });
 
+    testWidgets('swapping the controller moves the scroll trigger', (
+      tester,
+    ) async {
+      final a = ScrollController();
+      final b = ScrollController();
+      addTearDown(a.dispose);
+      addTearDown(b.dispose);
+      Widget app(ScrollController c) => themedHost(
+        _Harness(
+          initial: 30,
+          mode: LoadMoreMode.onScroll,
+          controller: c,
+          load: (_) async => _items(40, 30),
+        ),
+      );
+      await tester.pumpApp(app(a));
+      // hasListeners is protected, but is the only way to see the removal.
+      // ignore: invalid_use_of_protected_member
+      expect(a.hasListeners, isTrue);
+      await tester.pumpApp(app(b));
+      // hasListeners is protected, but is the only way to see the removal.
+      // ignore: invalid_use_of_protected_member
+      expect(a.hasListeners, isFalse);
+      final state = tester.state<_HarnessState>(find.byType(_Harness));
+      expect(state.calls, 0);
+      b.jumpTo(b.position.maxScrollExtent);
+      await tester.pump();
+      expect(state.calls, 1);
+      await tester.pump(const Duration(seconds: 3));
+    });
+
     testWidgets('an owned controller is created and disposed', (tester) async {
       await tester.pumpApp(
         themedHost(
@@ -497,21 +547,38 @@ void main() {
   });
 
   group('layout', () {
-    testWidgets('mirrors in RTL and keeps working at text scale 2', (
-      tester,
-    ) async {
-      await tester.pumpApp(
-        themedHost(
-          MediaQuery(
-            data: const MediaQueryData(textScaler: TextScaler.linear(2)),
-            child: _Harness(load: (_) async => []),
+    for (final direction in TextDirection.values) {
+      testWidgets('mirrors in $direction and holds at text scale 2', (
+        tester,
+      ) async {
+        await tester.pumpApp(
+          themedHost(
+            MediaQuery(
+              data: const MediaQueryData(textScaler: TextScaler.linear(2)),
+              child: PagedList<String>(
+                items: _items(3),
+                itemBuilder: (context, item, index) => Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(item),
+                ),
+                hasMore: true,
+                onLoadMore: () async {},
+              ),
+            ),
+            direction: direction,
           ),
-          direction: TextDirection.rtl,
-        ),
-      );
-      expect(tester.takeException(), isNull);
-      expect(showMore, findsOneWidget);
-    });
+        );
+        expect(tester.takeException(), isNull);
+        expect(showMore, findsOneWidget);
+        final width = tester.getSize(find.byType(Scaffold)).width;
+        final text = tester.getRect(find.text('Item 0'));
+        if (direction == TextDirection.rtl) {
+          expect(text.right, greaterThan(width - 40));
+        } else {
+          expect(text.left, lessThan(40));
+        }
+      });
+    }
 
     for (final platform in [TargetPlatform.android, TargetPlatform.macOS]) {
       testWidgets('the Show more button is 48 dp on $platform', (tester) async {
