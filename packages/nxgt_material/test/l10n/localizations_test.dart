@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/l10n.dart';
+import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations_en.dart';
 
 class _Reworded extends NxgtMaterialLocalizationsWrapper {
   new(super.base);
@@ -121,6 +122,12 @@ void main() {
     expect(second.actionsRetry, 'Try again');
   });
 
+  test('the wrapper forwards the plural displayCount', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.displayCount(1), '1 item');
+    expect(wrapper.displayCount(3), '3 items');
+  });
+
   test('the delegate reloads only when the override changes', () {
     const a = NxgtMaterialLocalizationsDelegate();
     expect(a.shouldReload(const NxgtMaterialLocalizationsDelegate()), isFalse);
@@ -150,4 +157,5 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.layoutOpenNavigation,
   s.layoutCloseNavigation,
   s.layoutNavigation,
+  s.displayCount(2),
 ];

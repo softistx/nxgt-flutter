@@ -1,3 +1,7 @@
+## Unreleased
+
+- `display.dart`: `StatusIndicator` (a dot or the tone icon and a label in AA tone colours from `FeedbackTone`, the tone spoken first) and `CountBadge` (a count on `Badge.count`: `99+` above `max`, hidden at 0, spoken with a plural label; asserts a negative count and a non-positive `max`). New string `displayCount` in fr and en.
+
 ## 0.1.0
 
 First release.

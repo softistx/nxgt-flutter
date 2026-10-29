@@ -246,6 +246,31 @@ Pages: [EmptyState](doc/components/empty_state.md),
 [InlineAlert](doc/components/inline_alert.md),
 [Toast](doc/components/toast.md).
 
+## Display
+
+`package:nxgt_material/display.dart`.
+
+| Component | What it adds |
+| --- | --- |
+| `StatusIndicator` | A dot (or the tone's icon) and a label in AA tone colours; the tone is spoken first |
+| `CountBadge` | A count on a corner on `Badge.count`: `99+` above `max`, hidden at 0, localized plural label |
+
+```dart
+import 'package:nxgt_material/display.dart';
+import 'package:nxgt_material/feedback.dart';
+
+const StatusIndicator(label: 'Paid', tone: FeedbackTone.success)
+
+CountBadge(
+  count: unread,
+  semanticLabel: 'Inbox',
+  child: const Icon(Icons.mail_outline),
+)
+```
+
+Pages: [StatusIndicator](doc/components/status_indicator.md),
+[CountBadge](doc/components/count_badge.md).
+
 ## Layout
 
 `package:nxgt_material/layout.dart`. Built on Flutter's `NavigationBar`,
@@ -350,6 +375,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [AsyncButton](doc/components/async_button.md),
   [AsyncView](doc/components/async_view.md),
   [CopyButton](doc/components/copy_button.md),
+  [CountBadge](doc/components/count_badge.md),
   [EmailField](doc/components/email_field.md),
   [EmptyState](doc/components/empty_state.md),
   [ErrorState](doc/components/error_state.md),
@@ -364,6 +390,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [PhoneField](doc/components/phone_field.md),
   [ResponsiveGrid](doc/components/responsive_grid.md),
   [SplitButton](doc/components/split_button.md),
+  [StatusIndicator](doc/components/status_indicator.md),
   [SubmitButton](doc/components/submit_button.md),
   [TextAreaField](doc/components/text_area_field.md),
   [Toast](doc/components/toast.md),

@@ -79,4 +79,6 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   String get layoutCloseNavigation => base.layoutCloseNavigation;
   @override
   String get layoutNavigation => base.layoutNavigation;
+  @override
+  String displayCount(int count) => base.displayCount(count);
 }

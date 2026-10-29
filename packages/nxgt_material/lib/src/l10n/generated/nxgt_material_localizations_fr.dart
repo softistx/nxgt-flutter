@@ -113,4 +113,15 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
 
   @override
   String get layoutNavigation => 'Navigation';
+
+  @override
+  String displayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count éléments',
+      one: '1 élément',
+    );
+    return '$_temp0';
+  }
 }
