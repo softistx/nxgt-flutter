@@ -77,5 +77,11 @@
   "actionsCancel": "Cancel",
   "@actionsCancel": {"description": "Label of the button that dismisses a dialog without doing its action."},
   "actionsConfirm": "Confirm",
-  "@actionsConfirm": {"description": "Default label of the button that accepts a confirmation dialog."}
+  "@actionsConfirm": {"description": "Default label of the button that accepts a confirmation dialog."},
+  "overlaysDiscardTitle": "Discard changes?",
+  "@overlaysDiscardTitle": {"description": "Title of the dialog that asks whether to close a form dialog that has unsaved changes."},
+  "overlaysDiscardMessage": "Your changes have not been saved. If you close now, they are lost.",
+  "@overlaysDiscardMessage": {"description": "Message of the dialog that asks whether to close a form dialog that has unsaved changes."},
+  "overlaysDiscardConfirm": "Discard",
+  "@overlaysDiscardConfirm": {"description": "Label of the button that closes a form dialog and loses its unsaved changes."}
 }

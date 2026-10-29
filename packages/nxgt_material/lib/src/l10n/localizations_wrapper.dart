@@ -42,6 +42,12 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String get actionsConfirm => base.actionsConfirm;
   @override
+  String get overlaysDiscardTitle => base.overlaysDiscardTitle;
+  @override
+  String get overlaysDiscardMessage => base.overlaysDiscardMessage;
+  @override
+  String get overlaysDiscardConfirm => base.overlaysDiscardConfirm;
+  @override
   String get fieldsRequired => base.fieldsRequired;
   @override
   String get fieldsInvalidEmail => base.fieldsInvalidEmail;

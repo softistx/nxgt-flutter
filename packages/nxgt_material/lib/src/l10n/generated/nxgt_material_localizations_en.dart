@@ -156,4 +156,14 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
 
   @override
   String get actionsConfirm => 'Confirm';
+
+  @override
+  String get overlaysDiscardTitle => 'Discard changes?';
+
+  @override
+  String get overlaysDiscardMessage =>
+      'Your changes have not been saved. If you close now, they are lost.';
+
+  @override
+  String get overlaysDiscardConfirm => 'Discard';
 }

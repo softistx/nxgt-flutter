@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/layout/window_size.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 import 'package:nxgt_material/src/theme/tone_colors.dart';
 
@@ -43,8 +44,6 @@ const _inlineMaxTextScale = 1.5;
 const _textFlex = 3;
 const _actionsFlex = 2;
 
-const _minTarget = Size.square(48);
-
 /// The error tone while enabled; `null` when disabled, so the theme's
 /// disabled look applies.
 WidgetStateProperty<Color?> _whenEnabled(Color color) =>
@@ -53,7 +52,7 @@ WidgetStateProperty<Color?> _whenEnabled(Color color) =>
     );
 
 ButtonStyle _actionStyle(EntityAction action, ToneColors error) => ButtonStyle(
-  minimumSize: const WidgetStatePropertyAll(_minTarget),
+  minimumSize: const WidgetStatePropertyAll(minTarget),
   tapTargetSize: MaterialTapTargetSize.padded,
   visualDensity: VisualDensity.standard,
   backgroundColor: action.destructive ? _whenEnabled(error.container) : null,
@@ -201,7 +200,7 @@ class EntityHeader extends StatelessWidget {
         onPressed: () =>
             controller.isOpen ? controller.close() : controller.open(),
         style: IconButton.styleFrom(
-          minimumSize: _minTarget,
+          minimumSize: minTarget,
           tapTargetSize: MaterialTapTargetSize.padded,
           visualDensity: VisualDensity.standard,
         ),

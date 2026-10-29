@@ -334,6 +334,24 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Confirm'**
   String get actionsConfirm;
+
+  /// Title of the dialog that asks whether to close a form dialog that has unsaved changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get overlaysDiscardTitle;
+
+  /// Message of the dialog that asks whether to close a form dialog that has unsaved changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Your changes have not been saved. If you close now, they are lost.'**
+  String get overlaysDiscardMessage;
+
+  /// Label of the button that closes a form dialog and loses its unsaved changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get overlaysDiscardConfirm;
 }
 
 class _NxgtMaterialLocalizationsDelegate

@@ -156,4 +156,14 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
 
   @override
   String get actionsConfirm => 'Confirmer';
+
+  @override
+  String get overlaysDiscardTitle => 'Abandonner les modifications ?';
+
+  @override
+  String get overlaysDiscardMessage =>
+      'Vos modifications n\'ont pas été enregistrées. Si vous fermez maintenant, elles seront perdues.';
+
+  @override
+  String get overlaysDiscardConfirm => 'Abandonner';
 }

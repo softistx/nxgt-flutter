@@ -34,7 +34,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `forms.dart` | Form scaffolding: sections, validation summary, submit bar |
 | `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
-| `overlays.dart` | Dialogs and sheets: `ConfirmDialog` and `context.confirm`, `AdaptiveSheet` and `context.showAdaptiveSheet` |
+| `overlays.dart` | Dialogs and sheets: `ConfirmDialog` and `context.confirm`, `AdaptiveSheet` and `context.showAdaptiveSheet`, `FormDialog` and `context.showFormDialog` |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
 ## Theme
@@ -303,6 +303,7 @@ Pages: [StatusIndicator](doc/components/status_indicator.md),
 | --- | --- |
 | `ConfirmDialog` / `context.confirm` | A confirmation dialog at every window size that answers `true` or `false`; an async `onConfirm` with a busy state, a `destructive` error-tone action, 48 dp targets |
 | `AdaptiveSheet` / `context.showAdaptiveSheet` | A modal sheet chosen by window size (not platform): a bottom sheet on compact with a drag handle and keyboard inset, a side sheet on the end edge from medium up; returns the popped value or `null`; semantics header, 48 dp close button |
+| `FormDialog` / `context.showFormDialog` | A form in a dialog: full-screen with an app bar on compact, a dialog up to 560 dp from medium up; wires a `Form` and a `SubmitButton` (validates, busy, locked while it runs), pops the value `onSubmit` returns, asks "Discard changes?" when closed after an edit; 48 dp targets |
 
 ```dart
 import 'package:nxgt_material/overlays.dart';
@@ -323,8 +324,18 @@ final color = await context.showAdaptiveSheet<Color>(
 );
 ```
 
+```dart
+final invoice = await context.showFormDialog<Invoice>(
+  title: 'New invoice',
+  submitLabel: 'Create',
+  builder: (context) => InvoiceFields(controller: controller),
+  onSubmit: () => repository.create(controller.draft),
+);
+```
+
 Pages: [AdaptiveSheet](doc/components/adaptive_sheet.md),
-[ConfirmDialog](doc/components/confirm_dialog.md).
+[ConfirmDialog](doc/components/confirm_dialog.md),
+[FormDialog](doc/components/form_dialog.md).
 
 ## Layout
 
@@ -436,6 +447,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [EmailField](doc/components/email_field.md),
   [EmptyState](doc/components/empty_state.md),
   [ErrorState](doc/components/error_state.md),
+  [FormDialog](doc/components/form_dialog.md),
   [FormSection](doc/components/form_section.md),
   [InlineAlert](doc/components/inline_alert.md),
   [ListDetailLayout](doc/components/list_detail_layout.md),

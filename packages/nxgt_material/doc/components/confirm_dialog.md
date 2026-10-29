@@ -10,8 +10,8 @@ A dialog that asks the user to confirm an action, shown with
 Before an action that is hard to undo or that the user may have triggered by
 mistake: deleting a record, leaving with unsaved changes, sending to many
 people. For a message that needs no answer use `context.showToast` or an
-`InlineAlert`; for a form in a dialog use Flutter's `AlertDialog` or
-`showDialog` directly. It is a dialog at every window size (no bottom sheet on
+`InlineAlert`; for a form in a dialog use `context.showFormDialog`; for other
+content use `showDialog` directly. It is a dialog at every window size (no bottom sheet on
 compact), built on Material 3's `AlertDialog`.
 
 ## Example

@@ -329,3 +329,23 @@ final result = await context.showAdaptiveSheet<String>(
   builder: (context) => const FilterForm(),
 );
 ```
+
+## FormDialog.title must not be empty.
+
+**When:** in a debug build, `context.showFormDialog` (or a `FormDialog`) is
+given an empty `title`.
+
+**Why:** the title is the heading of the dialog and the name of its route for a
+screen reader. A release build does not assert: the dialog is shown with an
+empty header text and no route name, and the close and submit actions still
+work.
+
+**Fix:** give the dialog a title that says what it is for.
+
+```dart
+final invoice = await context.showFormDialog<Invoice>(
+  title: 'New invoice',
+  builder: (context) => const InvoiceFields(),
+  onSubmit: () => repository.create(draft),
+);
+```
