@@ -13,7 +13,7 @@
   "actionsCopied": "Copied",
   "@actionsCopied": {"description": "Label of the copy button after the value was copied, and what a screen reader announces."},
   "actionsMoreOptions": "More options",
-  "@actionsMoreOptions": {"description": "Tooltip and screen reader label of the arrow button of a split button that opens its menu."},
+  "@actionsMoreOptions": {"description": "Tooltip and screen reader label of a button that opens an overflow menu (split button arrow, entity header)."},
   "fieldsRequired": "This field is required",
   "@fieldsRequired": {"description": "Error shown under a required field that is empty."},
   "fieldsInvalidEmail": "Enter a valid email address",

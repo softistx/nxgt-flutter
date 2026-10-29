@@ -137,7 +137,7 @@ abstract class NxgtMaterialLocalizations {
   /// **'Copied'**
   String get actionsCopied;
 
-  /// Tooltip and screen reader label of the arrow button of a split button that opens its menu.
+  /// Tooltip and screen reader label of a button that opens an overflow menu (split button arrow, entity header).
   ///
   /// In en, this message translates to:
   /// **'More options'**

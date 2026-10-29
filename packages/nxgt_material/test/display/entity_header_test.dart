@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/display.dart';
@@ -151,7 +152,7 @@ void main() {
       final plain = tester.widget<OutlinedButton>(
         find.widgetWithText(OutlinedButton, 'Edit'),
       );
-      expect(plain.style, isNull);
+      expect(plain.style?.foregroundColor, isNull);
     });
 
     testWidgets('folds into the menu above 1.5x text', (tester) async {
@@ -202,5 +203,79 @@ void main() {
 
     final item = tester.widget<MenuItemButton>(find.byType(MenuItemButton));
     expect(item.onPressed, isNull);
+  });
+
+  group('disabled destructive action', () {
+    const off = EntityAction(
+      label: 'Delete',
+      destructive: true,
+      onPressed: null,
+    );
+
+    testWidgets('inline button has no error colours', (tester) async {
+      await _pump(
+        tester,
+        const EntityHeader(title: 'Ada', actions: [off]),
+        width: 640,
+      );
+
+      final style = tester
+          .widget<OutlinedButton>(find.widgetWithText(OutlinedButton, 'Delete'))
+          .style!;
+      expect(style.foregroundColor?.resolve({WidgetState.disabled}), isNull);
+      expect(style.backgroundColor?.resolve({WidgetState.disabled}), isNull);
+      expect(style.iconColor?.resolve({WidgetState.disabled}), isNull);
+      expect(style.foregroundColor?.resolve({}), isNotNull);
+    });
+
+    testWidgets('menu item has no error colours', (tester) async {
+      await _pump(tester, const EntityHeader(title: 'Ada', actions: [off]));
+      await tester.tap(find.byTooltip('More options'));
+      await tester.pumpAndSettle();
+
+      final style = tester
+          .widget<MenuItemButton>(find.byType(MenuItemButton))
+          .style!;
+      expect(style.foregroundColor?.resolve({WidgetState.disabled}), isNull);
+      expect(style.backgroundColor?.resolve({WidgetState.disabled}), isNull);
+    });
+  });
+
+  testWidgets('keeps 48 dp targets on macOS', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    final handle = tester.ensureSemantics();
+
+    await _pump(tester, header());
+    final menu = tester.getSemantics(find.byTooltip('More options')).rect;
+    expect(menu.height, greaterThanOrEqualTo(48));
+    expect(menu.width, greaterThanOrEqualTo(48));
+
+    await _pump(tester, header(), width: 640);
+    for (final label in ['Edit', 'Delete']) {
+      final rect = tester.getRect(find.widgetWithText(OutlinedButton, label));
+      expect(rect.height, greaterThanOrEqualTo(48));
+    }
+    handle.dispose();
+    debugDefaultTargetPlatformOverride = null;
+  });
+
+  testWidgets('six actions at 640 dp do not overflow', (tester) async {
+    await _pump(
+      tester,
+      EntityHeader(
+        title: 'Ada Lovelace',
+        actions: [
+          for (var i = 0; i < 6; i++)
+            EntityAction(
+              label: 'Action number $i',
+              icon: Icons.edit,
+              onPressed: () {},
+            ),
+        ],
+      ),
+      width: 640,
+    );
+
+    expect(tester.takeException(), isNull);
   });
 }

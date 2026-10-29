@@ -38,6 +38,8 @@ EntityHeader(
 - On compact, or when the text scale is above 1.5 (buttons would crowd the
   title), they fold into a `MenuAnchor` opened by a "More options" icon button
   (string `actionsMoreOptions`).
+- The buttons share at most half the header's width and wrap; a single label
+  wider than that clips.
 - A long title or subtitle wraps; nothing overflows at a 2x text scale.
 - A `destructive` action uses the error tone (container and on-container
   colours, AA contrast) in both forms.

@@ -38,14 +38,26 @@ class EntityAction {
 /// window size, because buttons would not fit beside the title.
 const _inlineMaxTextScale = 1.5;
 
-ButtonStyle? _destructiveStyle(ToneColors error) => ButtonStyle(
-  backgroundColor: WidgetStatePropertyAll(error.container),
-  foregroundColor: WidgetStatePropertyAll(error.onContainer),
-  iconColor: WidgetStatePropertyAll(error.onContainer),
+const _minTarget = Size.square(48);
+
+/// The error tone while enabled; `null` when disabled, so the theme's
+/// disabled look applies.
+WidgetStateProperty<Color?> _whenEnabled(Color color) =>
+    WidgetStateProperty.resolveWith(
+      (states) => states.contains(WidgetState.disabled) ? null : color,
+    );
+
+ButtonStyle _actionStyle(EntityAction action, ToneColors error) => ButtonStyle(
+  minimumSize: const WidgetStatePropertyAll(_minTarget),
+  tapTargetSize: MaterialTapTargetSize.padded,
+  visualDensity: VisualDensity.standard,
+  backgroundColor: action.destructive ? _whenEnabled(error.container) : null,
+  foregroundColor: action.destructive ? _whenEnabled(error.onContainer) : null,
+  iconColor: action.destructive ? _whenEnabled(error.onContainer) : null,
 );
 
 Widget _actionButton(EntityAction action, ToneColors error) {
-  final style = action.destructive ? _destructiveStyle(error) : null;
+  final style = _actionStyle(action, error);
   final icon = action.icon;
   final label = Text(action.label);
   if (icon == null) {
@@ -66,7 +78,7 @@ Widget _actionButton(EntityAction action, ToneColors error) {
 Widget _menuItem(EntityAction action, ToneColors error) => MenuItemButton(
   onPressed: action.onPressed,
   leadingIcon: action.icon == null ? null : Icon(action.icon),
-  style: action.destructive ? _destructiveStyle(error) : null,
+  style: _actionStyle(action, error),
   child: Text(action.label),
 );
 
@@ -192,6 +204,11 @@ class EntityHeader extends StatelessWidget {
         tooltip: tooltip,
         onPressed: () =>
             controller.isOpen ? controller.close() : controller.open(),
+        style: IconButton.styleFrom(
+          minimumSize: _minTarget,
+          tapTargetSize: MaterialTapTargetSize.padded,
+          visualDensity: VisualDensity.standard,
+        ),
         icon: const Icon(Icons.more_vert),
       ),
     );
