@@ -53,6 +53,9 @@ Future<void> _open(
   TextDirection? direction,
   double scale = 1,
   double keyboard = 0,
+  bool reduceMotion = false,
+  EdgeInsets padding = EdgeInsets.zero,
+  bool settle = true,
   Locale locale = const Locale('en'),
 }) async {
   tester.view
@@ -61,6 +64,12 @@ Future<void> _open(
   addTearDown(tester.view.reset);
   _node = FocusNode();
   addTearDown(_node.dispose);
+  tester.view.padding = FakeViewPadding(
+    left: padding.left,
+    top: padding.top,
+    right: padding.right,
+    bottom: padding.bottom,
+  );
   tester.view.viewInsets = FakeViewPadding(bottom: keyboard);
   tester.platformDispatcher.textScaleFactorTestValue = scale;
   addTearDown(tester.platformDispatcher.clearAllTestValues);
@@ -69,11 +78,23 @@ Future<void> _open(
       _Opener(onResult: onResult ?? (_) {}, focusNode: _node, content: content),
       locale: locale,
       direction: direction,
+      disableAnimations: reduceMotion,
     ),
   );
   await tester.tap(find.text('Open'));
-  await tester.pumpAndSettle();
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump();
+  }
 }
+
+/// The Material 3 drag handle: a 32 x 4 bar.
+final _handle = find.byWidgetPredicate(
+  (w) =>
+      w is Container &&
+      w.constraints == const BoxConstraints.tightFor(width: 32, height: 4),
+);
 
 void main() {
   group('layout', () {
@@ -81,12 +102,7 @@ void main() {
       await _open(tester);
 
       expect(find.byType(BottomSheet), findsOneWidget);
-      expect(
-        find.byWidgetPredicate(
-          (w) => w.runtimeType.toString() == '_DragHandle',
-        ),
-        findsOneWidget,
-      );
+      expect(_handle, findsOneWidget);
       final sheet = tester.getRect(find.byType(BottomSheet));
       expect(sheet.bottom, 800);
       expect(sheet.height, lessThanOrEqualTo(800 * 0.9));
@@ -130,6 +146,64 @@ void main() {
       expect(sheet.left, 0);
       expect(sheet.width, 400);
     });
+  });
+
+  group('medium insets', () {
+    testWidgets('respect the safe area (top 40, end 30)', (tester) async {
+      await _open(
+        tester,
+        size: _medium,
+        padding: const EdgeInsets.only(top: 40, right: 30),
+      );
+
+      final close = tester.getRect(find.byType(IconButton));
+      expect(close.top, greaterThanOrEqualTo(40));
+      expect(close.right, lessThanOrEqualTo(900 - 30));
+    });
+
+    testWidgets('stay above a 300 dp keyboard', (tester) async {
+      await _open(tester, size: _medium, keyboard: 300);
+
+      expect(
+        tester.getRect(find.text('Apply')).bottom,
+        lessThanOrEqualTo(800 - 300),
+      );
+    });
+  });
+
+  group('reduced motion', () {
+    for (final size in const [_compact, _medium]) {
+      testWidgets('the sheet is in place after one pump at ${size.width} dp', (
+        tester,
+      ) async {
+        await _open(tester, size: size, reduceMotion: true, settle: false);
+        await tester.pump();
+
+        final rect = tester.getRect(find.byType(AdaptiveSheet));
+        expect(rect.bottom, lessThanOrEqualTo(800));
+        expect(rect.right, lessThanOrEqualTo(size.width));
+        expect(rect.top, lessThan(800));
+        if (size == _medium) expect(rect.right, 900);
+      });
+    }
+  });
+
+  group('route semantics', () {
+    for (final size in const [_compact, _medium]) {
+      testWidgets('exactly one namesRoute node at ${size.width} dp', (
+        tester,
+      ) async {
+        final handle = tester.ensureSemantics();
+        await _open(tester, size: size);
+
+        final named = find.semantics
+            .byPredicate((n) => n.flagsCollection.namesRoute)
+            .evaluate();
+        expect(named, hasLength(1));
+        expect(find.bySemanticsLabel('Filters'), findsWidgets);
+        handle.dispose();
+      });
+    }
   });
 
   group('result', () {

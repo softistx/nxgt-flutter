@@ -74,8 +74,7 @@ const _closeStyle = ButtonStyle(
   visualDensity: VisualDensity.standard,
 );
 
-/// The sheet in the route: names the route and keeps the content clear of the
-/// keyboard.
+/// The sheet in the route: keeps the content clear of the keyboard.
 class _SheetBody extends StatelessWidget {
   const new({required this.title, required this.builder});
 
@@ -84,19 +83,11 @@ class _SheetBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      scopesRoute: true,
-      namesRoute: true,
-      label: title,
-      explicitChildNodes: true,
-      child: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.viewInsetsOf(context).bottom,
-        ),
-        child: AdaptiveSheet(
-          title: title,
-          child: Builder(builder: builder),
-        ),
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: AdaptiveSheet(
+        title: title,
+        child: Builder(builder: builder),
       ),
     );
   }
@@ -134,8 +125,12 @@ extension AdaptiveSheetContext on BuildContext {
     required WidgetBuilder builder,
   }) {
     final body = _SheetBody(title: title, builder: builder);
+    final reduceMotion = MediaQuery.disableAnimationsOf(this);
     if (windowSize == WindowSize.compact) {
+      // Flutter's route already scopes and names itself (generically); the
+      // title is reachable as the header.
       return showModalBottomSheet<T>(
+        sheetAnimationStyle: reduceMotion ? AnimationStyle.noAnimation : null,
         context: this,
         isScrollControlled: true,
         useSafeArea: true,
@@ -152,8 +147,10 @@ extension AdaptiveSheetContext on BuildContext {
       context: this,
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(this).modalBarrierDismissLabel,
-      barrierColor: Colors.black54,
-      transitionDuration: const Duration(milliseconds: 250),
+      barrierColor: theme.bottomSheetTheme.modalBarrierColor ?? Colors.black54,
+      transitionDuration: reduceMotion
+          ? Duration.zero
+          : const Duration(milliseconds: 250),
       pageBuilder: (context, _, _) => Theme(
         data: theme,
         child: Align(
@@ -161,15 +158,22 @@ extension AdaptiveSheetContext on BuildContext {
           child: SizedBox(
             width: width < _sideSheetWidth ? width : _sideSheetWidth,
             height: double.infinity,
-            child: Material(
-              color: theme.colorScheme.surfaceContainerLow,
-              elevation: 1,
-              child: SafeArea(child: body),
+            child: Semantics(
+              scopesRoute: true,
+              namesRoute: true,
+              label: title,
+              explicitChildNodes: true,
+              child: Material(
+                color: theme.colorScheme.surfaceContainerLow,
+                elevation: 1,
+                child: SafeArea(child: body),
+              ),
             ),
           ),
         ),
       ),
       transitionBuilder: (context, animation, _, child) {
+        if (reduceMotion) return child;
         final rtl = Directionality.of(context) == TextDirection.rtl;
         return SlideTransition(
           position: Tween(
