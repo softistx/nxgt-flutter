@@ -41,6 +41,11 @@ void main() {
         'http://sub.example.co.uk/path?q=1#frag',
         'https://example.com:8080/a',
         'HTTP://Example.COM',
+        'HTTPS://EXAMPLE.COM',
+        'example.com:8080',
+        'https://bücher.de',
+        '例え.jp',
+        'xn--bcher-kva.de',
         '  example.com  ',
         '',
         '   ',
@@ -59,6 +64,14 @@ void main() {
         '-a.com',
         'http://exa mple.com',
         'mailto:a@b.co',
+        'example.com.',
+        'user:pw@example.com',
+        '192.168.1.1',
+        '1.2.3.999',
+        'http://[::1]',
+        'localhost:3000',
+        'example.com:0',
+        'example.com:99999',
       ]) {
         expect(v.url()(bad), 'Enter a valid web address', reason: bad);
       }

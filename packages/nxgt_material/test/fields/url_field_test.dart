@@ -41,6 +41,7 @@ void main() {
       '  example.com/a?q=1  ': 'https://example.com/a?q=1',
       'https://example.com': 'https://example.com',
       'http://example.com/path': 'http://example.com/path',
+      'HTTP://Example.COM': 'HTTP://Example.COM',
       'HTTPS://Example.com': 'HTTPS://Example.com',
       'ftp://x.com': null,
       'localhost': null,

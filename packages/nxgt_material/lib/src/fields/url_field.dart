@@ -7,8 +7,10 @@ import 'package:nxgt_material/src/fields/validators.dart';
 ///
 /// Opens the URL keyboard, offers the saved addresses to autofill, never
 /// capitalizes or autocorrects, and rejects anything but an http or https
-/// address with a localized message. The scheme is optional while typing: the
-/// field keeps the text as typed, and [normalize] turns it into a full URL.
+/// address with a localized message. The scheme is optional while typing.
+/// Hosts are domain names, including international ones (no bare IP,
+/// `localhost` or credentials). The field keeps the text as typed, and
+/// [normalize] turns it into a full URL.
 class UrlField extends TextFieldBase {
   /// Creates a UrlField.
   const new({

@@ -6,7 +6,7 @@ A text field for a web address, built on `TextFormField`.
 
 ## When to use it
 
-Whenever the value is an http or https address: it sets the URL keyboard, the `url` autofill hint, no capitalization, no autocorrect, the `next` action and the localized validation. The scheme is optional, so `example.com` is valid. The field keeps the text as typed; call `UrlField.normalize` on the value you save. For other text use `TextFormField`.
+Whenever the value is an http or https address: it sets the URL keyboard, the `url` autofill hint, no capitalization, no autocorrect, the `next` action and the localized validation. The scheme is optional, so `example.com` is valid. Hosts must be domain names, including international ones (`bücher.de`); a bare IP address, `localhost` and credentials (`user:pw@host`) are rejected. The field keeps the text as typed; call `UrlField.normalize` on the value you save. For other text use `TextFormField`.
 
 ## Example
 

@@ -55,7 +55,8 @@ class Validators {
   /// Fails when a non-empty value is not an http or https web address.
   ///
   /// The scheme is optional (`example.com` passes) and the host needs a dot
-  /// (`localhost` fails). Other schemes such as `ftp://` fail.
+  /// (`localhost` fails). Hosts are domain names, international ones included;
+  /// a bare IP address, credentials and a port outside 1 to 65535 fail. Other schemes such as `ftp://` fail.
   FormFieldValidator<String> url() => (value) {
     final text = value?.trim() ?? '';
     return text.isEmpty || isWebUrl(text) ? null : l10n.fieldsInvalidUrl;
