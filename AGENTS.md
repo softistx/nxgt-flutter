@@ -13,6 +13,7 @@ apps/widgetbook/          Widgetbook catalogue (not published; GitHub Pages)
 bricks/                   Mason bricks: package, component
 tool/                     Dart scripts used by Melos scripts
 .github/workflows/        ci.yml, release.yml, pages.yml
+.github/dependabot.yml    weekly grouped pub and GitHub Actions updates into develop
 ```
 
 Root `pubspec.yaml` holds the `workspace:` list and the `melos:` config. Each
