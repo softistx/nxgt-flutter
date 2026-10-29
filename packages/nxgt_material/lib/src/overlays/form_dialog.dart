@@ -57,7 +57,9 @@ class FormDialog<T> extends StatefulWidget {
 
   /// Whether to draw the full-screen layout (a `Scaffold` with an app bar)
   /// instead of the dialog. `context.showFormDialog` sets it from the window
-  /// size when the dialog opens. The full-screen layout needs a bounded
+  /// size when the dialog opens. Prefer `context.showFormDialog`, which picks
+  /// the layout from the window size; this flag exists to place each layout
+  /// directly (catalogue, goldens). The full-screen layout needs a bounded
   /// height.
   final bool fullscreen;
 
@@ -73,6 +75,29 @@ class _FormDialogState<T> extends State<FormDialog<T>> {
   bool _busy = false;
 
   bool _asking = false;
+
+  /// Takes the focus when no field did, so Escape reaches the guard above.
+  final _focus = FocusNode(debugLabel: 'FormDialog');
+
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.fullscreen) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // A field's `autofocus` is applied in a microtask after the frame.
+      scheduleMicrotask(() {
+        if (!mounted) return;
+        // A field with `autofocus` has the focus; leave it there.
+        if (FocusScope.of(context).focusedChild == null) _focus.requestFocus();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focus.dispose();
+    super.dispose();
+  }
 
   void _changed() {
     if (!_dirty) setState(() => _dirty = true);
@@ -96,13 +121,17 @@ class _FormDialogState<T> extends State<FormDialog<T>> {
     if (_asking || _busy) return;
     _asking = true;
     final l10n = context.materialL10n;
-    final discard = await context.confirm(
-      title: l10n.overlaysDiscardTitle,
-      message: l10n.overlaysDiscardMessage,
-      confirmLabel: l10n.overlaysDiscardConfirm,
-      destructive: true,
-    );
-    _asking = false;
+    final bool discard;
+    try {
+      discard = await context.confirm(
+        title: l10n.overlaysDiscardTitle,
+        message: l10n.overlaysDiscardMessage,
+        confirmLabel: l10n.overlaysDiscardConfirm,
+        destructive: true,
+      );
+    } finally {
+      _asking = false;
+    }
     if (!discard || !mounted) return;
     setState(() => _busy = true);
     Navigator.of(context).pop();
@@ -195,9 +224,8 @@ class _FormDialogState<T> extends State<FormDialog<T>> {
       ),
       body: _guard(
         fullscreen: true,
-        // Focus starts inside the dialog so Escape reaches the guard above.
         child: Focus(
-          autofocus: true,
+          focusNode: _focus,
           skipTraversal: true,
           child: SafeArea(
             top: false,

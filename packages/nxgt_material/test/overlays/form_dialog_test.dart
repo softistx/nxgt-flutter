@@ -379,6 +379,51 @@ void main() {
       expect(_discardTitle, findsNothing);
     });
 
+    testWidgets('Escape twice shows exactly one discard dialog', (
+      tester,
+    ) async {
+      await _open(tester, size: _compact);
+      await _type(tester);
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.pumpAndSettle();
+
+      // The second Escape reached the open question, not the form.
+      expect(find.text('Discard changes?'), findsNothing);
+      expect(find.text('New invoice'), findsOneWidget);
+    });
+
+    testWidgets('the form is locked while it closes after Discard', (
+      tester,
+    ) async {
+      await _open(tester);
+      await _type(tester);
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Discard'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      // The question is leaving; the form dialog beneath is still locked.
+      final form = find.byType(AlertDialog).first;
+      expect(
+        tester
+            .widget<TextButton>(
+              find.descendant(
+                of: form,
+                matching: find.widgetWithText(TextButton, 'Cancel'),
+              ),
+            )
+            .onPressed,
+        isNull,
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('New invoice'), findsNothing);
+    });
+
     testWidgets('the discard question is destructive', (tester) async {
       await _open(tester);
       await _type(tester);
@@ -557,6 +602,37 @@ void main() {
         await tester.pump();
         expect(find.text('New invoice'), findsNothing);
       }
+    });
+  });
+
+  group('focus inside', () {
+    testWidgets('a field with autofocus keeps the focus at compact', (
+      tester,
+    ) async {
+      tester.view
+        ..physicalSize = _compact
+        ..devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpApp(
+        themedHost(
+          Builder(
+            builder: (context) => TextButton(
+              onPressed: () => context.showFormDialog<void>(
+                title: 'New invoice',
+                builder: (_) =>
+                    TextFormField(key: const Key('auto'), autofocus: true),
+                onSubmit: () async {},
+              ),
+              child: const Text('Open'),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      final focused = FocusManager.instance.primaryFocus!.context!;
+      expect(focused.findAncestorWidgetOfExactType<EditableText>(), isNotNull);
     });
   });
 
