@@ -22,6 +22,11 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
   String get actionsCopy => 'Copier';
 
   @override
+  String actionsCopyItem(String label) {
+    return 'Copier « $label »';
+  }
+
+  @override
   String get actionsCopied => 'Copié';
 
   @override

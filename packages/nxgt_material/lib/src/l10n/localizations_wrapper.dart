@@ -32,6 +32,8 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String get actionsCopy => base.actionsCopy;
   @override
+  String actionsCopyItem(String label) => base.actionsCopyItem(label);
+  @override
   String get actionsCopied => base.actionsCopied;
   @override
   String get actionsMoreOptions => base.actionsMoreOptions;

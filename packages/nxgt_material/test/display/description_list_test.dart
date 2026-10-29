@@ -44,8 +44,34 @@ void main() {
 
       final label = tester.getTopLeft(find.text('Customer'));
       final value = tester.getTopLeft(find.text('Ada Lovelace'));
-      expect(value.dy, label.dy);
+      expect((value.dy - label.dy).abs(), lessThan(8)); // baseline-aligned
       expect(value.dx, greaterThan(label.dx));
+    });
+
+    testWidgets('keeps long text readable at twice the text size', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        MediaQuery(
+          data: const MediaQueryData(
+            size: Size(600, 800),
+            textScaler: TextScaler.linear(2),
+          ),
+          child: DescriptionList(
+            items: [
+              DescriptionItem(
+                label: 'L' * 60,
+                value: 'V' * 120,
+                copyable: true,
+              ),
+            ],
+          ),
+        ),
+        width: 600,
+      );
+
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('draws nothing for an empty list', (tester) async {
@@ -106,7 +132,7 @@ void main() {
         ),
       );
 
-      expect(find.bySemanticsLabel('Copier Invoice'), findsOneWidget);
+      expect(find.bySemanticsLabel('Copier « Invoice »'), findsOneWidget);
       handle.dispose();
     });
 

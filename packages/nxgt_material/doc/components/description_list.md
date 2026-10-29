@@ -36,8 +36,8 @@ choice follows `context.windowSize`, so it tracks the window, not the parent.
 
 Each row is one node read as "label, value" ("Invoice, INV-2026-0042"), rows
 in the order of `items`. Labels are not headings. A copyable row also has its
-own button, labelled with the item ("Copy Invoice", "Copier Invoice" in
-French; the word comes from `actionsCopy`, rewordable through
+own button, labelled with the item ("Copy Invoice", "Copier « Invoice »" in
+French; the string `actionsCopyItem`, rewordable through
 `NxgtMaterialLocalizationsWrapper`). Alignment and spacing follow the text
 direction.
 

@@ -136,6 +136,11 @@ void main() {
     expect(wrapper.displayPresenceOffline, 'Offline');
   });
 
+  test('the wrapper forwards actionsCopyItem', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.actionsCopyItem('Invoice'), 'Copy Invoice');
+  });
+
   test('the wrapper forwards the trend strings', () {
     final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
     expect(wrapper.displayTrendUp, 'up');
@@ -172,6 +177,7 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.layoutOpenNavigation,
   s.layoutCloseNavigation,
   s.layoutNavigation,
+  s.actionsCopyItem('x'),
   s.displayCount(2),
   s.displayTrendUp,
   s.displayTrendDown,

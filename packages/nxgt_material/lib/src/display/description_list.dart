@@ -38,7 +38,7 @@ class DescriptionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sideBySide = context.windowSize.isAtLeast(WindowSize.medium);
+    final sideBySide = _sideBySide(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -49,6 +49,12 @@ class DescriptionList extends StatelessWidget {
     );
   }
 
+  /// Medium window and up, unless the text is scaled past 1.5: the fixed label
+  /// column would then leave the value too little width.
+  bool _sideBySide(BuildContext context) =>
+      context.windowSize.isAtLeast(WindowSize.medium) &&
+      MediaQuery.textScalerOf(context).scale(16) <= 24;
+
   Widget _row(
     BuildContext context,
     DescriptionItem item, {
@@ -57,7 +63,7 @@ class DescriptionList extends StatelessWidget {
     final copy = item.copyable
         ? CopyButton(
             value: item.value,
-            tooltip: '${context.materialL10n.actionsCopy} ${item.label}',
+            tooltip: context.materialL10n.actionsCopyItem(item.label),
           )
         : null;
     return Semantics(
@@ -82,7 +88,8 @@ class DescriptionList extends StatelessWidget {
 
   Widget _wide(BuildContext context, DescriptionItem item) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
       spacing: 16,
       children: [
         SizedBox(width: 176, child: _label(context, item)),
@@ -101,26 +108,20 @@ class DescriptionList extends StatelessWidget {
 
   Widget _label(BuildContext context, DescriptionItem item) {
     final theme = Theme.of(context);
-    return Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Text(
-        item.label,
-        style: theme.textTheme.labelLarge?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
+    return Text(
+      item.label,
+      style: theme.textTheme.labelLarge?.copyWith(
+        color: theme.colorScheme.onSurfaceVariant,
       ),
     );
   }
 
   Widget _value(BuildContext context, DescriptionItem item) {
     final theme = Theme.of(context);
-    return Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Text(
-        item.value,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: theme.colorScheme.onSurface,
-        ),
+    return Text(
+      item.value,
+      style: theme.textTheme.bodyLarge?.copyWith(
+        color: theme.colorScheme.onSurface,
       ),
     );
   }

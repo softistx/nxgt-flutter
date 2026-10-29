@@ -4,6 +4,7 @@
   "actionsRetry": "Réessayer",
   "actionsShowMore": "Afficher plus",
   "actionsCopy": "Copier",
+  "actionsCopyItem": "Copier « {label} »",
   "actionsCopied": "Copié",
   "actionsMoreOptions": "Plus d’options",
   "fieldsRequired": "Ce champ est obligatoire",
