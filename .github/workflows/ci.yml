@@ -27,6 +27,10 @@ jobs:
         run: |
           dart pub get
           dart run melos bootstrap
+      # Before the tests: their coverage and golden outputs would show up as
+      # uncommitted files in the dry run.
+      - name: Publish dry run
+        run: dart run melos run publish:check
       - name: Analyze
         run: dart run melos run analyze
       - name: Format check

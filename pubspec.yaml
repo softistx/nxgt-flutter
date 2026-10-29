@@ -57,6 +57,14 @@ melos:
         flutter: false
         dirExists: test
 
+    publish:check:
+      description: pub.dev validation of every published package (publishes nothing).
+      exec:
+        command: flutter pub publish --dry-run
+        concurrency: 1
+      packageFilters:
+        noPrivate: true
+
     coverage:
       description: Fail when a package's line coverage is below 80 %.
       run: dart run tool/check_coverage.dart 80 packages/nxgt_material packages/nxgt_http
