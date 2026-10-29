@@ -151,6 +151,19 @@ void main() {
     expect(wrapper.actionsCopyItem('Invoice'), 'Copy Invoice');
   });
 
+  test('the wrapper forwards the sort strings', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.collectionsSortBy, 'Sort by');
+    expect(
+      wrapper.collectionsSortedAscending('Name'),
+      'Name, sorted ascending',
+    );
+    expect(
+      wrapper.collectionsSortedDescending('Name'),
+      'Name, sorted descending',
+    );
+  });
+
   test('the wrapper forwards the trend strings', () {
     final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
     expect(wrapper.displayTrendUp, 'up');
@@ -221,4 +234,7 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.collectionsSearchHint,
   s.collectionsSearchClear,
   s.collectionsLoadedMore(2),
+  s.collectionsSortBy,
+  s.collectionsSortedAscending('x'),
+  s.collectionsSortedDescending('x'),
 ];

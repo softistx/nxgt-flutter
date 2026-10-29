@@ -95,5 +95,11 @@
   "collectionsSearchClear": "Clear search",
   "@collectionsSearchClear": {"description": "Tooltip and screen reader label of the button that clears the text of a search field."},
   "collectionsLoadedMore": "{count, plural, =1{1 more loaded} other{{count} more loaded}}",
-  "@collectionsLoadedMore": {"description": "Screen reader announcement after a page of a paged list landed: how many items were added.", "placeholders": {"count": {"type": "int"}}}
+  "@collectionsLoadedMore": {"description": "Screen reader announcement after a page of a paged list landed: how many items were added.", "placeholders": {"count": {"type": "int"}}},
+  "collectionsSortBy": "Sort by",
+  "@collectionsSortBy": {"description": "Tooltip and screen reader label of the button that opens the sort menu of a responsive table on a compact window."},
+  "collectionsSortedAscending": "{column}, sorted ascending",
+  "@collectionsSortedAscending": {"description": "Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in ascending order.", "placeholders": {"column": {"type": "String"}}},
+  "collectionsSortedDescending": "{column}, sorted descending",
+  "@collectionsSortedDescending": {"description": "Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in descending order.", "placeholders": {"column": {"type": "String"}}}
 }

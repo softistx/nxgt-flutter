@@ -21,6 +21,8 @@ import 'package:nxgt_widgetbook/actions/split_button.usecase.dart'
     as _nxgt_widgetbook_actions_split_button_usecase;
 import 'package:nxgt_widgetbook/collections/paged_list.usecase.dart'
     as _nxgt_widgetbook_collections_paged_list_usecase;
+import 'package:nxgt_widgetbook/collections/responsive_table.usecase.dart'
+    as _nxgt_widgetbook_collections_responsive_table_usecase;
 import 'package:nxgt_widgetbook/collections/search_field.usecase.dart'
     as _nxgt_widgetbook_collections_search_field_usecase;
 import 'package:nxgt_widgetbook/display/count_badge.usecase.dart'
@@ -147,6 +149,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_collections_paged_list_usecase
                 .buildPagedListDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ResponsiveTable',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_collections_responsive_table_usecase
+                .buildResponsiveTableDefault,
           ),
         ],
       ),

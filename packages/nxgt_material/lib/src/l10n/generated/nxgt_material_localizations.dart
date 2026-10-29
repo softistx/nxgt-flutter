@@ -388,6 +388,24 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 more loaded} other{{count} more loaded}}'**
   String collectionsLoadedMore(int count);
+
+  /// Tooltip and screen reader label of the button that opens the sort menu of a responsive table on a compact window.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get collectionsSortBy;
+
+  /// Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in ascending order.
+  ///
+  /// In en, this message translates to:
+  /// **'{column}, sorted ascending'**
+  String collectionsSortedAscending(String column);
+
+  /// Screen reader label of a sortable table column, or of its sort menu entry, when the table is sorted by it in descending order.
+  ///
+  /// In en, this message translates to:
+  /// **'{column}, sorted descending'**
+  String collectionsSortedDescending(String column);
 }
 
 class _NxgtMaterialLocalizationsDelegate

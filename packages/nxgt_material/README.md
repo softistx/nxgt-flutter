@@ -382,12 +382,13 @@ Pages: [CheckboxField](doc/components/checkbox_field.md),
 ## Collections
 
 `package:nxgt_material/collections.dart`. Built on Material 3 `TextField`,
-`IconButton`, `ListView` and `RefreshIndicator`.
+`IconButton`, `ListView`, `RefreshIndicator` and `DataTable`.
 
 | Component | What it adds |
 | --- | --- |
 | `SearchField` | A search input (not a `FormField`): search icon, localized hint, a 48 dp clear button shown only with text, the `search` keyboard action and a debounced `onChanged` (300 ms by default; clear and submit are immediate) |
 | `PagedList` | A list loaded page by page: `AsyncView`'s loading, error and empty states for the first load, a `LoadMoreButton` or load-on-scroll (never twice at once; a failing load shows a retry and stops auto-loading), pull to refresh and an "N more loaded" announcement |
+| `ResponsiveTable` | Rows as a Material 3 `DataTable` from the medium window size and one `DescriptionList` card per row on compact; the caller-owned sort is announced ("Name, sorted ascending"), sortable headers are buttons, a sort menu serves compact, `onRowTap` and an empty state |
 
 ```dart
 import 'package:nxgt_material/collections.dart';
@@ -398,7 +399,8 @@ SearchField(
 )
 ```
 
-Pages: [SearchField](doc/components/search_field.md).
+Pages: [SearchField](doc/components/search_field.md),
+[ResponsiveTable](doc/components/responsive_table.md).
 
 ## Layout
 
