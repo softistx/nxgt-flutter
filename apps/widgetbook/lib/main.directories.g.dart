@@ -67,6 +67,8 @@ import 'package:nxgt_widgetbook/layout/responsive_grid.usecase.dart'
     as _nxgt_widgetbook_layout_responsive_grid_usecase;
 import 'package:nxgt_widgetbook/layout/window_size.usecase.dart'
     as _nxgt_widgetbook_layout_window_size_usecase;
+import 'package:nxgt_widgetbook/overlays/confirm_dialog.usecase.dart'
+    as _nxgt_widgetbook_overlays_confirm_dialog_usecase;
 import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
     as _nxgt_widgetbook_theme_token_sheet_usecase;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
@@ -376,6 +378,21 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_layout_window_size_usecase
                 .buildWindowSizeDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Overlays',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'ConfirmDialog',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_overlays_confirm_dialog_usecase
+                .buildConfirmDialogDefault,
           ),
         ],
       ),

@@ -148,6 +148,12 @@ void main() {
     expect(wrapper.displayTrendFlat, 'unchanged');
   });
 
+  test('the wrapper forwards the dialog strings', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.actionsCancel, 'Cancel');
+    expect(wrapper.actionsConfirm, 'Confirm');
+  });
+
   test('the delegate reloads only when the override changes', () {
     const a = NxgtMaterialLocalizationsDelegate();
     expect(a.shouldReload(const NxgtMaterialLocalizationsDelegate()), isFalse);
@@ -186,4 +192,6 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.displayPresenceAway,
   s.displayPresenceBusy,
   s.displayPresenceOffline,
+  s.actionsCancel,
+  s.actionsConfirm,
 ];

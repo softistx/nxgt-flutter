@@ -294,3 +294,20 @@ reader. A release build does not assert: `EntityHeader` leaves that action out.
 ```dart
 EntityAction(label: 'Edit', icon: Icons.edit, onPressed: edit)
 ```
+
+## ConfirmDialog.title must not be empty.
+
+**When:** in a debug build, a `ConfirmDialog` (or `context.confirm`) is given an
+empty `title`.
+
+**Why:** the title is the name of the dialog for a screen reader. A release
+build does not assert: the dialog is shown with an empty title and no name.
+
+**Fix:** give the dialog a title that asks the question.
+
+```dart
+final ok = await context.confirm(
+  title: 'Delete invoice?',
+  message: 'This cannot be undone.',
+);
+```

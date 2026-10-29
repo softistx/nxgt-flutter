@@ -39,5 +39,7 @@
   "displayPresenceOnline": "En ligne",
   "displayPresenceAway": "Absent",
   "displayPresenceBusy": "Occupé",
-  "displayPresenceOffline": "Hors ligne"
+  "displayPresenceOffline": "Hors ligne",
+  "actionsCancel": "Annuler",
+  "actionsConfirm": "Confirmer"
 }
