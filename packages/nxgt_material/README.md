@@ -542,6 +542,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
 - [Forms](doc/guide/forms.md)
 - [Localization](doc/guide/localization.md)
 - [Adaptive layout](doc/guide/adaptive.md)
+- [Dates](doc/guide/dates.md)
 - [Overlays: dialog or sheet](doc/guide/overlays.md)
 - [Roadmap](doc/roadmap.md)
 - [Troubleshooting](doc/troubleshooting.md)

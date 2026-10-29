@@ -1,6 +1,14 @@
-## Unreleased
+## 0.3.0
+
+Adds the `dates.dart` library and three fields: `SwitchField`, `UrlField` and `OtpField`.
+
+### Breaking
+
+- `NxgtMaterialLocalizations` gains the getters `datesClear`, `datesBefore`, `datesAfter`, `datesRangeValue`, `fieldsInvalidUrl` and `fieldsOtpIncomplete`. Only a class that implements or extends `NxgtMaterialLocalizations` directly no longer compiles; extend `NxgtMaterialLocalizationsWrapper` instead, which forwards every string. Apps that only use the delegate, `context.materialL10n` or a `reword:` subclass of the wrapper are not affected.
 
 ### Added
+
+- `selection.dart`: `SwitchField` (a `FormField<bool>` on a full-width `SwitchListTile` at least 48 dp high, off by default; a `validator` expresses "must be on", the error has the `alert` role and replaces the helper text, which with the error is the switch's semantics hint; works with `Form` validate, save and reset and with `autovalidateMode`; directional layout). Reuses the strings of the other choice fields; no new string.
 
 - `dates.dart`: `DateRangeField` (a range of dates as a read-only field that opens `showDateRangePicker` with its calendar and typed-entry toggle: Flutter's `DateTimeRange` value with both ends at midnight, text and spoken value "start to end" from `MaterialLocalizations.formatMediumDate` or a `formatter`, `firstDate` and `lastDate` naming the bound in an error, `required`, `clearable` with a 48 dp clear button, one semantics node). New string `datesRangeValue` in fr and en.
 - `dates.dart`: `TimeField` (a time of day as a read-only field that opens `showTimePicker` with its dial and typed-entry toggle: `TimeOfDay` value, text from `MaterialLocalizations.formatTimeOfDay` or a `formatter`, `use24HourFormat` to force the 12 or 24 hour clock in the text and the picker (`null` follows `MediaQuery.alwaysUse24HourFormat`), `required`, `clearable` with a 48 dp clear button, one semantics node). Reuses the `datesClear` string.
