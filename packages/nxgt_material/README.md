@@ -254,6 +254,7 @@ Pages: [EmptyState](doc/components/empty_state.md),
 | --- | --- |
 | `StatusIndicator` | A dot (or the tone's icon) and a label in AA tone colours; the tone is spoken first |
 | `CountBadge` | A count on a corner on `Badge.count`: `99+` above `max`, hidden at 0, localized plural label |
+| `UserAvatar` | Picture or initials on a tone picked from the name, optional presence dot, spoken name and presence |
 
 ```dart
 import 'package:nxgt_material/display.dart';
@@ -266,10 +267,13 @@ CountBadge(
   semanticLabel: 'Inbox',
   child: const Icon(Icons.mail_outline),
 )
+
+UserAvatar(name: 'Ada Lovelace', presence: AvatarPresence.online)
 ```
 
 Pages: [StatusIndicator](doc/components/status_indicator.md),
-[CountBadge](doc/components/count_badge.md).
+[CountBadge](doc/components/count_badge.md),
+[UserAvatar](doc/components/user_avatar.md).
 
 ## Layout
 
@@ -394,6 +398,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [SubmitButton](doc/components/submit_button.md),
   [TextAreaField](doc/components/text_area_field.md),
   [Toast](doc/components/toast.md),
+  [UserAvatar](doc/components/user_avatar.md),
   [WindowSize](doc/components/window_size.md).
 - Live catalogue: Widgetbook, published on GitHub Pages from `develop`.
 

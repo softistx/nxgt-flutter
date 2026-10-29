@@ -274,6 +274,30 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 item} other{{count} items}}'**
   String displayCount(int count);
+
+  /// Screen reader text of an avatar's presence dot: the person is available now.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get displayPresenceOnline;
+
+  /// Screen reader text of an avatar's presence dot: the person is signed in but away.
+  ///
+  /// In en, this message translates to:
+  /// **'Away'**
+  String get displayPresenceAway;
+
+  /// Screen reader text of an avatar's presence dot: the person asked not to be disturbed.
+  ///
+  /// In en, this message translates to:
+  /// **'Busy'**
+  String get displayPresenceBusy;
+
+  /// Screen reader text of an avatar's presence dot: the person is not signed in.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get displayPresenceOffline;
 }
 
 class _NxgtMaterialLocalizationsDelegate

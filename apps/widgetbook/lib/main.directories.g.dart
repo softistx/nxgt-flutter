@@ -23,6 +23,8 @@ import 'package:nxgt_widgetbook/display/count_badge.usecase.dart'
     as _nxgt_widgetbook_display_count_badge_usecase;
 import 'package:nxgt_widgetbook/display/status_indicator.usecase.dart'
     as _nxgt_widgetbook_display_status_indicator_usecase;
+import 'package:nxgt_widgetbook/display/user_avatar.usecase.dart'
+    as _nxgt_widgetbook_display_user_avatar_usecase;
 import 'package:nxgt_widgetbook/feedback/async_view.usecase.dart'
     as _nxgt_widgetbook_feedback_async_view_usecase;
 import 'package:nxgt_widgetbook/feedback/empty_state.usecase.dart'
@@ -129,6 +131,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_display_status_indicator_usecase
                 .buildStatusIndicatorDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'UserAvatar',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_user_avatar_usecase
+                .buildUserAvatarDefault,
           ),
         ],
       ),

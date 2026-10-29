@@ -28,5 +28,9 @@
   "layoutOpenNavigation": "Ouvrir la navigation",
   "layoutCloseNavigation": "Fermer la navigation",
   "layoutNavigation": "Navigation",
-  "displayCount": "{count, plural, =1{1 élément} other{{count} éléments}}"
+  "displayCount": "{count, plural, =1{1 élément} other{{count} éléments}}",
+  "displayPresenceOnline": "En ligne",
+  "displayPresenceAway": "Absent",
+  "displayPresenceBusy": "Occupé",
+  "displayPresenceOffline": "Hors ligne"
 }
