@@ -538,3 +538,28 @@ field.
 ```dart
 SelectField<String>(label: 'Country', options: countries, initialValue: 'fr')
 ```
+
+## SearchField.controller and SearchField.initialValue must not both be given.
+
+**When:** in a debug build, a `SearchField` gets both a `controller` and an
+`initialValue`.
+
+**Why:** the starting text belongs to the controller you pass; the field owns
+a controller only when none is given. A release build uses the controller and
+ignores `initialValue`.
+
+**Fix:** set the text on your controller, or drop the controller.
+
+```dart
+final controller = TextEditingController(text: 'amoxi');
+SearchField(controller: controller, onChanged: filter)
+```
+
+## SearchField.debounce must not be negative.
+
+**When:** in a debug build, `debounce` of a `SearchField` is below zero.
+
+**Why:** a pause cannot be negative. A release build emits at once, as
+`Duration.zero` does.
+
+**Fix:** pass `Duration.zero` for no debounce, or a positive duration.

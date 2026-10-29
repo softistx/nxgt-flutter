@@ -47,5 +47,6 @@
   "overlaysDiscardConfirm": "Abandonner",
   "fieldsSelectClear": "Effacer le choix",
   "fieldsSelectSearch": "Rechercher",
-  "fieldsSelectNoResults": "Aucun résultat"
+  "fieldsSelectNoResults": "Aucun résultat",
+  "collectionsSearchClear": "Effacer la recherche"
 }

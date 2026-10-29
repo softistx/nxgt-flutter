@@ -370,6 +370,12 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'No results'**
   String get fieldsSelectNoResults;
+
+  /// Tooltip and screen reader label of the button that clears the text of a search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get collectionsSearchClear;
 }
 
 class _NxgtMaterialLocalizationsDelegate

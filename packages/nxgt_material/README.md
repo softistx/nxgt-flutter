@@ -29,6 +29,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | Library | What is in it |
 | --- | --- |
 | `actions.dart` | Buttons and menus that trigger something |
+| `collections.dart` | Search and list-shaped inputs: `SearchField` |
 | `feedback.dart` | Empty, loading and error states, toasts, banners, progress |
 | `fields.dart` | Single-value inputs built on `FormField` |
 | `forms.dart` | Form scaffolding: sections, validation summary, submit bar |
@@ -377,6 +378,26 @@ Pages: [CheckboxField](doc/components/checkbox_field.md),
 [CheckboxGroupField](doc/components/checkbox_group_field.md),
 [ChoiceChipsField and FilterChipsField](doc/components/choice_chips_field.md),
 [SelectField](doc/components/select_field.md).
+
+## Collections
+
+`package:nxgt_material/collections.dart`. Built on Material 3 `TextField` and
+`IconButton`.
+
+| Component | What it adds |
+| --- | --- |
+| `SearchField` | A search input (not a `FormField`): search icon, localized hint, a 48 dp clear button shown only with text, the `search` keyboard action and a debounced `onChanged` (300 ms by default; clear and submit are immediate) |
+
+```dart
+import 'package:nxgt_material/collections.dart';
+
+SearchField(
+  onChanged: (text) => setState(() => _query = text),
+  hintText: 'Search patients',
+)
+```
+
+Pages: [SearchField](doc/components/search_field.md).
 
 ## Layout
 

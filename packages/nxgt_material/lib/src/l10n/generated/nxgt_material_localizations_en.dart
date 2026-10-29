@@ -175,4 +175,7 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
 
   @override
   String get fieldsSelectNoResults => 'No results';
+
+  @override
+  String get collectionsSearchClear => 'Clear search';
 }

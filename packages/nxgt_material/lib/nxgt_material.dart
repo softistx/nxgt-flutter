@@ -5,6 +5,7 @@
 library;
 
 export 'actions.dart';
+export 'collections.dart';
 export 'display.dart';
 export 'feedback.dart';
 export 'fields.dart';
