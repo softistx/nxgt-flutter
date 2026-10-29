@@ -73,6 +73,8 @@ import 'package:nxgt_widgetbook/overlays/confirm_dialog.usecase.dart'
     as _nxgt_widgetbook_overlays_confirm_dialog_usecase;
 import 'package:nxgt_widgetbook/overlays/form_dialog.usecase.dart'
     as _nxgt_widgetbook_overlays_form_dialog_usecase;
+import 'package:nxgt_widgetbook/selection/checkbox_field.usecase.dart'
+    as _nxgt_widgetbook_selection_checkbox_field_usecase;
 import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
     as _nxgt_widgetbook_theme_token_sheet_usecase;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
@@ -417,6 +419,21 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_overlays_form_dialog_usecase
                 .buildFormDialogDefault,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Selection',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'CheckboxField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_checkbox_field_usecase
+                .buildCheckboxFieldDefault,
           ),
         ],
       ),

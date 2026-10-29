@@ -1,0 +1,6 @@
+/// Single-choice and multiple-choice form fields.
+///
+/// Built on Material 3 (`CheckboxListTile`, `FormField`), under intent names.
+library;
+
+export 'src/selection/checkbox_field.dart';
