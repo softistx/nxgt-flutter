@@ -181,4 +181,15 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
 
   @override
   String get collectionsSearchClear => 'Effacer la recherche';
+
+  @override
+  String collectionsLoadedMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count éléments de plus chargés',
+      one: '1 élément de plus chargé',
+    );
+    return '$_temp0';
+  }
 }

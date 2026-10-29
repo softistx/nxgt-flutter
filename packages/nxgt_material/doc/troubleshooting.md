@@ -563,3 +563,22 @@ SearchField(controller: controller, onChanged: filter)
 `Duration.zero` does.
 
 **Fix:** pass `Duration.zero` for no debounce, or a positive duration.
+
+## PagedList.hasMore is true but onLoadMore is null.
+
+**When:** in a debug build, a `PagedList` has `hasMore: true` and no
+`onLoadMore`.
+
+**Why:** nothing can load the next page. A release build shows no "Show more"
+button and never loads automatically.
+
+**Fix:** pass `onLoadMore`, or set `hasMore` to false.
+
+```dart
+PagedList<Patient>(
+  items: patients,
+  itemBuilder: (context, patient, index) => PatientTile(patient),
+  hasMore: hasMore,
+  onLoadMore: loadNextPage,
+)
+```

@@ -382,6 +382,12 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Clear search'**
   String get collectionsSearchClear;
+
+  /// Screen reader announcement after a page of a paged list landed: how many items were added.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more loaded} other{{count} more loaded}}'**
+  String collectionsLoadedMore(int count);
 }
 
 class _NxgtMaterialLocalizationsDelegate

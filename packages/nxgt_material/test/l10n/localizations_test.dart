@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/l10n.dart';
 import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations_en.dart';
+import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations_fr.dart';
 
 class _Reworded extends NxgtMaterialLocalizationsWrapper {
   new(super.base);
@@ -128,6 +129,15 @@ void main() {
     expect(wrapper.displayCount(3), '3 items');
   });
 
+  test('the wrapper forwards the plural collectionsLoadedMore', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.collectionsLoadedMore(1), '1 more loaded');
+    expect(wrapper.collectionsLoadedMore(3), '3 more loaded');
+    final fr = _Reworded(NxgtMaterialLocalizationsFr());
+    expect(fr.collectionsLoadedMore(1), '1 élément de plus chargé');
+    expect(fr.collectionsLoadedMore(3), '3 éléments de plus chargés');
+  });
+
   test('the wrapper forwards the presence strings', () {
     final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
     expect(wrapper.displayPresenceOnline, 'Online');
@@ -210,4 +220,5 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.fieldsSelectNoResults,
   s.collectionsSearchHint,
   s.collectionsSearchClear,
+  s.collectionsLoadedMore(2),
 ];

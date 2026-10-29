@@ -3,4 +3,5 @@
 /// Built on Material 3 (`TextField`, `IconButton`), under intent names.
 library;
 
+export 'src/collections/paged_list.dart';
 export 'src/collections/search_field.dart';
