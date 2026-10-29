@@ -136,6 +136,13 @@ void main() {
     expect(wrapper.displayPresenceOffline, 'Offline');
   });
 
+  test('the wrapper forwards the trend strings', () {
+    final wrapper = _Reworded(NxgtMaterialLocalizationsEn());
+    expect(wrapper.displayTrendUp, 'up');
+    expect(wrapper.displayTrendDown, 'down');
+    expect(wrapper.displayTrendFlat, 'unchanged');
+  });
+
   test('the delegate reloads only when the override changes', () {
     const a = NxgtMaterialLocalizationsDelegate();
     expect(a.shouldReload(const NxgtMaterialLocalizationsDelegate()), isFalse);
@@ -166,6 +173,9 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.layoutCloseNavigation,
   s.layoutNavigation,
   s.displayCount(2),
+  s.displayTrendUp,
+  s.displayTrendDown,
+  s.displayTrendFlat,
   s.displayPresenceOnline,
   s.displayPresenceAway,
   s.displayPresenceBusy,

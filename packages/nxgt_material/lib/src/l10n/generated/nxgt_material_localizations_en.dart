@@ -126,6 +126,15 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
   }
 
   @override
+  String get displayTrendUp => 'up';
+
+  @override
+  String get displayTrendDown => 'down';
+
+  @override
+  String get displayTrendFlat => 'unchanged';
+
+  @override
   String get displayPresenceOnline => 'Online';
 
   @override
