@@ -1,4 +1,4 @@
-const _label = r'[\p{L}\p{N}](?:[\p{L}\p{N}-]{0,61}[\p{L}\p{N}])?';
+const _label = r'[\p{L}\p{N}](?:[\p{L}\p{M}\p{N}-]{0,61}[\p{L}\p{M}\p{N}])?';
 
 final _url = RegExp(
   '^(?:https?://)?(?<host>$_label(?:\\.$_label)+)'

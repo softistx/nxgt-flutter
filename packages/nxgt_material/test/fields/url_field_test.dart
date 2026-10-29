@@ -189,4 +189,23 @@ void main() {
       handle.dispose();
     });
   });
+
+  testWidgets('lays out at 2x text scale without overflow', (tester) async {
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(textScaler: TextScaler.linear(2)),
+        child: formHost([
+          const UrlField(
+            label: 'Website',
+            helperText: 'Where your page lives',
+            required: true,
+          ),
+        ], formKey: key),
+      ),
+    );
+    await tester.pumpAndSettle();
+    key.currentState!.validate();
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
 }
