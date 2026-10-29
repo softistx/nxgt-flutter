@@ -27,8 +27,7 @@ jobs:
         run: |
           dart pub get
           dart run melos bootstrap
-      # Before the tests: their coverage and golden outputs would show up as
-      # uncommitted files in the dry run.
+      # Before the tests, so a pub.dev validation failure fails fast.
       - name: Publish dry run
         run: dart run melos run publish:check
       - name: Analyze
