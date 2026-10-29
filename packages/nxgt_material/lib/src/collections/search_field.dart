@@ -163,7 +163,7 @@ class _SearchFieldState extends State<SearchField> {
   Widget build(BuildContext context) {
     final l10n = context.materialL10n;
     _hadText = _controller.text.isNotEmpty;
-    final hint = widget.hintText ?? l10n.fieldsSelectSearch;
+    final hint = widget.hintText ?? l10n.collectionsSearchHint;
     return Semantics(
       inputType: SemanticsInputType.search,
       child: TextField(

@@ -23,7 +23,7 @@ the app's. `SelectField`'s sheet has its own search box for that case.
 - No callback fires after the field is disposed.
 - Without a `controller` the field owns one (starting at `initialValue`) and a
   focus node, and disposes them; a controller or focus node you pass is never
-  disposed. A swapped controller is followed. Changing the text of a
+  disposed. A swapped controller is followed. Swapping the controller drops a pending emission and does not emit. Changing the text of a
   controller from code does not call `onChanged`.
 
 ## Example
@@ -40,7 +40,7 @@ SearchField(
 ## Accessibility
 
 One text-field node of the search input type, labelled by the hint ("Search" /
-"Rechercher" unless `hintText` is given) while empty. The search icon is
+"Rechercher", `collectionsSearchHint`, unless `hintText` is given) while empty. The search icon is
 decorative. The clear button is named "Clear search" / "Effacer la recherche"
 (its tooltip, `collectionsSearchClear`) and is at least 48 dp on every
 platform, as is the field. The layout mirrors in right-to-left, holds at large

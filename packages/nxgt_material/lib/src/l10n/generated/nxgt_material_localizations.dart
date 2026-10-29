@@ -371,6 +371,12 @@ abstract class NxgtMaterialLocalizations {
   /// **'No results'**
   String get fieldsSelectNoResults;
 
+  /// Placeholder and screen reader label of an empty search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get collectionsSearchHint;
+
   /// Tooltip and screen reader label of the button that clears the text of a search field.
   ///
   /// In en, this message translates to:

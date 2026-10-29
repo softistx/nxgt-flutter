@@ -48,5 +48,6 @@
   "fieldsSelectClear": "Effacer le choix",
   "fieldsSelectSearch": "Rechercher",
   "fieldsSelectNoResults": "Aucun résultat",
+  "collectionsSearchHint": "Rechercher",
   "collectionsSearchClear": "Effacer la recherche"
 }
