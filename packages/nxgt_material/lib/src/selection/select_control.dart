@@ -6,6 +6,7 @@ import 'package:nxgt_material/src/overlays/adaptive_sheet.dart';
 import 'package:nxgt_material/src/selection/choice_option.dart';
 import 'package:nxgt_material/src/selection/select_menu.dart';
 import 'package:nxgt_material/src/selection/select_sheet.dart';
+import 'package:nxgt_material/src/selection/select_sheet_field.dart';
 
 /// The menu or sheet control of a `SelectField`. Internal, not exported.
 class SelectControl<T> extends StatefulWidget {
@@ -173,41 +174,14 @@ class _SelectControlState<T> extends State<SelectControl<T>> {
     final errorTheme = widget.hasError ? selectErrorTheme(context) : null;
     final Widget field;
     if (widget.sheet) {
-      final theme = Theme.of(context);
-      field = CallbackShortcuts(
-        bindings: {
-          const SingleActivator(LogicalKeyboardKey.enter): _openSheet,
-          const SingleActivator(LogicalKeyboardKey.space): _openSheet,
-          const SingleActivator(LogicalKeyboardKey.arrowDown): _openSheet,
-        },
-        child: Theme(
-          data: errorTheme == null
-              ? theme
-              : theme.copyWith(inputDecorationTheme: errorTheme),
-          // One button that opens the sheet; the clear action stays a custom
-          // action of the field (see below).
-          child: Semantics(
-            button: true,
-            enabled: widget.enabled,
-            label: widget.label,
-            value: _controller.text,
-            onTap: widget.enabled ? _openSheet : null,
-            child: ExcludeSemantics(
-              child: TextField(
-                controller: _controller,
-                readOnly: true,
-                enabled: widget.enabled,
-                focusNode: widget.focusNode,
-                onTap: _openSheet,
-                mouseCursor: widget.enabled ? SystemMouseCursors.click : null,
-                decoration: InputDecoration(
-                  labelText: widget.label,
-                  suffixIcon: _trailing(open: false),
-                ),
-              ),
-            ),
-          ),
-        ),
+      field = SelectSheetField(
+        label: widget.label,
+        controller: _controller,
+        enabled: widget.enabled,
+        focusNode: widget.focusNode,
+        errorTheme: errorTheme,
+        trailing: _trailing(open: false),
+        onOpen: _openSheet,
       );
     } else {
       field = Focus(
