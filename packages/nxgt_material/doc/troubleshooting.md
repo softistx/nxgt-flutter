@@ -281,3 +281,16 @@ draws the avatar at the default size of 40.
 ```dart
 UserAvatar(name: user.name, size: 56)
 ```
+
+## EntityAction.label must not be empty.
+
+**When:** in a debug build, an `EntityAction` is built with an empty `label`.
+
+**Why:** the label is the only name of the button or menu item for a screen
+reader. A release build does not assert: `EntityHeader` leaves that action out.
+
+**Fix:** give every action a label.
+
+```dart
+EntityAction(label: 'Edit', icon: Icons.edit, onPressed: edit)
+```

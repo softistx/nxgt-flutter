@@ -23,6 +23,8 @@ import 'package:nxgt_widgetbook/display/count_badge.usecase.dart'
     as _nxgt_widgetbook_display_count_badge_usecase;
 import 'package:nxgt_widgetbook/display/description_list.usecase.dart'
     as _nxgt_widgetbook_display_description_list_usecase;
+import 'package:nxgt_widgetbook/display/entity_header.usecase.dart'
+    as _nxgt_widgetbook_display_entity_header_usecase;
 import 'package:nxgt_widgetbook/display/stat_card.usecase.dart'
     as _nxgt_widgetbook_display_stat_card_usecase;
 import 'package:nxgt_widgetbook/display/status_indicator.usecase.dart'
@@ -135,6 +137,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_display_description_list_usecase
                 .buildDescriptionListDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'EntityHeader',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_display_entity_header_usecase
+                .buildEntityHeaderDefault,
           ),
         ],
       ),

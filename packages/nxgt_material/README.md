@@ -256,6 +256,7 @@ Pages: [EmptyState](doc/components/empty_state.md),
 | `CountBadge` | A count on a corner on `Badge.count`: `99+` above `max`, hidden at 0, localized plural label |
 | `StatCard` | A key figure on a `Card`: label, value, a trend pill (icon, spoken word, AA tone) and an optional 48 dp tap |
 | `DescriptionList` | Labels and values as rows: side by side from 600 dp, stacked below; a row can have a `CopyButton` |
+| `EntityHeader` | A record heading: title (a header), muted subtitle, leading avatar, status and actions as buttons from 600 dp or a menu below |
 | `UserAvatar` | Picture or initials on a tone picked from the name, optional presence dot, spoken name and presence |
 
 ```dart
@@ -274,6 +275,13 @@ StatCard(label: 'Revenue', value: '1 200', delta: '4 %', trend: StatTrend.up)
 
 UserAvatar(name: 'Ada Lovelace', presence: AvatarPresence.online)
 
+EntityHeader(
+  title: 'Ada Lovelace',
+  subtitle: 'ada@example.com',
+  leading: const UserAvatar(name: 'Ada Lovelace'),
+  actions: [EntityAction(label: 'Edit', icon: Icons.edit, onPressed: edit)],
+)
+
 DescriptionList(
   items: [DescriptionItem(label: 'Invoice', value: 'INV-2026-0042', copyable: true)],
 )
@@ -283,7 +291,8 @@ Pages: [StatusIndicator](doc/components/status_indicator.md),
 [CountBadge](doc/components/count_badge.md),
 [StatCard](doc/components/stat_card.md),
 [DescriptionList](doc/components/description_list.md),
-[UserAvatar](doc/components/user_avatar.md).
+[UserAvatar](doc/components/user_avatar.md),
+[EntityHeader](doc/components/entity_header.md).
 
 ## Layout
 
