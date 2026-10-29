@@ -2,7 +2,11 @@
 
 ## Now
 
+Nothing in progress.
+
 ## Next
+
+Nothing in progress.
 
 ## Later
 

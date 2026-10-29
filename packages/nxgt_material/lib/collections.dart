@@ -1,6 +1,9 @@
-/// Search and list-shaped inputs.
+/// Search and collections of records: [SearchField], a search input with a
+/// debounced `onChanged`; [PagedList], a list loaded page by page; and
+/// [ResponsiveTable], a data table that becomes cards on a compact window.
 ///
-/// Built on Material 3 (`TextField`, `IconButton`), under intent names.
+/// Built on Material 3 (`TextField`, `ListView`, `DataTable`), under intent
+/// names.
 library;
 
 export 'src/collections/paged_list.dart';
