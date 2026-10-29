@@ -6,7 +6,17 @@ Adds the `dates.dart` library and three fields: `SwitchField`, `UrlField` and `O
 
 - `NxgtMaterialLocalizations` gains the getters `datesClear`, `datesBefore`, `datesAfter`, `datesRangeValue`, `fieldsInvalidUrl` and `fieldsOtpIncomplete`. Only a class that implements or extends `NxgtMaterialLocalizations` directly no longer compiles; extend `NxgtMaterialLocalizationsWrapper` instead, which forwards every string. Apps that only use the delegate, `context.materialL10n` or a `reword:` subclass of the wrapper are not affected.
 
+### Fixed
+
+- `OtpField`: pasting a full code over typed digits no longer gives a wrong code (`654321` pasted after `12` gave `126543` and fired `onCompleted` with it), and pasting into a full field now replaces the code instead of doing nothing. A pasted or autofilled chunk holding `length` digits or more becomes the code.
+- `DateField` and `DateRangeField` assert in debug that `lastDate` is not before `firstDate` (a release build reads it as `lastDate == firstDate`); `DateRangeField` words the bound in its range error through its `formatter`, like `DateField`, instead of always the locale's medium date.
+- `Validators.url` and `UrlField` accept hosts with combining marks, such as `मेरा.भारत`.
+- `SwitchField` and `CheckboxField` no longer let a screen reader read the helper text twice, once as the control's hint and once as separate text.
+- The French `datesAfter` message uses a typographic apostrophe.
+
 ### Added
+
+- `fields.dart`: `OtpField` gains `autovalidateMode`.
 
 - `selection.dart`: `SwitchField` (a `FormField<bool>` on a full-width `SwitchListTile` at least 48 dp high, off by default; a `validator` expresses "must be on", the error has the `alert` role and replaces the helper text, which with the error is the switch's semantics hint; works with `Form` validate, save and reset and with `autovalidateMode`; directional layout). Reuses the strings of the other choice fields; no new string.
 
