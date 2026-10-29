@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nxgt_material/collections.dart';
 import 'package:nxgt_material/display.dart';
 import 'package:nxgt_material/feedback.dart';
 
@@ -7,6 +8,30 @@ import '../support/responsive_table_host.dart';
 
 void main() {
   group('compact', () {
+    testWidgets('shows the text of a column that has a cell builder', (
+      tester,
+    ) async {
+      await pumpTable(
+        tester,
+        tableHost(
+          ResponsiveTable<(String, String)>(
+            columns: [
+              TableColumn<(String, String)>(
+                label: 'Name',
+                value: (r) => r.$1,
+                cell: (context, r) => Chip(label: Text('chip ${r.$1}')),
+              ),
+            ],
+            rows: tablePeople,
+          ),
+          width: 400,
+        ),
+      );
+
+      expect(find.byType(Chip), findsNothing);
+      expect(find.text('Ada'), findsOneWidget);
+    });
+
     testWidgets('is one card per row', (tester) async {
       await pumpTable(tester, tableHost(buildTable(), width: 400));
 
@@ -161,6 +186,9 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.text('Grace'), findsOneWidget);
+      expect(find.text('Name'), findsNWidgets(2));
+      expect(find.text('Age'), findsNWidgets(2));
+      expect(tester.getSize(find.text('Grace')).height, greaterThan(30));
     });
 
     testWidgets('survives IntrinsicHeight', (tester) async {

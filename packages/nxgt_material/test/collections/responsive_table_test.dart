@@ -24,6 +24,66 @@ void main() {
       expect(table.columns.map((c) => c.numeric), [false, true]);
     });
 
+    testWidgets('lands numeric cells flush with the end of their column', (
+      tester,
+    ) async {
+      await pumpTable(
+        tester,
+        tableHost(buildTable(rows: const [('Ada', '5'), ('Grace', '1000')])),
+      );
+
+      final right = tester.getTopRight(find.text('1000')).dx;
+      expect(tester.getTopRight(find.text('5')).dx, right);
+      expect(tester.getTopRight(find.text('Age')).dx, right);
+      expect(
+        tester.getTopLeft(find.text('Ada')).dx,
+        tester.getTopLeft(find.text('Grace')).dx,
+      );
+    });
+
+    testWidgets('fills the available width', (tester) async {
+      await pumpTable(
+        tester,
+        tableHost(
+          ResponsiveTable<(String, String, String)>(
+            columns: [
+              for (final label in ['A', 'B', 'C'])
+                TableColumn(label: label, value: (r) => r.$1),
+            ],
+            rows: const [('x', 'y', 'z')],
+          ),
+        ),
+      );
+
+      expect(tester.getSize(find.byType(DataTable)).width, closeTo(800, 0.01));
+    });
+
+    testWidgets('draws a column cell builder instead of the text', (
+      tester,
+    ) async {
+      await pumpTable(
+        tester,
+        tableHost(
+          ResponsiveTable<(String, String)>(
+            columns: [
+              TableColumn<(String, String)>(
+                label: 'Name',
+                value: (r) => r.$1,
+                cell: (context, r) => Chip(label: Text('chip ${r.$1}')),
+              ),
+              TableColumn<(String, String)>(label: 'Age', value: (r) => r.$2),
+            ],
+            rows: tablePeople,
+          ),
+        ),
+      );
+
+      expect(find.byType(Chip), findsNWidgets(2));
+      expect(find.text('chip Ada'), findsOneWidget);
+      expect(find.text('Ada'), findsNothing);
+      expect(find.text('36'), findsOneWidget);
+    });
+
     testWidgets('a sortable header sorts and flips the direction', (
       tester,
     ) async {
@@ -101,8 +161,13 @@ void main() {
         tableHost(buildTable(onSort: (_, {required ascending}) {})),
       );
 
-      final node = tester.getSemantics(find.text('Name'));
-      expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
+      final header = find.ancestor(
+        of: find.text('Name'),
+        matching: find.byType(InkWell),
+      );
+      final data = tester.getSemantics(header).getSemanticsData();
+      expect(data.flagsCollection.isButton, isTrue);
+      expect(data.hasAction(SemanticsAction.tap), isTrue);
       handle.dispose();
     });
 
@@ -136,13 +201,18 @@ void main() {
         tester.getTopRight(find.text('Name')).dx,
         greaterThan(tester.getTopRight(find.text('Age')).dx),
       );
+      expect(tester.getTopRight(find.text('Name')).dx, greaterThan(400));
+      expect(tester.getTopLeft(find.text('Age')).dx, lessThan(400));
     });
 
     testWidgets('survives text scale 2', (tester) async {
       await pumpTable(tester, tableHost(buildTable(), width: 600, scale: 2));
 
       expect(tester.takeException(), isNull);
+      expect(find.text('Name'), findsOneWidget);
+      expect(find.text('Age'), findsOneWidget);
       expect(find.text('Ada'), findsOneWidget);
+      expect(tester.getSize(find.text('Name')).height, greaterThan(30));
     });
 
     testWidgets('survives IntrinsicHeight', (tester) async {
@@ -153,6 +223,9 @@ void main() {
   });
 
   group('misuse', () {
+    // The release fallbacks (no columns draws nothing, an out-of-range sort
+    // index shows the table unsorted) sit behind the asserts, which stop a
+    // debug run before build: tests cannot reach them.
     test('asserts on no columns', () {
       expect(
         () => ResponsiveTable<int>(columns: const [], rows: const []),

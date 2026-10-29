@@ -38,20 +38,29 @@ class ResponsiveTableGrid<T> extends StatelessWidget {
     final tap = onRowTap;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: DataTable(
-        sortColumnIndex: sortColumnIndex,
-        sortAscending: sortAscending,
-        showCheckboxColumn: false,
-        columns: [for (var i = 0; i < columns.length; i++) _column(context, i)],
-        rows: [
-          for (final row in rows)
-            DataRow(
-              onSelectChanged: tap == null ? null : (_) => tap(row),
-              cells: [
-                for (final column in columns) DataCell(Text(column.value(row))),
-              ],
-            ),
-        ],
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minWidth: MediaQuery.sizeOf(context).width),
+        child: DataTable(
+          sortColumnIndex: sortColumnIndex,
+          sortAscending: sortAscending,
+          showCheckboxColumn: false,
+          columns: [
+            for (var i = 0; i < columns.length; i++) _column(context, i),
+          ],
+          rows: [
+            for (final row in rows)
+              DataRow(
+                onSelectChanged: tap == null ? null : (_) => tap(row),
+                cells: [
+                  for (final column in columns)
+                    DataCell(
+                      column.cell?.call(context, row) ??
+                          Text(column.value(row)),
+                    ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -61,20 +70,23 @@ class ResponsiveTableGrid<T> extends StatelessWidget {
     final sort = onSort;
     final l10n = context.materialL10n;
     final label = Text(column.label);
+    final sortable = column.sortable && sort != null;
+    final sorted = index == sortColumnIndex;
     return DataColumn(
       numeric: column.numeric,
-      onSort: column.sortable && sort != null
-          ? (i, ascending) => sort(i, ascending: ascending)
-          : null,
-      label: index == sortColumnIndex
-          ? Semantics(
-              label: sortAscending
+      onSort: sortable ? (i, ascending) => sort(i, ascending: ascending) : null,
+      label: !sortable && !sorted
+          ? label
+          : Semantics(
+              button: sortable,
+              label: !sorted
+                  ? null
+                  : sortAscending
                   ? l10n.collectionsSortedAscending(column.label)
                   : l10n.collectionsSortedDescending(column.label),
-              excludeSemantics: true,
+              excludeSemantics: sorted,
               child: label,
-            )
-          : label,
+            ),
     );
   }
 }

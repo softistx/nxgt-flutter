@@ -37,16 +37,16 @@ class ResponsiveTableCards<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sortable = onSort != null && columns.any((c) => c.sortable);
+    final sort = onSort;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       spacing: 8,
       children: [
-        if (sortable)
+        if (sort != null && columns.any((c) => c.sortable))
           Align(
             alignment: AlignmentDirectional.centerEnd,
-            child: _sortMenu(context),
+            child: _sortMenu(context, sort),
           ),
         for (final row in rows) _card(context, row),
       ],
@@ -62,13 +62,16 @@ class ResponsiveTableCards<T> extends StatelessWidget {
         : l10n.collectionsSortedDescending(label);
   }
 
-  Widget _sortMenu(BuildContext context) {
+  Widget _sortMenu(
+    BuildContext context,
+    void Function(int, {required bool ascending}) sort,
+  ) {
     return PopupMenuButton<int>(
       tooltip: context.materialL10n.collectionsSortBy,
       icon: const Icon(Icons.sort),
       style: targetStyle,
       onSelected: (index) =>
-          onSort!(index, ascending: index != sortColumnIndex || !sortAscending),
+          sort(index, ascending: index != sortColumnIndex || !sortAscending),
       itemBuilder: (context) => [
         for (var i = 0; i < columns.length; i++)
           if (columns[i].sortable)

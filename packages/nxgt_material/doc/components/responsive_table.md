@@ -17,6 +17,12 @@ that load page by page use `PagedList`; for the details of one record use
   is wider than its space. Compact: a `Card` per row built on a
   `DescriptionList`, each `TableColumn.label` naming its value, with a sort
   menu above the cards when a column sorts.
+- The table fills the width of the window (`MediaQuery`), so inside a parent
+  narrower than the window it scrolls sideways rather than shrinking.
+- `TableColumn.cell` builds a widget (a status chip, an icon) for the table's
+  cell; `value` stays required, as the text of the compact card (a
+  `DescriptionItem` holds text, so a card never shows the `cell` widget) and
+  of screen readers.
 - The caller owns the order. Pass `sortColumnIndex` and `sortAscending`, sort
   `rows` when `onSort` fires, and pass them back. A column sorts when its
   `sortable` is true and `onSort` is set. Choosing the sorted column flips its
@@ -83,6 +89,7 @@ ResponsiveTable<Invoice>(
 | Name | Type | Description |
 | --- | --- | --- |
 | `label` | `String` | The header, and the label of the value on a compact card. |
-| `value` | `String Function(T)` | The text of the cell for a row, already formatted. |
+| `value` | `String Function(T)` | The text of the cell for a row, already formatted; also the compact card's value and the semantics text. |
+| `cell` | `Widget Function(BuildContext, T)?` | Builds the table's cell instead of the `value` text; compact cards ignore it. |
 | `sortable` | `bool` | Whether the user can sort by it; default `false`. |
 | `numeric` | `bool` | Whether it holds numbers, aligned to the end in the table; default `false`. |

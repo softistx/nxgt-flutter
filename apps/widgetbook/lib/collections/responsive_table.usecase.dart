@@ -62,7 +62,11 @@ class _SortableState extends State<_Sortable> {
             sortable: true,
             numeric: true,
           ),
-          TableColumn(label: 'Ward', value: (p) => p.ward),
+          TableColumn(
+            label: 'Ward',
+            value: (p) => p.ward,
+            cell: (context, p) => Chip(label: Text(p.ward)),
+          ),
         ],
         rows: widget.empty ? const [] : _sorted,
         sortColumnIndex: _column,
