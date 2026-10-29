@@ -564,6 +564,27 @@ SearchField(controller: controller, onChanged: filter)
 
 **Fix:** pass `Duration.zero` for no debounce, or a positive duration.
 
+## while loading more items of a PagedList
+
+**When:** the `onLoadMore` of a `PagedList` threw. The text is the `context` of
+the report in the console.
+
+**Why:** the list keeps its items, shows a retry row (never the exception) and
+reports the error to `FlutterError.onError`.
+
+**Fix:** handle the error in `onLoadMore` if it is expected; the user can retry
+from the row.
+
+## while refreshing a PagedList
+
+**When:** the `onRefresh` of a `PagedList` threw. The text is the `context` of
+the report in the console.
+
+**Why:** the list keeps its items and the error is reported to
+`FlutterError.onError`.
+
+**Fix:** handle the error in `onRefresh` if it is expected.
+
 ## PagedList.hasMore is true but onLoadMore is null.
 
 **When:** in a debug build, a `PagedList` has `hasMore: true` and no
