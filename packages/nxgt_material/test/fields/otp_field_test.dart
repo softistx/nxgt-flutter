@@ -357,4 +357,86 @@ void main() {
       expect(fired, 1);
     });
   });
+
+  testWidgets('pasting a full code over typed digits replaces them', (
+    tester,
+  ) async {
+    final controller = TextEditingController();
+    final completed = <String>[];
+    addTearDown(controller.dispose);
+    await pump(
+      tester,
+      OtpField(
+        label: 'Code',
+        controller: controller,
+        onCompleted: completed.add,
+      ),
+    );
+    await tester.enterText(find.byType(EditableText), '12');
+    await tester.pump();
+
+    await tester.enterText(find.byType(EditableText), '12654321');
+    await tester.pump();
+
+    expect(controller.text, '654321');
+    expect(completed, ['654321']);
+  });
+
+  testWidgets('pasting a full code into a full field replaces it', (
+    tester,
+  ) async {
+    final controller = TextEditingController();
+    final completed = <String>[];
+    addTearDown(controller.dispose);
+    await pump(
+      tester,
+      OtpField(
+        label: 'Code',
+        controller: controller,
+        onCompleted: completed.add,
+      ),
+    );
+    await tester.enterText(find.byType(EditableText), '123456');
+    await tester.pump();
+
+    await tester.enterText(find.byType(EditableText), '123456654321');
+    await tester.pump();
+
+    expect(controller.text, '654321');
+    expect(completed, ['123456', '654321']);
+  });
+
+  testWidgets('typing past the length is still cut', (tester) async {
+    final controller = TextEditingController();
+    addTearDown(controller.dispose);
+    await pump(tester, OtpField(label: 'Code', controller: controller));
+    await tester.enterText(find.byType(EditableText), '12345');
+    await tester.enterText(find.byType(EditableText), '1234567');
+    expect(controller.text, '123456');
+  });
+
+  testWidgets('autovalidateMode validates as the user types', (tester) async {
+    await pump(
+      tester,
+      const OtpField(label: 'Code', autovalidateMode: AutovalidateMode.always),
+    );
+    await tester.enterText(find.byType(EditableText), '12');
+    await tester.pump();
+    expect(find.text('Enter all 6 digits'), findsOneWidget);
+  });
+
+  testWidgets('lays out at 2x text scale without overflow', (tester) async {
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(textScaler: TextScaler.linear(2)),
+        child: formHost([
+          const OtpField(label: 'Code', helperText: 'Sent by SMS'),
+        ]),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(EditableText), '123456');
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
 }

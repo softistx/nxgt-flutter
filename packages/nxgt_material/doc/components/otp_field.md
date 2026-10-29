@@ -45,6 +45,7 @@ The row is at most `length * 48 + (length - 1) * 8` dp wide (328 dp for 6 digits
 | `onCompleted` | `ValueChanged<String>?` | Called once when the code reaches `length` digits. |
 | `onChanged` | `ValueChanged<String>?` | Called with the digits at every edit. |
 | `onSaved` | `FormFieldSetter<String>?` | Called by `FormState.save`. |
+| `autovalidateMode` | `AutovalidateMode?` | When to validate; `null` follows the enclosing `Form`. |
 | `validator` | `FormFieldValidator<String>?` | Extra validator, run after the built-in ones. |
 | `controller` | `TextEditingController?` | Controls the digits. |
 | `focusNode` | `FocusNode?` | The focus node of the input. |

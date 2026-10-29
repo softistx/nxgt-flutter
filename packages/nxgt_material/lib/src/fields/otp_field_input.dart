@@ -18,6 +18,7 @@ class OtpInput extends StatelessWidget {
     required this.autofocus,
     this.onChanged,
     this.onSaved,
+    this.autovalidateMode,
     this.helperText,
     super.key,
   });
@@ -49,6 +50,9 @@ class OtpInput extends StatelessWidget {
   /// Called by `FormState.save`.
   final FormFieldSetter<String>? onSaved;
 
+  /// When to validate; `null` follows the enclosing form.
+  final AutovalidateMode? autovalidateMode;
+
   /// Text under the slots while there is no error.
   final String? helperText;
 
@@ -68,6 +72,7 @@ class OtpInput extends StatelessWidget {
         autofocus: autofocus,
         enabled: enabled,
         validator: validator,
+        autovalidateMode: autovalidateMode,
         onChanged: onChanged,
         onSaved: onSaved,
         keyboardType: TextInputType.number,
@@ -82,10 +87,7 @@ class OtpInput extends StatelessWidget {
           fontSize: 1,
           height: 1,
         ),
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(length),
-        ],
+        inputFormatters: [_OtpFormatter(length)],
         errorBuilder: (context, error) => _ErrorProbe(
           onError: onError,
           child: Text(
@@ -111,6 +113,50 @@ class OtpInput extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(vertical: 23.5),
         ),
       ),
+    );
+  }
+}
+
+/// Keeps digits only, at most `length` of them.
+///
+/// A pasted or autofilled chunk holding `length` digits or more replaces the
+/// whole code, so pasting a full code works over typed digits and into a full
+/// field; anything else is stripped to digits and cut at `length`.
+class _OtpFormatter extends TextInputFormatter {
+  const new(this.length);
+
+  final int length;
+
+  static final _nonDigit = RegExp(r'\D');
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text;
+    var digits = text.replaceAll(_nonDigit, '');
+    // The inserted chunk is what the old selection (the end when it is
+    // unknown) became: the new text minus the old text around it.
+    final old = oldValue.text;
+    final sel = oldValue.selection.isValid
+        ? oldValue.selection
+        : TextSelection.collapsed(offset: old.length);
+    final head = old.substring(0, sel.start);
+    final tail = old.substring(sel.end);
+    if (text.length >= head.length + tail.length &&
+        text.startsWith(head) &&
+        text.endsWith(tail)) {
+      final chunk = text
+          .substring(head.length, text.length - tail.length)
+          .replaceAll(_nonDigit, '');
+      if (chunk.length >= length) digits = chunk;
+    }
+    if (digits.length > length) digits = digits.substring(0, length);
+    if (digits == text) return newValue;
+    return TextEditingValue(
+      text: digits,
+      selection: TextSelection.collapsed(offset: digits.length),
     );
   }
 }
