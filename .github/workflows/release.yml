@@ -24,7 +24,7 @@ jobs:
       contents: read
       id-token: write # pub.dev OIDC
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # the main-branch check below needs the history
       # setup-dart exchanges the job's OIDC token for a pub.dev credential;
