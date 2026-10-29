@@ -651,6 +651,31 @@ ResponsiveTable<Patient>(
 )
 ```
 
+## DateField shows English month names, or the date picker is in English
+
+**When:** the app is in French (or another language) but a `DateField` shows
+English dates and the picker's buttons read "Cancel" and "OK".
+
+**Why:** the date text and the picker come from Flutter's
+`MaterialLocalizations`, which the app adds with
+`GlobalMaterialLocalizations.delegate` and a `supportedLocales` entry for the
+language. `NxgtMaterialLocalizationsDelegate` only supplies this package's own
+strings (the clear button, the range errors).
+
+**Fix:** add Flutter's delegates next to this package's, and list the locale.
+
+```dart
+MaterialApp(
+  localizationsDelegates: const [
+    NxgtMaterialLocalizationsDelegate(),
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: NxgtMaterialLocalizations.supportedLocales,
+)
+```
+
 ## length must be 1 to 12
 
 **When:** in a debug build, an `OtpField` is created with `length: 0` or

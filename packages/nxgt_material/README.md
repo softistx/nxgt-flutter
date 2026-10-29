@@ -26,6 +26,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | --- | --- |
 | `actions.dart` | Buttons and menus that trigger something |
 | `collections.dart` | Search and list-shaped data: `SearchField`, `PagedList`, `ResponsiveTable` and `TableColumn` |
+| `dates.dart` | Date fields built on `FormField`: `DateField` |
 | `display.dart` | Read-only record display: `StatusIndicator`, `CountBadge`, `UserAvatar`, `StatCard`, `DescriptionList`, `EntityHeader` |
 | `feedback.dart` | Empty, loading and error states, toasts, banners, progress |
 | `fields.dart` | Single-value inputs built on `FormField` |
@@ -341,6 +342,28 @@ Guide: [Overlays](doc/guide/overlays.md). Pages:
 [ConfirmDialog](doc/components/confirm_dialog.md),
 [FormDialog](doc/components/form_dialog.md).
 
+## Dates
+
+`package:nxgt_material/dates.dart`. Built on Material 3 `showDatePicker` and
+`InputDecorator`.
+
+| Component | What it adds |
+| --- | --- |
+| `DateField` | A `FormField<DateTime>` that opens the date picker: value at midnight, text in the locale's medium date (or a `formatter`), `firstDate` and `lastDate` with a named-bound error, `required`, a 48 dp clear button, one announced node |
+
+```dart
+import 'package:nxgt_material/dates.dart';
+
+DateField(
+  label: 'Birth date',
+  required: true,
+  lastDate: DateTime.now(),
+  onChanged: (date) => setState(() => _birth = date),
+)
+```
+
+Pages: [DateField](doc/components/date_field.md), [dates guide](doc/guide/dates.md).
+
 ## Selection
 
 `package:nxgt_material/selection.dart`.
@@ -530,6 +553,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [CopyButton](doc/components/copy_button.md),
   [CountBadge](doc/components/count_badge.md),
   [DescriptionList](doc/components/description_list.md),
+  [DateField](doc/components/date_field.md),
   [EmailField](doc/components/email_field.md),
   [EmptyState](doc/components/empty_state.md),
   [EntityHeader](doc/components/entity_header.md),
