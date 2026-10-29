@@ -33,6 +33,7 @@ Form(
 | `EmailField` | fields | Email keyboard, autofill, validation |
 | `PasswordField` | fields | Obscured text, show/hide toggle, new-password hint |
 | `UrlField` | fields | URL keyboard, autofill, validation, `normalize` |
+| `OtpField` | fields | One-time code: digit slots, paste, SMS autofill, `onCompleted` |
 | `PhoneField` | fields | Phone keypad, character filter, validation |
 | `NumberField` | fields | Numeric keypad, comma or point, min and max |
 | `TextAreaField` | fields | Growing multi-line text with an optional counter |

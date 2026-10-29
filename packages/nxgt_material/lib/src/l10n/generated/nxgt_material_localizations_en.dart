@@ -67,6 +67,17 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
   String get fieldsInvalidUrl => 'Enter a valid web address';
 
   @override
+  String fieldsOtpIncomplete(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Enter all $count digits',
+      one: 'Enter the digit',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get fieldsInvalidNumber => 'Enter a valid number';
 
   @override

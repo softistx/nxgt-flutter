@@ -204,6 +204,7 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.fieldsRequired,
   s.fieldsInvalidEmail,
   s.fieldsInvalidUrl,
+  s.fieldsOtpIncomplete(6),
   s.fieldsMinLength(2),
   s.fieldsMaxLength(2),
   s.feedbackLoading,

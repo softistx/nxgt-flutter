@@ -2,6 +2,7 @@
 
 ### Added
 
+- `fields.dart`: `OtpField` (a one-time code as one real input with invisible text over `length` 48 dp slots: native paste stripped to digits and cut at `length`, `AutofillHints.oneTimeCode`, one semantics node, slots left to right in RTL; `onCompleted` fires once per completion and never submits the form; built-in incomplete and `required` checks). New string `fieldsOtpIncomplete` in fr and en.
 - `fields.dart`: `UrlField` (URL keyboard, `url` autofill, no capitalization, autocorrect off, `required`, `textInputAction`; keeps the text as typed) and `UrlField.normalize` (trims, adds `https://` when there is no scheme, `null` when invalid). `Validators.url()` accepts http and https addresses with a dotted host and an optional scheme. New string `fieldsInvalidUrl` in fr and en.
 
 ## 0.2.0
