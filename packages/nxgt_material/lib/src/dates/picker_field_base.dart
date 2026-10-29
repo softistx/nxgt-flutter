@@ -8,8 +8,9 @@ import 'package:nxgt_material/src/selection/choice_field_parts.dart';
 /// `DateRangeField`. Internal, not exported.
 ///
 /// [V] is the picked value. A field builds this widget with [format] (value
-/// to text) and [pick] (open the picker), and gets the decorated, focusable, announced control, the 48 dp
-/// clear button, the required check and the form behaviour.
+/// to text) and [pick] (open the picker), and gets the decorated, focusable,
+/// announced control, the 48 dp clear button, the required check and the
+/// form behaviour.
 class PickerFieldBase<V> extends StatelessWidget {
   /// Creates the field.
   const new({
