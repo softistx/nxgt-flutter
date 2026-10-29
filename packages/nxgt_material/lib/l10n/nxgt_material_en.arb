@@ -63,7 +63,7 @@
   "displayPresenceAway": "Away",
   "@displayPresenceAway": {"description": "Screen reader text of an avatar's presence dot: the person is signed in but away."},
   "displayPresenceBusy": "Busy",
-  "@displayPresenceBusy": {"description": "Screen reader text of an avatar's presence dot: the person is do not disturb."},
+  "@displayPresenceBusy": {"description": "Screen reader text of an avatar's presence dot: the person asked not to be disturbed."},
   "displayPresenceOffline": "Offline",
   "@displayPresenceOffline": {"description": "Screen reader text of an avatar's presence dot: the person is not signed in."}
 }

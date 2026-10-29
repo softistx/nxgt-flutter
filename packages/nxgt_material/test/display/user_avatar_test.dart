@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/display.dart';
 
+import 'package:nxgt_material/theme.dart';
+
 import '../support/host.dart';
 
 class _FailingImage extends ImageProvider<_FailingImage> {
@@ -20,6 +22,13 @@ class _FailingImage extends ImageProvider<_FailingImage> {
     Future<ImageInfo>.error(Exception('cannot load')),
   );
 }
+
+/// Exact palette picks of the FNV-1a hash; the web test pins the same ones.
+const pinnedTones = [
+  ('Ada Lovelace', 'tertiary'),
+  ('eve  adams', 'secondary'),
+  ('Chloé Durand', 'success'),
+];
 
 Color _fill(WidgetTester tester) =>
     tester.widget<CircleAvatar>(find.byType(CircleAvatar)).backgroundColor!;
@@ -152,10 +161,129 @@ void main() {
     });
   }
 
-  testWidgets('UserAvatar has no presence dot by default', (tester) async {
+  testWidgets('UserAvatar speaks only the name without presence', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
     await tester.pumpApp(themedHost(const UserAvatar(name: 'Ada')));
 
+    expect(find.bySemanticsLabel('Ada'), findsOneWidget);
+    expect(find.byType(PositionedDirectional), findsNothing);
     expect(find.byType(Positioned), findsOneWidget);
+    await tester.pumpApp(
+      themedHost(const UserAvatar(name: 'Ada', presence: AvatarPresence.busy)),
+    );
+    expect(find.byType(Positioned), findsNWidgets(2));
+    handle.dispose();
+  });
+
+  testWidgets('UserAvatar speaks only the presence for an empty name', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    await tester.pumpApp(
+      themedHost(const UserAvatar(name: '', presence: AvatarPresence.online)),
+    );
+
+    expect(find.bySemanticsLabel('Online'), findsOneWidget);
+    handle.dispose();
+  });
+
+  testWidgets('UserAvatar has no label for an empty name and no presence', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    await tester.pumpApp(themedHost(const UserAvatar(name: '')));
+
+    final node = tester.getSemantics(find.byType(UserAvatar));
+    expect(node.label, isEmpty);
+    handle.dispose();
+  });
+
+  testWidgets('UserAvatar person icon meets AA contrast on the neutral tone', (
+    tester,
+  ) async {
+    for (final brightness in Brightness.values) {
+      await tester.pumpApp(
+        themedHost(const UserAvatar(name: ''), brightness: brightness),
+      );
+      final icon = tester.widget<Icon>(find.byIcon(Icons.person));
+      expect(
+        _fill(tester),
+        tester.element(find.byType(UserAvatar)).tones.neutral.container,
+      );
+      expect(_contrast(icon.color!, _fill(tester)), greaterThanOrEqualTo(4.5));
+    }
+  });
+
+  testWidgets('UserAvatar sizes the presence dot between 8 and 16', (
+    tester,
+  ) async {
+    Future<double> dot(double size) async {
+      await tester.pumpApp(
+        themedHost(
+          Center(
+            child: UserAvatar(
+              name: 'Ada',
+              size: size,
+              presence: AvatarPresence.online,
+            ),
+          ),
+        ),
+      );
+      return tester
+          .getSize(
+            find.descendant(
+              of: find.byType(PositionedDirectional),
+              matching: find.byType(SizedBox),
+            ),
+          )
+          .width;
+    }
+
+    expect(await dot(20), 8);
+    expect(await dot(40), closeTo(12, 0.001));
+    expect(await dot(100), 16);
+  });
+
+  testWidgets('UserAvatar puts the presence dot at the end in RTL', (
+    tester,
+  ) async {
+    Future<double> dotX(TextDirection direction) async {
+      await tester.pumpApp(
+        themedHost(
+          Directionality(
+            textDirection: direction,
+            child: const Center(
+              child: UserAvatar(name: 'Ada', presence: AvatarPresence.online),
+            ),
+          ),
+        ),
+      );
+      final avatar = tester.getCenter(find.byType(CircleAvatar)).dx;
+      final dot = tester
+          .getCenter(
+            find.descendant(
+              of: find.byType(PositionedDirectional),
+              matching: find.byType(SizedBox),
+            ),
+          )
+          .dx;
+      return dot - avatar;
+    }
+
+    expect(await dotX(TextDirection.ltr), greaterThan(0));
+    expect(await dotX(TextDirection.rtl), lessThan(0));
+  });
+
+  testWidgets('UserAvatar pins the tone picked for fixed names', (
+    tester,
+  ) async {
+    for (final (name, tone) in pinnedTones) {
+      await tester.pumpApp(themedHost(UserAvatar(name: name)));
+      final tones = tester.element(find.byType(UserAvatar)).tones;
+      expect(_fill(tester), tones[tone]!.container, reason: name);
+    }
   });
 
   testWidgets('UserAvatar honours size', (tester) async {

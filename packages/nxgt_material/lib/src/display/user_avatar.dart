@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/generated/nxgt_material_localizations.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
+import 'package:nxgt_material/src/theme/tone_colors.dart';
+import 'package:nxgt_material/src/theme/tones.dart';
 
 /// Whether the person an avatar stands for is available.
 ///
@@ -18,16 +22,18 @@ enum AvatarPresence {
   busy,
 
   /// Not signed in.
-  offline;
-
-  /// The localized word a screen reader says after the name.
-  String label(NxgtMaterialLocalizations l10n) => switch (this) {
-    AvatarPresence.online => l10n.displayPresenceOnline,
-    AvatarPresence.away => l10n.displayPresenceAway,
-    AvatarPresence.busy => l10n.displayPresenceBusy,
-    AvatarPresence.offline => l10n.displayPresenceOffline,
-  };
+  offline,
 }
+
+String _presenceLabel(
+  AvatarPresence presence,
+  NxgtMaterialLocalizations l10n,
+) => switch (presence) {
+  AvatarPresence.online => l10n.displayPresenceOnline,
+  AvatarPresence.away => l10n.displayPresenceAway,
+  AvatarPresence.busy => l10n.displayPresenceBusy,
+  AvatarPresence.offline => l10n.displayPresenceOffline,
+};
 
 /// A person's avatar: their picture, or their initials on a colour that the
 /// name always gives the same.
@@ -64,22 +70,8 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     // Release builds degrade: a size of 0 or less draws the default 40.
     final diameter = size > 0 ? size : 40.0;
-    final tones = context.tones;
-    final palette = [
-      tones.primary,
-      tones.secondary,
-      tones.tertiary,
-      tones.success,
-      tones.info,
-      tones.warning,
-    ];
     final trimmed = name.trim();
-    final colors = trimmed.isEmpty
-        ? tones.neutral
-        : palette[_stableHash(
-                trimmed.split(RegExp(r'\s+')).join(' ').toLowerCase(),
-              ) %
-              palette.length];
+    final colors = _toneFor(context.tones, trimmed);
     final initials = _initials(trimmed);
 
     Widget fallback() => initials.isEmpty
@@ -118,11 +110,19 @@ class UserAvatar extends StatelessWidget {
               ),
             ),
     );
+    return _assemble(context, avatar, diameter, trimmed);
+  }
 
+  Widget _assemble(
+    BuildContext context,
+    Widget avatar,
+    double diameter,
+    String trimmed,
+  ) {
     final status = presence;
     final label = [
       if (trimmed.isNotEmpty) trimmed,
-      if (status != null) status.label(context.materialL10n),
+      if (status != null) _presenceLabel(status, context.materialL10n),
     ].join(', ');
     return Semantics(
       container: true,
@@ -136,8 +136,8 @@ class UserAvatar extends StatelessWidget {
           children: [
             Positioned.fill(child: avatar),
             if (status != null)
-              Positioned(
-                right: 0,
+              PositionedDirectional(
+                end: 0,
                 bottom: 0,
                 child: _PresenceDot(
                   presence: status,
@@ -150,12 +150,33 @@ class UserAvatar extends StatelessWidget {
     );
   }
 
-  /// FNV-1a over the code units: the same on every platform and run, unlike
-  /// `String.hashCode`.
+  /// The tone of [trimmed]: neutral when empty, else one of six picked by a
+  /// stable hash of the lowercased, whitespace-normalized name.
+  static ToneColors _toneFor(Tones tones, String trimmed) {
+    if (trimmed.isEmpty) return tones.neutral;
+    final palette = [
+      tones.primary,
+      tones.secondary,
+      tones.tertiary,
+      tones.success,
+      tones.info,
+      tones.warning,
+    ];
+    final key = trimmed.split(RegExp(r'\s+')).join(' ').toLowerCase();
+    return palette[_stableHash(key) % palette.length];
+  }
+
+  /// FNV-1a 32 bits over the UTF-8 bytes, identical on every platform and
+  /// run (unlike `String.hashCode`). On the web ints are doubles, so it never
+  /// applies a bitwise operator to a value of 2^31 or more: the xor touches
+  /// only the low byte, and the multiply by 0x01000193 (2^24 + 0x193) stays
+  /// below 2^53.
   static int _stableHash(String value) {
     var hash = 0x811c9dc5;
-    for (final unit in value.codeUnits) {
-      hash = ((hash ^ unit) * 0x01000193) & 0x7fffffff;
+    for (final byte in utf8.encode(value)) {
+      final low = hash % 256;
+      hash = hash - low + (low ^ byte);
+      hash = (hash * 0x193 + (hash % 256) * 0x1000000) % 0x100000000;
     }
     return hash;
   }
