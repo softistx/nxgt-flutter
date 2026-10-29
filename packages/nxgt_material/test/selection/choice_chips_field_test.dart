@@ -85,6 +85,51 @@ void main() {
       handle.dispose();
     });
 
+    testWidgets('one chip is a selected button with its tooltip', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await pump(tester, field(initialValue: 'a'));
+      final data = tester.getSemantics(find.text('Alpha')).getSemanticsData();
+      expect(data.label, contains('Alpha'));
+      expect(data.tooltip, 'First');
+      expect(data.flagsCollection.isButton, isTrue);
+      expect(data.flagsCollection.isSelected, Tristate.isTrue);
+      expect(data.flagsCollection.isInMutuallyExclusiveGroup, isTrue);
+      expect(data.flagsCollection.isEnabled, Tristate.isTrue);
+      handle.dispose();
+    });
+
+    testWidgets('a 200-character label is ellipsized, still read in full', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      final long = 'Long label ' * 18;
+      await tester.binding.setSurfaceSize(const Size(320, 600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await pump(
+        tester,
+        field(
+          options: [
+            ChoiceOption(value: 'a', label: long),
+            _options[1],
+          ],
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      final text = tester.widget<Text>(find.text(long));
+      expect(text.overflow, TextOverflow.ellipsis);
+      expect(
+        tester.getSize(find.byType(ChoiceChip).first).width,
+        lessThan(321),
+      );
+      expect(
+        tester.getSemantics(find.text(long)).getSemanticsData().label,
+        contains(long),
+      );
+      handle.dispose();
+    });
+
     testWidgets('the description is the tooltip, not visible text', (
       tester,
     ) async {

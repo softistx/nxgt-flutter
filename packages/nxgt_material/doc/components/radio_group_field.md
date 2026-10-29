@@ -34,6 +34,9 @@ field is required" / "Ce champ est obligatoire"); `validator` runs after it.
 `autovalidateMode` follows the `Form` when left `null`. `onChanged` receives
 the chosen value; it is never called with `null` by a tap.
 
+A chosen option cannot be cleared by the user; use `ChoiceChipsField` when
+clearing is needed.
+
 ## Accessibility
 
 The group is one container node named by its label (the visible title) whose

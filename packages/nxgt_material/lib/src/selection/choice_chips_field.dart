@@ -55,7 +55,11 @@ class ChoiceChipsField<T> extends ChoiceFieldBase<T?> {
                 child: Semantics(
                   inMutuallyExclusiveGroup: true,
                   child: ChoiceChip(
-                    label: Text(option.label),
+                    label: Text(
+                      option.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     tooltip: option.description,
                     selected: state.value == option.value,
                     onSelected: enabled && option.enabled
@@ -130,22 +134,22 @@ class FilterChipsField<T> extends ChoiceFieldBase<Set<T>> {
           children: [
             for (final (i, option) in unique.indexed)
               FilterChip(
-                label: Text(option.label),
+                label: Text(
+                  option.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 tooltip: option.description,
                 selected: chosen.contains(option.value),
                 onSelected: enabled && option.enabled
                     ? (selected) => change(
                         state,
-                        Set<T>.unmodifiable({
-                          for (final o in unique)
-                            if (o.value == option.value
-                                ? selected
-                                : (state.value ?? <T>{}).contains(o.value))
-                              o.value,
-                          // Values that match no option stay at the end.
-                          for (final v in state.value ?? <T>{})
-                            if (!unique.any((o) => o.value == v)) v,
-                        }),
+                        nextChosen(
+                          unique,
+                          chosen,
+                          option.value,
+                          chosen: selected,
+                        ),
                       )
                     : null,
                 focusNode: i == firstEnabled ? focusNode : null,
