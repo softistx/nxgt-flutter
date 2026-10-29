@@ -9,6 +9,7 @@ Future<void> main() async {
   await goldenTest(
     'PagedList looks right in light and dark',
     fileName: 'paged_list',
+    pumpBeforeTest: pumpOnce,
     builder: () => GoldenTestGroup(
       children: [
         for (final brightness in Brightness.values)
