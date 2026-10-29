@@ -60,6 +60,8 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String get fieldsInvalidUrl => base.fieldsInvalidUrl;
   @override
+  String fieldsOtpIncomplete(int count) => base.fieldsOtpIncomplete(count);
+  @override
   String get fieldsInvalidNumber => base.fieldsInvalidNumber;
   @override
   String fieldsMinValue(String min) => base.fieldsMinValue(min);

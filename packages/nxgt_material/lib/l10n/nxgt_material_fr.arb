@@ -13,6 +13,7 @@
   "fieldsMaxLength": "Saisissez au plus {count, plural, =1{1 caractère} other{{count} caractères}}",
   "fieldsInvalidPhone": "Saisissez un numéro de téléphone valide",
   "fieldsInvalidUrl": "Saisissez une adresse web valide",
+  "fieldsOtpIncomplete": "{count, plural, =1{Saisissez le chiffre} other{Saisissez les {count} chiffres}}",
   "fieldsInvalidNumber": "Saisissez un nombre valide",
   "fieldsMinValue": "Saisissez une valeur d’au moins {min}",
   "fieldsMaxValue": "Saisissez une valeur d’au plus {max}",

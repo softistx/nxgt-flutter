@@ -53,6 +53,8 @@ import 'package:nxgt_widgetbook/fields/email_field.usecase.dart'
     as _nxgt_widgetbook_fields_email_field_usecase;
 import 'package:nxgt_widgetbook/fields/number_field.usecase.dart'
     as _nxgt_widgetbook_fields_number_field_usecase;
+import 'package:nxgt_widgetbook/fields/otp_field.usecase.dart'
+    as _nxgt_widgetbook_fields_otp_field_usecase;
 import 'package:nxgt_widgetbook/fields/password_field.usecase.dart'
     as _nxgt_widgetbook_fields_password_field_usecase;
 import 'package:nxgt_widgetbook/fields/phone_field.usecase.dart'
@@ -327,6 +329,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_fields_number_field_usecase
                 .buildNumberFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'OtpField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_fields_otp_field_usecase.buildOtpFieldDefault,
           ),
         ],
       ),

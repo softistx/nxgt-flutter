@@ -179,6 +179,12 @@ abstract class NxgtMaterialLocalizations {
   /// **'Enter a valid web address'**
   String get fieldsInvalidUrl;
 
+  /// Error shown under a one-time code field that is only partly filled; count is the code length.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Enter the digit} other{Enter all {count} digits}}'**
+  String fieldsOtpIncomplete(int count);
+
   /// Error shown under a number field whose value is not a number.
   ///
   /// In en, this message translates to:

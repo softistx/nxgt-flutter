@@ -650,3 +650,17 @@ ResponsiveTable<Patient>(
   sortColumnIndex: 0, // < columns.length
 )
 ```
+
+## length must be 1 to 12
+
+**When:** in a debug build, an `OtpField` is created with `length: 0` or
+`length: 13` (or any value outside 1 to 12).
+
+**Why:** the field draws one 48 dp slot per digit and asserts a usable range.
+A release build does not check it.
+
+**Fix:** pass a `length` from 1 to 12.
+
+```dart
+OtpField(label: 'Code', length: 6) // 1 to 12
+```

@@ -139,6 +139,7 @@ Pages: [AsyncButton](doc/components/async_button.md),
 | `EmailField` | Email keyboard, autofill and validation |
 | `PasswordField` | Obscured text with a localized show/hide toggle |
 | `UrlField` | URL keyboard, autofill and validation; `UrlField.normalize` adds `https://` |
+| `OtpField` | One-time code: digit slots over one input, paste, SMS autofill, `onCompleted` |
 | `PhoneField` | Phone keypad, character filter and validation |
 | `NumberField` | Numeric keypad, comma or point, min and max |
 | `TextAreaField` | Growing multi-line text with an optional counter |
@@ -188,6 +189,7 @@ TextFormField(validator: v.compose([v.required(), v.minLength(3)]));
 Guide: [Forms](doc/guide/forms.md). Pages:
 [EmailField](doc/components/email_field.md),
 [PasswordField](doc/components/password_field.md),
+[OtpField](doc/components/otp_field.md),
 [PhoneField](doc/components/phone_field.md),
 [NumberField](doc/components/number_field.md),
 [TextAreaField](doc/components/text_area_field.md),
@@ -539,6 +541,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [LoadMoreButton](doc/components/load_more_button.md),
   [LoadingState](doc/components/loading_state.md),
   [NumberField](doc/components/number_field.md),
+  [OtpField](doc/components/otp_field.md),
   [PageBody](doc/components/page_body.md),
   [PagedList](doc/components/paged_list.md),
   [PasswordField](doc/components/password_field.md),
