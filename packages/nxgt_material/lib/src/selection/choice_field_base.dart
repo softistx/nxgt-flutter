@@ -101,41 +101,11 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (isGroup)
-              Semantics(
-                container: true,
-                explicitChildNodes: true,
+              _GroupBody(
                 label: label,
                 hint: error ?? helperText,
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // The visible title; the container node carries it.
-                      ExcludeSemantics(
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                            16,
-                            12,
-                            16,
-                            4,
-                          ),
-                          child: Text(
-                            label,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  color: error == null
-                                      ? null
-                                      : Theme.of(context).colorScheme.error,
-                                ),
-                          ),
-                        ),
-                      ),
-                      builder(state.context, state),
-                    ],
-                  ),
-                ),
+                hasError: error != null,
+                child: builder(state.context, state),
               )
             else
               // The error, or the helper text, is the hint of the control, so
@@ -151,7 +121,12 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
                   ),
                 ),
               ),
-            _Footer(helperText: helperText, errorText: error),
+            _Footer(
+              helperText: helperText,
+              errorText: error,
+              // A group's helper text is already the hint of its container.
+              excludeHelper: isGroup,
+            ),
           ],
         );
       },
@@ -166,15 +141,71 @@ abstract class ChoiceFieldBase<V> extends StatelessWidget {
   }
 }
 
+/// The body of a group: a visible title and a container node named by it,
+/// holding the options in [child].
+class _GroupBody extends StatelessWidget {
+  const new({
+    required this.label,
+    required this.hint,
+    required this.hasError,
+    required this.child,
+  });
+
+  final String label;
+  final String? hint;
+  final bool hasError;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: label,
+      hint: hint,
+      // Its own Material, so a coloured ancestor neither hides the ink
+      // splashes nor trips the ListTile assertion.
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // The visible title; the container node carries it.
+            ExcludeSemantics(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 4),
+                child: Text(
+                  label,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: hasError ? theme.colorScheme.error : null,
+                  ),
+                ),
+              ),
+            ),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// The helper text, replaced by the announced error when there is one.
 ///
 /// The 16 dp start inset matches the padding of a `ListTile`, so the text
 /// lines up with the tile's content edge.
 class _Footer extends StatelessWidget {
-  const new({required this.helperText, required this.errorText});
+  const new({
+    required this.helperText,
+    required this.errorText,
+    required this.excludeHelper,
+  });
 
   final String? helperText;
   final String? errorText;
+  final bool excludeHelper;
 
   @override
   Widget build(BuildContext context) {
@@ -205,10 +236,13 @@ class _Footer extends StatelessWidget {
     if (helper == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
-      child: Text(
-        helper,
-        style: theme.textTheme.bodySmall?.copyWith(
-          color: theme.colorScheme.onSurfaceVariant,
+      child: ExcludeSemantics(
+        excluding: excludeHelper,
+        child: Text(
+          helper,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
     );

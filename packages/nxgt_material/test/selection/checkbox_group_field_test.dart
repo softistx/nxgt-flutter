@@ -334,4 +334,54 @@ void main() {
     await tester.pump();
     expect(tester.takeException(), isA<AssertionError>());
   });
+
+  testWidgets('focusNode goes to the first enabled option, if any', (
+    tester,
+  ) async {
+    final node = FocusNode();
+    addTearDown(node.dispose);
+    Future<void> show(List<bool> enabled, {bool fieldEnabled = true}) => pump(
+      tester,
+      CheckboxGroupField<String>(
+        label: 'L',
+        focusNode: node,
+        enabled: fieldEnabled,
+        options: [
+          for (final (i, e) in enabled.indexed)
+            ChoiceOption(value: 'v$i', label: 'Option $i', enabled: e),
+        ],
+      ),
+    );
+
+    await show([false, true, true]);
+    expect(node.context, isNotNull);
+    expect(
+      tester
+          .getRect(find.byType(CheckboxListTile).at(1))
+          .contains(node.rect.center),
+      isTrue,
+    );
+
+    await show([false, false]);
+    expect(node.context?.mounted ?? false, isFalse);
+    await show([true, true], fieldEnabled: false);
+    expect(node.context?.mounted ?? false, isFalse);
+    await show([true, true]);
+    expect(
+      tester
+          .getRect(find.byType(CheckboxListTile).first)
+          .contains(node.rect.center),
+      isTrue,
+    );
+  });
+
+  testWidgets('reports the set in the order of the options', (tester) async {
+    final changes = <Set<String>>[];
+    await pump(tester, field(onChanged: changes.add));
+    await tester.tap(find.text('Gamma'));
+    await tester.pump();
+    await tester.tap(find.text('Alpha'));
+    await tester.pump();
+    expect(changes.last.toList(), ['a', 'c']);
+  });
 }

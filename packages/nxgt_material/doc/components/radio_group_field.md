@@ -60,7 +60,7 @@ a disabled option stays visible and is skipped.
 | `autovalidateMode` | `AutovalidateMode?` | When to validate; `null` follows the `Form`. |
 | `required` | `bool` | A choice is needed to be valid. Default `false`. |
 | `enabled` | `bool` | Whether it accepts input. Default `true`. |
-| `focusNode` | `FocusNode?` | Focus node of the first enabled option. |
+| `focusNode` | `FocusNode?` | Focus node of the first enabled option; it stays unattached when the field is disabled or every option is. |
 | `helperText` | `String?` | A hint under the group, replaced by the error. |
 
 `ChoiceOption<T>` has `value`, `label`, `description` and `enabled`.

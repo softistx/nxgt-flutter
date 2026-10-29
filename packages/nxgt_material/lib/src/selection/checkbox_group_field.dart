@@ -7,7 +7,8 @@ import 'package:nxgt_material/src/theme/targets.dart';
 ///
 /// A titled vertical group of full-width checkbox tiles, each at least 48 dp
 /// high with its label and optional description. The value is a `Set` that is
-/// never mutated: every change reports a new unmodifiable set. With
+/// never mutated: every change reports a new unmodifiable set, in the order of
+/// the options. With
 /// `required` it is valid only once something is chosen. Works in a [Form]
 /// (validate, save, reset). For a single box use `CheckboxField`.
 class CheckboxGroupField<T> extends ChoiceFieldBase<Set<T>> {
@@ -38,30 +39,21 @@ class CheckboxGroupField<T> extends ChoiceFieldBase<Set<T>> {
 
   @override
   Widget build(BuildContext context) {
-    assert(options.isNotEmpty, 'CheckboxGroupField.options must not be empty.');
-    assert(
-      options.map((o) => o.value).toSet().length == options.length,
-      'CheckboxGroupField.options must have unique values.',
-    );
     assert(
       (initialValue ?? const {}).every((v) => options.any((o) => o.value == v)),
       'CheckboxGroupField.initialValue must only hold values of the options.',
     );
-    final seen = <T>{};
-    final unique = [
-      for (final option in options)
-        if (seen.add(option.value)) option,
-    ];
+    final unique = uniqueOptions(options, 'CheckboxGroupField');
+    final firstEnabled = firstEnabledOption(unique, fieldEnabled: enabled);
     return buildChoice(
       context,
       builder: (context, state) {
         final chosen = state.value ?? <T>{};
-        var focusAssigned = false;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            for (final option in unique)
+            for (final (i, option) in unique.indexed)
               ConstrainedBox(
                 constraints: BoxConstraints(minHeight: minTarget.height),
                 child: CheckboxListTile(
@@ -69,18 +61,17 @@ class CheckboxGroupField<T> extends ChoiceFieldBase<Set<T>> {
                   onChanged: enabled && option.enabled
                       ? (checked) => change(
                           state,
-                          Set<T>.unmodifiable({
-                            for (final v in state.value ?? <T>{})
-                              if (v != option.value) v,
-                            if (checked ?? false) option.value,
-                          }),
+                          Set<T>.unmodifiable(
+                            _inOptionOrder(
+                              unique,
+                              state.value ?? <T>{},
+                              option.value,
+                              checked ?? false,
+                            ),
+                          ),
                         )
                       : null,
-                  focusNode: (focusAssigned || !(enabled && option.enabled))
-                      ? null
-                      : (focusAssigned = true)
-                      ? focusNode
-                      : null,
+                  focusNode: i == firstEnabled ? focusNode : null,
                   title: Text(option.label),
                   subtitle: option.description == null
                       ? null
@@ -94,5 +85,23 @@ class CheckboxGroupField<T> extends ChoiceFieldBase<Set<T>> {
         );
       },
     );
+  }
+
+  // The next value, in the order of the options; values that match no option
+  // stay at the end.
+  static Set<T> _inOptionOrder<T>(
+    List<ChoiceOption<T>> unique,
+    Set<T> current,
+    T toggled,
+    bool checked,
+  ) {
+    final next = {...current}..remove(toggled);
+    if (checked) next.add(toggled);
+    return {
+      for (final o in unique)
+        if (next.contains(o.value)) o.value,
+      for (final v in next)
+        if (!unique.any((o) => o.value == v)) v,
+    };
   }
 }

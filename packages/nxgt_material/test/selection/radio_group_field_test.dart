@@ -344,4 +344,44 @@ void main() {
     await tester.pump();
     expect(tester.takeException(), isA<AssertionError>());
   });
+
+  testWidgets('focusNode goes to the first enabled option, if any', (
+    tester,
+  ) async {
+    final node = FocusNode();
+    addTearDown(node.dispose);
+    Future<void> show(List<bool> enabled, {bool fieldEnabled = true}) => pump(
+      tester,
+      RadioGroupField<String>(
+        label: 'L',
+        focusNode: node,
+        enabled: fieldEnabled,
+        options: [
+          for (final (i, e) in enabled.indexed)
+            ChoiceOption(value: 'v$i', label: 'Option $i', enabled: e),
+        ],
+      ),
+    );
+
+    await show([false, true, true]);
+    expect(node.context, isNotNull);
+    expect(
+      tester
+          .getRect(find.byType(RadioListTile<String>).at(1))
+          .contains(node.rect.center),
+      isTrue,
+    );
+
+    await show([false, false]);
+    expect(node.context?.mounted ?? false, isFalse);
+    await show([true, true], fieldEnabled: false);
+    expect(node.context?.mounted ?? false, isFalse);
+    await show([true, true]);
+    expect(
+      tester
+          .getRect(find.byType(RadioListTile<String>).first)
+          .contains(node.rect.center),
+      isTrue,
+    );
+  });
 }

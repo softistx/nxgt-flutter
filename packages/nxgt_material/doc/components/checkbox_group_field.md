@@ -27,7 +27,7 @@ CheckboxGroupField<Channel>(
 ```
 
 The value is a `Set<T>` that is never mutated: each change reports a new
-unmodifiable set, and `initialValue` is left untouched. With `required`, an
+unmodifiable set in the order of the options, and `initialValue` is left untouched. With `required`, an
 empty set fails with the localized `fieldsRequired` string; `validator` runs
 after it and can bound the count itself. `Form.reset` restores `initialValue`.
 
@@ -55,7 +55,7 @@ field ignores input and is not validated; a disabled option stays visible.
 | `autovalidateMode` | `AutovalidateMode?` | When to validate; `null` follows the `Form`. |
 | `required` | `bool` | At least one choice is needed. Default `false`. |
 | `enabled` | `bool` | Whether it accepts input. Default `true`. |
-| `focusNode` | `FocusNode?` | Focus node of the first enabled option. |
+| `focusNode` | `FocusNode?` | Focus node of the first enabled option; it stays unattached when the field is disabled or every option is. |
 | `helperText` | `String?` | A hint under the group, replaced by the error. |
 
 `ChoiceOption<T>` has `value`, `label`, `description` and `enabled`.

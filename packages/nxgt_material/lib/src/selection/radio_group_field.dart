@@ -36,24 +36,15 @@ class RadioGroupField<T> extends ChoiceFieldBase<T?> {
 
   @override
   Widget build(BuildContext context) {
-    assert(options.isNotEmpty, 'RadioGroupField.options must not be empty.');
-    assert(
-      options.map((o) => o.value).toSet().length == options.length,
-      'RadioGroupField.options must have unique values.',
-    );
     assert(
       initialValue == null || options.any((o) => o.value == initialValue),
       'RadioGroupField.initialValue must be one of the options.',
     );
-    final seen = <T>{};
-    final unique = [
-      for (final option in options)
-        if (seen.add(option.value)) option,
-    ];
+    final unique = uniqueOptions(options, 'RadioGroupField');
+    final firstEnabled = firstEnabledOption(unique, fieldEnabled: enabled);
     return buildChoice(
       context,
       builder: (context, state) {
-        var focusAssigned = false;
         return RadioGroup<T>(
           groupValue: state.value,
           onChanged: (value) {
@@ -63,17 +54,13 @@ class RadioGroupField<T> extends ChoiceFieldBase<T?> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              for (final option in unique)
+              for (final (i, option) in unique.indexed)
                 ConstrainedBox(
                   constraints: BoxConstraints(minHeight: minTarget.height),
                   child: RadioListTile<T>(
                     value: option.value,
                     enabled: enabled && option.enabled,
-                    focusNode: (focusAssigned || !(enabled && option.enabled))
-                        ? null
-                        : (focusAssigned = true)
-                        ? focusNode
-                        : null,
+                    focusNode: i == firstEnabled ? focusNode : null,
                     title: Text(option.label),
                     subtitle: option.description == null
                         ? null
