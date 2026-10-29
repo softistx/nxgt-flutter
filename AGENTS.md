@@ -71,6 +71,11 @@ member has `resolution: workspace`; there is a single root `pubspec.lock`.
   (`gh workflow run goldens-update.yml -f ref=<branch>`), available once it is
   merged into `develop`. It refuses `develop` and `main`. Its push is made with
   `GITHUB_TOKEN` and does not trigger CI, so re-run CI on the branch afterwards.
+- Web-branch tests (`kIsWeb`, such as `test/feedback/live_region_web_test.dart`)
+  are tagged `web` with `@TestOn('browser')`. `melos run test` excludes the tag.
+  Run them locally, one file at a time:
+  `cd packages/nxgt_material && nice -n 10 fvm flutter test --platform chrome --tags web <file>`.
+  They do not run in CI.
 - Browser or full-platform builds are not run in CI beyond the Pages web build.
 
 ## Git

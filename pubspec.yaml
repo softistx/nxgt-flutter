@@ -38,7 +38,7 @@ melos:
     test:
       description: Unit and widget tests per Flutter package, with coverage.
       exec:
-        command: flutter test --coverage --exclude-tags golden
+        command: flutter test --coverage --exclude-tags golden,web
         concurrency: 1
       packageFilters:
         flutter: true
