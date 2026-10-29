@@ -60,6 +60,7 @@ class OtpInput extends StatelessWidget {
       data: const TextSelectionThemeData(
         selectionColor: Colors.transparent,
         cursorColor: Colors.transparent,
+        selectionHandleColor: Colors.transparent,
       ),
       child: TextFormField(
         controller: controller,
@@ -99,8 +100,7 @@ class OtpInput extends StatelessWidget {
           ),
           isDense: false,
           // Pinned so an app theme cannot resize the 48 dp input.
-          // ignore: avoid_redundant_argument_values
-          constraints: null,
+          constraints: const BoxConstraints(),
           filled: false,
           border: InputBorder.none,
           enabledBorder: InputBorder.none,

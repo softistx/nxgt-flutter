@@ -30,7 +30,7 @@ The row is at most `length * 48 + (length - 1) * 8` dp wide (328 dp for 6 digits
 ## Accessibility
 
 - A screen reader sees one text field named by `label`; the slots are hidden from it. The error text is shown under the slots.
-- Each slot is 48 dp; the whole row is one touch target that focuses the input.
+- Each slot is 48 dp high and up to 48 dp wide; the whole row is one touch target that focuses the input.
 - The next slot to fill is outlined while focused; an error outlines every slot in the error colour and the message is shown as text, so colour is never the only cue.
 - A disabled field is not focusable.
 - Keyboard `number`, autofill `AutofillHints.oneTimeCode`, autocorrect and suggestions off.
