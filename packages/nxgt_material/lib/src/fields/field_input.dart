@@ -27,6 +27,7 @@ class FieldInput extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.obscureText = false,
     this.sensitive = false,
+    this.autocorrect = true,
     this.suffixIcon,
     this.minLines,
     this.maxLines = 1,
@@ -88,6 +89,9 @@ class FieldInput extends StatelessWidget {
   /// Whether the text is hidden.
   final bool obscureText;
 
+  /// Whether the keyboard may correct the text; `sensitive` turns it off.
+  final bool autocorrect;
+
   /// A secret: never autocorrected or suggested, always one line.
   final bool sensitive;
 
@@ -121,7 +125,7 @@ class FieldInput extends StatelessWidget {
       inputFormatters: inputFormatters,
       textCapitalization: textCapitalization,
       obscureText: obscureText,
-      autocorrect: !sensitive,
+      autocorrect: autocorrect && !sensitive,
       enableSuggestions: !sensitive,
       minLines: minLines,
       maxLines: sensitive ? 1 : maxLines,

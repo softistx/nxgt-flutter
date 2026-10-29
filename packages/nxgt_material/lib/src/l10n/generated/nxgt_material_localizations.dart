@@ -173,6 +173,12 @@ abstract class NxgtMaterialLocalizations {
   /// **'Enter a valid phone number'**
   String get fieldsInvalidPhone;
 
+  /// Error shown under a URL field whose value is not a web address (http or https).
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid web address'**
+  String get fieldsInvalidUrl;
+
   /// Error shown under a number field whose value is not a number.
   ///
   /// In en, this message translates to:

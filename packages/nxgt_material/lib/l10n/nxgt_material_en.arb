@@ -24,6 +24,8 @@
   "@fieldsMaxLength": {"description": "Error shown under a field whose text is longer than its maximum length.", "placeholders": {"count": {"type": "int"}}},
   "fieldsInvalidPhone": "Enter a valid phone number",
   "@fieldsInvalidPhone": {"description": "Error shown under a phone field whose value is not a phone number."},
+  "fieldsInvalidUrl": "Enter a valid web address",
+  "@fieldsInvalidUrl": {"description": "Error shown under a URL field whose value is not a web address (http or https)."},
   "fieldsInvalidNumber": "Enter a valid number",
   "@fieldsInvalidNumber": {"description": "Error shown under a number field whose value is not a number."},
   "fieldsMinValue": "Enter a value of at least {min}",
