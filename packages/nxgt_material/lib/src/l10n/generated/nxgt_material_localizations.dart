@@ -430,6 +430,12 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Choose a date on or before {date}'**
   String datesAfter(String date);
+
+  /// Value of a date range field, read aloud and shown: the first and the last date.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} to {end}'**
+  String datesRangeValue(String start, String end);
 }
 
 class _NxgtMaterialLocalizationsDelegate

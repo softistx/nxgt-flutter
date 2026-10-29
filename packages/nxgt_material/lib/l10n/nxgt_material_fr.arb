@@ -57,5 +57,6 @@
   "collectionsSortedDescending": "{column}, tri décroissant",
   "datesClear": "Effacer {label}",
   "datesBefore": "Choisissez une date à partir du {date}",
-  "datesAfter": "Choisissez une date jusqu'au {date}"
+  "datesAfter": "Choisissez une date jusqu'au {date}",
+  "datesRangeValue": "du {start} au {end}"
 }

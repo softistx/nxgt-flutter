@@ -231,4 +231,9 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
   String datesAfter(String date) {
     return 'Choose a date on or before $date';
   }
+
+  @override
+  String datesRangeValue(String start, String end) {
+    return '$start to $end';
+  }
 }

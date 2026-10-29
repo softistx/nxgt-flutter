@@ -109,5 +109,7 @@
   "datesBefore": "Choose a date on or after {date}",
   "@datesBefore": {"description": "Error of a date field whose date is earlier than the first allowed date.", "placeholders": {"date": {"type": "String"}}},
   "datesAfter": "Choose a date on or before {date}",
-  "@datesAfter": {"description": "Error of a date field whose date is later than the last allowed date.", "placeholders": {"date": {"type": "String"}}}
+  "@datesAfter": {"description": "Error of a date field whose date is later than the last allowed date.", "placeholders": {"date": {"type": "String"}}},
+  "datesRangeValue": "{start} to {end}",
+  "@datesRangeValue": {"description": "Value of a date range field, read aloud and shown: the first and the last date.", "placeholders": {"start": {"type": "String"}, "end": {"type": "String"}}}
 }

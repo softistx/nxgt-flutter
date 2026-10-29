@@ -1,9 +1,9 @@
 # Dates
 
 `package:nxgt_material/dates.dart` holds the fields that pick a date or a
-time, `DateField` and `TimeField`: each a `FormField` that shows its value as
-read-only text, opens Material's picker on tap, Enter or Space, and follows
-the app's locale.
+time, `DateField`, `DateRangeField` and `TimeField`: each a `FormField` that
+shows its value as read-only text, opens Material's picker on tap, Enter or
+Space, and follows the app's locale.
 
 ## Setup
 
@@ -37,6 +37,34 @@ Form(
 - The picker offers its built-in toggle between the calendar and typing a date.
 
 See [DateField](../components/date_field.md) for every property.
+
+## DateRangeField
+
+```dart
+Form(
+  key: _form,
+  child: DateRangeField(
+    label: 'Stay',
+    required: true,
+    firstDate: DateTime.now(),
+    onSaved: (range) => _stay = range,
+  ),
+)
+```
+
+- The value is Flutter's `DateTimeRange`, both ends at midnight
+  (`DateUtils.dateOnly`).
+- The text and the spoken value read "start to end"; each date is
+  `MaterialLocalizations.formatMediumDate`. Pass `formatter` to word the whole
+  range differently.
+- The picker is `showDateRangePicker`, opened on the current range with each
+  end moved into the allowed range, with its built-in toggle between the
+  calendar and typing the dates.
+- `firstDate` defaults to 1 January 1900 and `lastDate` to 31 December 2100.
+- A start before `firstDate` or an end after `lastDate` fails validation and
+  the error names the bound.
+
+See [DateRangeField](../components/date_range_field.md) for every property.
 
 ## TimeField
 
