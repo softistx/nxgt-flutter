@@ -119,4 +119,12 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   String get collectionsSearchClear => base.collectionsSearchClear;
   @override
   String collectionsLoadedMore(int count) => base.collectionsLoadedMore(count);
+  @override
+  String get collectionsSortBy => base.collectionsSortBy;
+  @override
+  String collectionsSortedAscending(String column) =>
+      base.collectionsSortedAscending(column);
+  @override
+  String collectionsSortedDescending(String column) =>
+      base.collectionsSortedDescending(column);
 }

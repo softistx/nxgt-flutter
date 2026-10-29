@@ -582,3 +582,37 @@ PagedList<Patient>(
   onLoadMore: loadNextPage,
 )
 ```
+
+## ResponsiveTable.columns is empty.
+
+**When:** in a debug build, a `ResponsiveTable` has no columns.
+
+**Why:** there is nothing to show for a row. A release build draws nothing.
+
+**Fix:** pass at least one `TableColumn`.
+
+```dart
+ResponsiveTable<Patient>(
+  columns: [TableColumn(label: 'Name', value: (p) => p.name)],
+  rows: patients,
+)
+```
+
+## ResponsiveTable.sortColumnIndex is out of range.
+
+**When:** in a debug build, `sortColumnIndex` of a `ResponsiveTable` is below
+zero or not under `columns.length`.
+
+**Why:** no column has that index. A release build ignores it and shows the
+table unsorted.
+
+**Fix:** pass the index of one of `columns`, or `null` when the rows are
+unsorted.
+
+```dart
+ResponsiveTable<Patient>(
+  columns: columns,
+  rows: patients,
+  sortColumnIndex: 0, // < columns.length
+)
+```

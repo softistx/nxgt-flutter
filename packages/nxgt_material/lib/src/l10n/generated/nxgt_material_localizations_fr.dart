@@ -192,4 +192,17 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get collectionsSortBy => 'Trier par';
+
+  @override
+  String collectionsSortedAscending(String column) {
+    return '$column, tri croissant';
+  }
+
+  @override
+  String collectionsSortedDescending(String column) {
+    return '$column, tri décroissant';
+  }
 }
