@@ -4,6 +4,7 @@ import 'package:nxgt_material/src/layout/window_size.dart';
 import 'package:nxgt_material/src/theme/targets.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 import 'package:nxgt_material/src/theme/tone_colors.dart';
+import 'package:nxgt_material/src/theme/tone_style.dart';
 
 /// An action of an [EntityHeader]: a [label], an optional [icon] and what
 /// happens on [onPressed].
@@ -44,21 +45,14 @@ const _inlineMaxTextScale = 1.5;
 const _textFlex = 3;
 const _actionsFlex = 2;
 
-/// The error tone while enabled; `null` when disabled, so the theme's
-/// disabled look applies.
-WidgetStateProperty<Color?> _whenEnabled(Color color) =>
-    WidgetStateProperty.resolveWith(
-      (states) => states.contains(WidgetState.disabled) ? null : color,
+ButtonStyle _actionStyle(EntityAction action, ToneColors error) =>
+    targetStyle.copyWith(
+      backgroundColor: action.destructive ? whenEnabled(error.container) : null,
+      foregroundColor: action.destructive
+          ? whenEnabled(error.onContainer)
+          : null,
+      iconColor: action.destructive ? whenEnabled(error.onContainer) : null,
     );
-
-ButtonStyle _actionStyle(EntityAction action, ToneColors error) => ButtonStyle(
-  minimumSize: const WidgetStatePropertyAll(minTarget),
-  tapTargetSize: MaterialTapTargetSize.padded,
-  visualDensity: VisualDensity.standard,
-  backgroundColor: action.destructive ? _whenEnabled(error.container) : null,
-  foregroundColor: action.destructive ? _whenEnabled(error.onContainer) : null,
-  iconColor: action.destructive ? _whenEnabled(error.onContainer) : null,
-);
 
 Widget _actionButton(EntityAction action, ToneColors error) {
   final style = _actionStyle(action, error);
@@ -199,11 +193,7 @@ class EntityHeader extends StatelessWidget {
         tooltip: tooltip,
         onPressed: () =>
             controller.isOpen ? controller.close() : controller.open(),
-        style: IconButton.styleFrom(
-          minimumSize: minTarget,
-          tapTargetSize: MaterialTapTargetSize.padded,
-          visualDensity: VisualDensity.standard,
-        ),
+        style: targetStyle,
         icon: const Icon(Icons.more_vert),
       ),
     );

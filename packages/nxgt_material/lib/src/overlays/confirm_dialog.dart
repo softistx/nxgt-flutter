@@ -4,6 +4,7 @@ import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/theme/targets.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 import 'package:nxgt_material/src/theme/tone_colors.dart';
+import 'package:nxgt_material/src/theme/tone_style.dart';
 
 /// A dialog that asks the user to confirm an action, such as a deletion.
 ///
@@ -115,23 +116,13 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
   }
 }
 
-/// The error tone while enabled; `null` when disabled, so the theme's
-/// disabled look applies.
-WidgetStateProperty<Color?> _whenEnabled(Color color) =>
-    WidgetStateProperty.resolveWith(
-      (states) => states.contains(WidgetState.disabled) ? null : color,
-    );
-
 FilledButtonThemeData _confirmButtonTheme(
   FilledButtonThemeData base,
   ToneColors? error,
 ) {
-  final style = ButtonStyle(
-    minimumSize: const WidgetStatePropertyAll(minTarget),
-    tapTargetSize: MaterialTapTargetSize.padded,
-    visualDensity: VisualDensity.standard,
-    backgroundColor: error == null ? null : _whenEnabled(error.color),
-    foregroundColor: error == null ? null : _whenEnabled(error.onColor),
+  final style = targetStyle.copyWith(
+    backgroundColor: error == null ? null : whenEnabled(error.color),
+    foregroundColor: error == null ? null : whenEnabled(error.onColor),
   );
   return FilledButtonThemeData(style: base.style?.merge(style) ?? style);
 }
