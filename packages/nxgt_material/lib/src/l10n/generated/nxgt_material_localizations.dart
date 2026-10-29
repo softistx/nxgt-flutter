@@ -275,6 +275,24 @@ abstract class NxgtMaterialLocalizations {
   /// **'{count, plural, =1{1 item} other{{count} items}}'**
   String displayCount(int count);
 
+  /// Screen reader text of a stat card's trend when the figure rose, spoken before the change.
+  ///
+  /// In en, this message translates to:
+  /// **'up'**
+  String get displayTrendUp;
+
+  /// Screen reader text of a stat card's trend when the figure fell, spoken before the change.
+  ///
+  /// In en, this message translates to:
+  /// **'down'**
+  String get displayTrendDown;
+
+  /// Screen reader text of a stat card's trend when the figure did not move, spoken before the change.
+  ///
+  /// In en, this message translates to:
+  /// **'unchanged'**
+  String get displayTrendFlat;
+
   /// Screen reader text of an avatar's presence dot: the person is available now.
   ///
   /// In en, this message translates to:

@@ -21,6 +21,8 @@ import 'package:nxgt_widgetbook/actions/split_button.usecase.dart'
     as _nxgt_widgetbook_actions_split_button_usecase;
 import 'package:nxgt_widgetbook/display/count_badge.usecase.dart'
     as _nxgt_widgetbook_display_count_badge_usecase;
+import 'package:nxgt_widgetbook/display/stat_card.usecase.dart'
+    as _nxgt_widgetbook_display_stat_card_usecase;
 import 'package:nxgt_widgetbook/display/status_indicator.usecase.dart'
     as _nxgt_widgetbook_display_status_indicator_usecase;
 import 'package:nxgt_widgetbook/display/user_avatar.usecase.dart'
@@ -121,6 +123,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_display_count_badge_usecase
                 .buildCountBadgeDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'StatCard',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_display_stat_card_usecase.buildStatCardDefault,
           ),
         ],
       ),

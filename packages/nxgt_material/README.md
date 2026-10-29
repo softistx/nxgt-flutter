@@ -254,6 +254,7 @@ Pages: [EmptyState](doc/components/empty_state.md),
 | --- | --- |
 | `StatusIndicator` | A dot (or the tone's icon) and a label in AA tone colours; the tone is spoken first |
 | `CountBadge` | A count on a corner on `Badge.count`: `99+` above `max`, hidden at 0, localized plural label |
+| `StatCard` | A key figure on a `Card`: label, value, a trend pill (icon, spoken word, AA tone) and an optional 48 dp tap |
 | `UserAvatar` | Picture or initials on a tone picked from the name, optional presence dot, spoken name and presence |
 
 ```dart
@@ -268,11 +269,14 @@ CountBadge(
   child: const Icon(Icons.mail_outline),
 )
 
+StatCard(label: 'Revenue', value: '1 200', delta: '4 %', trend: StatTrend.up)
+
 UserAvatar(name: 'Ada Lovelace', presence: AvatarPresence.online)
 ```
 
 Pages: [StatusIndicator](doc/components/status_indicator.md),
 [CountBadge](doc/components/count_badge.md),
+[StatCard](doc/components/stat_card.md),
 [UserAvatar](doc/components/user_avatar.md).
 
 ## Layout
