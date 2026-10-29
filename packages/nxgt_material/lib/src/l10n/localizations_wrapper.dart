@@ -129,4 +129,10 @@ class NxgtMaterialLocalizationsWrapper extends NxgtMaterialLocalizations {
   @override
   String collectionsSortedDescending(String column) =>
       base.collectionsSortedDescending(column);
+  @override
+  String datesClear(String label) => base.datesClear(label);
+  @override
+  String datesBefore(String date) => base.datesBefore(date);
+  @override
+  String datesAfter(String date) => base.datesAfter(date);
 }

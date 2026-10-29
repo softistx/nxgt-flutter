@@ -412,6 +412,24 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'{column}, sorted descending'**
   String collectionsSortedDescending(String column);
+
+  /// Tooltip and screen reader label of the button that clears a date, time or range field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear {label}'**
+  String datesClear(String label);
+
+  /// Error of a date field whose date is earlier than the first allowed date.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date on or after {date}'**
+  String datesBefore(String date);
+
+  /// Error of a date field whose date is later than the last allowed date.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date on or before {date}'**
+  String datesAfter(String date);
 }
 
 class _NxgtMaterialLocalizationsDelegate

@@ -216,4 +216,19 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
   String collectionsSortedDescending(String column) {
     return '$column, tri décroissant';
   }
+
+  @override
+  String datesClear(String label) {
+    return 'Effacer $label';
+  }
+
+  @override
+  String datesBefore(String date) {
+    return 'Choisissez une date à partir du $date';
+  }
+
+  @override
+  String datesAfter(String date) {
+    return 'Choisissez une date jusqu\'au $date';
+  }
 }

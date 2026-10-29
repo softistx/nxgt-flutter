@@ -237,4 +237,7 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.collectionsSortBy,
   s.collectionsSortedAscending('x'),
   s.collectionsSortedDescending('x'),
+  s.datesClear('x'),
+  s.datesBefore('x'),
+  s.datesAfter('x'),
 ];

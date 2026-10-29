@@ -2,6 +2,7 @@
 
 ### Added
 
+- `dates.dart` (new library): `DateField` (a date as a read-only field that opens `showDatePicker` with its calendar and typed-entry toggle: `DateTime` at midnight, text from `MaterialLocalizations.formatMediumDate` or a `formatter`, `firstDate` and `lastDate` clamping the picker and naming the bound in an error, `required`, `clearable` with a 48 dp clear button, one semantics node with the error or helper text as its hint). New strings `datesClear`, `datesBefore` and `datesAfter` in fr and en.
 - `fields.dart`: `OtpField` (a one-time code as one real input with invisible text over `length` 48 dp slots: native paste stripped to digits and cut at `length`, `AutofillHints.oneTimeCode`, one semantics node, slots left to right in RTL; `onCompleted` fires once per completion and never submits the form; built-in incomplete and `required` checks). New string `fieldsOtpIncomplete` in fr and en.
 - `fields.dart`: `UrlField` (URL keyboard, `url` autofill, no capitalization, autocorrect off, `required`, `textInputAction`; keeps the text as typed) and `UrlField.normalize` (trims, adds `https://` when there is no scheme, `null` when invalid). `Validators.url()` accepts http and https addresses with a dotted host and an optional scheme. New string `fieldsInvalidUrl` in fr and en.
 

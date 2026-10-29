@@ -54,5 +54,8 @@
   "collectionsLoadedMore": "{count, plural, =1{1 élément de plus chargé} other{{count} éléments de plus chargés}}",
   "collectionsSortBy": "Trier par",
   "collectionsSortedAscending": "{column}, tri croissant",
-  "collectionsSortedDescending": "{column}, tri décroissant"
+  "collectionsSortedDescending": "{column}, tri décroissant",
+  "datesClear": "Effacer {label}",
+  "datesBefore": "Choisissez une date à partir du {date}",
+  "datesAfter": "Choisissez une date jusqu'au {date}"
 }
