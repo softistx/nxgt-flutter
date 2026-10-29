@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:nxgt_material/src/fields/otp_field_input.dart';
 import 'package:nxgt_material/src/fields/otp_slots.dart';
 import 'package:nxgt_material/src/fields/validators.dart';
 
@@ -15,7 +15,9 @@ import 'package:nxgt_material/src/fields/validators.dart';
 /// digits. [onCompleted] fires once each time the code becomes complete, and
 /// never submits the form. Inside a `Form`, an incomplete code fails with a
 /// localized message, and an empty one when [required]. The row is [length]
-/// slots wide (328 dp for 6) and scales down on a narrower screen.
+/// slots wide (328 dp for 6); the slots stay 48 dp high and narrow below 48 dp
+/// wide when the field has less room. A programmatic change of the controller
+/// that completes the code fires [onCompleted] too, before [onChanged].
 class OtpField extends StatefulWidget {
   /// Creates an OtpField.
   const new({
@@ -100,6 +102,9 @@ class _OtpFieldState extends State<OtpField> {
       (old.controller ?? _ownController)?.removeListener(_onText);
       _controller.addListener(_onText);
     }
+    if (old.controller != widget.controller || old.length != widget.length) {
+      _complete = _controller.text.length >= widget.length;
+    }
     if (old.focusNode != widget.focusNode) {
       (old.focusNode ?? _ownFocus)?.removeListener(_refresh);
       _focus.addListener(_refresh);
@@ -125,12 +130,8 @@ class _OtpFieldState extends State<OtpField> {
     setState(() {});
   }
 
-  void _syncError(String? error) {
-    final has = error != null;
-    if (_hasError.value == has) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _hasError.value = has;
-    });
+  void _setError(bool has) {
+    if (mounted) _hasError.value = has;
   }
 
   @override
@@ -161,89 +162,49 @@ class _OtpFieldState extends State<OtpField> {
             ),
           ),
         ),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: AlignmentDirectional.centerStart,
-          child: SizedBox(
-            width: width,
-            child: Stack(
-              children: [
-                PositionedDirectional(
-                  start: 0,
-                  top: 0,
-                  child: Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: ValueListenableBuilder<bool>(
-                      valueListenable: _hasError,
-                      builder: (context, hasError, _) => OtpSlots(
-                        text: _controller.text,
-                        length: length,
-                        focused: _focus.hasFocus,
-                        hasError: hasError,
-                        enabled: widget.enabled,
-                      ),
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: width),
+          child: Stack(
+            children: [
+              PositionedDirectional(
+                start: 0,
+                end: 0,
+                top: 0,
+                child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _hasError,
+                    builder: (context, hasError, _) => OtpSlots(
+                      text: _controller.text,
+                      length: length,
+                      focused: _focus.hasFocus,
+                      hasError: hasError,
+                      enabled: widget.enabled,
                     ),
                   ),
                 ),
-                MergeSemantics(
-                  child: Semantics(
-                    label: widget.label,
-                    child: _input(theme, validator),
+              ),
+              MergeSemantics(
+                child: Semantics(
+                  label: widget.label,
+                  child: OtpInput(
+                    controller: _controller,
+                    focusNode: _focus,
+                    length: length,
+                    validator: validator,
+                    onError: _setError,
+                    enabled: widget.enabled,
+                    autofocus: widget.autofocus,
+                    onChanged: widget.onChanged,
+                    onSaved: widget.onSaved,
+                    helperText: widget.helperText,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
-    );
-  }
-
-  /// The invisible input: 48 dp high over the slots (a 1 px font between
-  /// two paddings), the helper or error text under it.
-  Widget _input(ThemeData theme, FormFieldValidator<String> validator) {
-    final scheme = theme.colorScheme;
-    return TextFormField(
-      controller: _controller,
-      focusNode: _focus,
-      autofocus: widget.autofocus,
-      enabled: widget.enabled,
-      validator: validator,
-      onChanged: widget.onChanged,
-      onSaved: widget.onSaved,
-      keyboardType: TextInputType.number,
-      textInputAction: TextInputAction.done,
-      autofillHints: const [AutofillHints.oneTimeCode],
-      autocorrect: false,
-      enableSuggestions: false,
-      textDirection: TextDirection.ltr,
-      showCursor: false,
-      style: const TextStyle(color: Colors.transparent, fontSize: 1, height: 1),
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(widget.length),
-      ],
-      errorBuilder: (context, error) {
-        _syncError(error);
-        return Text(
-          error,
-          style: theme.textTheme.bodySmall?.copyWith(color: scheme.error),
-        );
-      },
-      decoration: InputDecoration(
-        helperText: widget.helperText,
-        helperStyle: theme.textTheme.bodySmall?.copyWith(
-          color: scheme.onSurfaceVariant,
-        ),
-        filled: false,
-        border: InputBorder.none,
-        enabledBorder: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        disabledBorder: InputBorder.none,
-        errorBorder: InputBorder.none,
-        focusedErrorBorder: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(vertical: 23.5),
-      ),
     );
   }
 }

@@ -54,24 +54,38 @@ class OtpSlots extends StatelessWidget {
         spacing: otpSlotGap,
         children: [
           for (var i = 0; i < length; i++)
-            Container(
-              key: ValueKey('otp-slot-$i'),
-              width: minTarget.width,
-              height: minTarget.height,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: enabled ? null : scheme.onSurface.withValues(alpha: .04),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  width: i == active || hasError ? 2 : 1,
-                  color: hasError
-                      ? scheme.error
-                      : i == active
-                      ? scheme.primary
-                      : scheme.outline.withValues(alpha: enabled ? 1 : .38),
+            Flexible(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: minTarget.width),
+                child: SizedBox(
+                  key: ValueKey('otp-slot-$i'),
+                  width: double.infinity,
+                  height: minTarget.height,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: enabled
+                          ? null
+                          : scheme.onSurface.withValues(alpha: .04),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        width: i == active || hasError ? 2 : 1,
+                        color: hasError
+                            ? scheme.error
+                            : i == active
+                            ? scheme.primary
+                            : scheme.outline.withValues(
+                                alpha: enabled ? 1 : .38,
+                              ),
+                      ),
+                    ),
+                    child: Center(
+                      child: i < text.length
+                          ? Text(text[i], style: digitStyle)
+                          : null,
+                    ),
+                  ),
                 ),
               ),
-              child: i < text.length ? Text(text[i], style: digitStyle) : null,
             ),
         ],
       ),

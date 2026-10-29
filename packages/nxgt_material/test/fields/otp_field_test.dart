@@ -144,8 +144,6 @@ void main() {
     expect(key.currentState!.validate(), isFalse);
     await tester.pump();
     expect(find.text('Enter all 6 digits'), findsOneWidget);
-    await tester.pump();
-    expect(tester.widget<Container>(slot(0)).decoration, isNotNull);
 
     await tester.enterText(find.byType(EditableText), '111111');
     expect(key.currentState!.validate(), isFalse);
@@ -246,15 +244,117 @@ void main() {
     expect(find.byType(OtpField), findsOneWidget);
   });
 
-  testWidgets('scales down on a screen narrower than its slots', (
+  testWidgets('slots narrow but keep their height on a narrow screen', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(200, 800);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    await pump(tester, const OtpField(label: 'Code'));
+    await pump(
+      tester,
+      const OtpField(label: 'Code', helperText: 'Sent by SMS'),
+    );
 
     expect(tester.takeException(), isNull);
-    expect(tester.getRect(slot(0)).width, lessThan(48));
+    expect(tester.getSize(slot(0)).width, lessThan(48));
+    expect(tester.getSize(slot(0)).height, 48);
+    final helper = tester.widget<Text>(find.text('Sent by SMS'));
+    expect(helper.style?.fontSize, isNot(lessThan(11)));
+    expect(tester.getRect(find.text('Sent by SMS')).height, lessThan(24));
+  });
+
+  group('error colour of the slots', () {
+    Color border(WidgetTester tester) {
+      final box = tester.widget<DecoratedBox>(
+        find.descendant(of: slot(0), matching: find.byType(DecoratedBox)),
+      );
+      return ((box.decoration as BoxDecoration).border! as Border).top.color;
+    }
+
+    ColorScheme scheme(WidgetTester tester) =>
+        Theme.of(tester.element(find.byType(OtpField))).colorScheme;
+
+    Future<void> settle(WidgetTester tester) async {
+      await tester.pump();
+      await tester.pump();
+    }
+
+    testWidgets('turn red on error and back when it clears', (tester) async {
+      await pump(tester, const OtpField(label: 'Code', required: true));
+      expect(border(tester), scheme(tester).outline);
+
+      expect(key.currentState!.validate(), isFalse);
+      await settle(tester);
+      expect(border(tester), scheme(tester).error);
+
+      await tester.enterText(find.byType(EditableText), '123456');
+      expect(key.currentState!.validate(), isTrue);
+      await settle(tester);
+      expect(border(tester), scheme(tester).outline);
+    });
+
+    testWidgets('go back to normal on Form reset', (tester) async {
+      await pump(tester, const OtpField(label: 'Code', required: true));
+      key.currentState!.validate();
+      await settle(tester);
+      expect(border(tester), scheme(tester).error);
+
+      key.currentState!.reset();
+      await settle(tester);
+      expect(border(tester), scheme(tester).outline);
+    });
+  });
+
+  group('onCompleted with a controller', () {
+    testWidgets('fires on a programmatic set, before onChanged', (
+      tester,
+    ) async {
+      final controller = TextEditingController();
+      addTearDown(controller.dispose);
+      final calls = <String>[];
+      await pump(
+        tester,
+        OtpField(
+          label: 'Code',
+          controller: controller,
+          onCompleted: (v) => calls.add('completed $v'),
+          onChanged: (v) => calls.add('changed $v'),
+        ),
+      );
+
+      controller.text = '123456';
+      await tester.pump();
+      expect(calls, ['completed 123456']);
+
+      controller.text = '12345';
+      await tester.enterText(find.byType(EditableText), '654321');
+      expect(calls.sublist(1), ['completed 654321', 'changed 654321']);
+    });
+
+    testWidgets('a swapped controller is judged on its own text', (
+      tester,
+    ) async {
+      final a = TextEditingController();
+      final b = TextEditingController(text: '123456');
+      addTearDown(a.dispose);
+      addTearDown(b.dispose);
+      var fired = 0;
+      Widget host(TextEditingController c) => formHost([
+        OtpField(label: 'Code', controller: c, onCompleted: (_) => fired++),
+      ]);
+      await tester.pumpWidget(host(a));
+      await tester.pumpWidget(host(b));
+      await tester.pump();
+      expect(fired, 0);
+
+      b
+        ..text = '12'
+        ..text = '654321';
+      await tester.pump();
+      expect(fired, 1);
+      a.text = '999999';
+      await tester.pump();
+      expect(fired, 1);
+    });
   });
 }
