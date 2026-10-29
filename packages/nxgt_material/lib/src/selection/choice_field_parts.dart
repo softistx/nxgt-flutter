@@ -3,7 +3,7 @@ import 'package:flutter/semantics.dart';
 import 'package:nxgt_material/src/feedback/live_region.dart';
 
 /// The body of a group: a visible title and a container node named by it,
-/// holding the options in [child].
+/// holding the options in [child]. Internal, not exported.
 class ChoiceGroupBody extends StatelessWidget {
   /// Creates the body.
   const new({
@@ -65,7 +65,7 @@ class ChoiceGroupBody extends StatelessWidget {
 /// The helper text, replaced by the announced error when there is one.
 ///
 /// The 16 dp start inset matches the padding of a `ListTile`, so the text
-/// lines up with the tile's content edge.
+/// lines up with the tile's content edge. Internal, not exported.
 class ChoiceFooter extends StatelessWidget {
   /// Creates the footer.
   const new({
