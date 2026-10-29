@@ -93,5 +93,7 @@
   "collectionsSearchHint": "Search",
   "@collectionsSearchHint": {"description": "Placeholder and screen reader label of an empty search field."},
   "collectionsSearchClear": "Clear search",
-  "@collectionsSearchClear": {"description": "Tooltip and screen reader label of the button that clears the text of a search field."}
+  "@collectionsSearchClear": {"description": "Tooltip and screen reader label of the button that clears the text of a search field."},
+  "collectionsLoadedMore": "{count, plural, =1{1 more loaded} other{{count} more loaded}}",
+  "@collectionsLoadedMore": {"description": "Screen reader announcement after a page of a paged list landed: how many items were added.", "placeholders": {"count": {"type": "int"}}}
 }

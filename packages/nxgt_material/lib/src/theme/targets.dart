@@ -11,3 +11,11 @@ const targetStyle = ButtonStyle(
   tapTargetSize: MaterialTapTargetSize.padded,
   visualDensity: VisualDensity.standard,
 );
+
+/// A button style that only keeps the 48 dp tap target and the standard
+/// density, so desktop density cannot shrink a button, without the 48 dp
+/// minimum width of [targetStyle] that would widen short labels.
+const tapTargetStyle = ButtonStyle(
+  tapTargetSize: MaterialTapTargetSize.padded,
+  visualDensity: VisualDensity.standard,
+);

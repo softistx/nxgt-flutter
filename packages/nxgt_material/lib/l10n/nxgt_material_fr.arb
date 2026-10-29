@@ -49,5 +49,6 @@
   "fieldsSelectSearch": "Rechercher",
   "fieldsSelectNoResults": "Aucun résultat",
   "collectionsSearchHint": "Rechercher",
-  "collectionsSearchClear": "Effacer la recherche"
+  "collectionsSearchClear": "Effacer la recherche",
+  "collectionsLoadedMore": "{count, plural, =1{1 élément de plus chargé} other{{count} éléments de plus chargés}}"
 }

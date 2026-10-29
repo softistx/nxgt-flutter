@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 
 /// The Material 3 button style an [AsyncButton] is drawn in.
 enum AsyncButtonVariant {
@@ -96,11 +97,13 @@ class _AsyncButtonState extends State<AsyncButton> {
             ? FilledButton(
                 onPressed: onPressed,
                 autofocus: widget.autofocus,
+                style: tapTargetStyle,
                 child: label,
               )
             : FilledButton.icon(
                 onPressed: onPressed,
                 autofocus: widget.autofocus,
+                style: tapTargetStyle,
                 icon: icon,
                 label: label,
               ),
@@ -109,11 +112,13 @@ class _AsyncButtonState extends State<AsyncButton> {
             ? FilledButton.tonal(
                 onPressed: onPressed,
                 autofocus: widget.autofocus,
+                style: tapTargetStyle,
                 child: label,
               )
             : FilledButton.tonalIcon(
                 onPressed: onPressed,
                 autofocus: widget.autofocus,
+                style: tapTargetStyle,
                 icon: icon,
                 label: label,
               ),
@@ -122,11 +127,13 @@ class _AsyncButtonState extends State<AsyncButton> {
             ? OutlinedButton(
                 onPressed: onPressed,
                 autofocus: widget.autofocus,
+                style: tapTargetStyle,
                 child: label,
               )
             : OutlinedButton.icon(
                 onPressed: onPressed,
                 autofocus: widget.autofocus,
+                style: tapTargetStyle,
                 icon: icon,
                 label: label,
               ),
@@ -135,11 +142,13 @@ class _AsyncButtonState extends State<AsyncButton> {
             ? TextButton(
                 onPressed: onPressed,
                 autofocus: widget.autofocus,
+                style: tapTargetStyle,
                 child: label,
               )
             : TextButton.icon(
                 onPressed: onPressed,
                 autofocus: widget.autofocus,
+                style: tapTargetStyle,
                 icon: icon,
                 label: label,
               ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nxgt_material/actions.dart';
@@ -8,6 +9,38 @@ void main() {
   Widget host(Widget child) => MaterialApp(
     home: Scaffold(body: Center(child: child)),
   );
+
+  group('48 dp target on every platform', () {
+    for (final platform in [TargetPlatform.android, TargetPlatform.macOS]) {
+      for (final variant in AsyncButtonVariant.values) {
+        for (final loading in [false, true]) {
+          testWidgets('${variant.name}, loading $loading, $platform', (
+            tester,
+          ) async {
+            debugDefaultTargetPlatformOverride = platform;
+            try {
+              await tester.pumpWidget(
+                host(
+                  AsyncButton(
+                    label: 'Go',
+                    variant: variant,
+                    loading: loading,
+                    onPressed: () async {},
+                  ),
+                ),
+              );
+              expect(
+                tester.getSize(find.byType(AsyncButton)).height,
+                greaterThanOrEqualTo(48),
+              );
+            } finally {
+              debugDefaultTargetPlatformOverride = null;
+            }
+          });
+        }
+      }
+    }
+  });
 
   testWidgets('shows its label and runs the action on press', (tester) async {
     var calls = 0;
