@@ -90,7 +90,7 @@ Future<void> _open(
 }
 
 /// The Material 3 drag handle: a 32 x 4 bar.
-final _handle = find.byWidgetPredicate(
+final Finder _handle = find.byWidgetPredicate(
   (w) =>
       w is Container &&
       w.constraints == const BoxConstraints.tightFor(width: 32, height: 4),
