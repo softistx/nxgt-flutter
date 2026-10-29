@@ -27,7 +27,7 @@ Adds four libraries: `display.dart`, `overlays.dart`, `selection.dart` and `coll
 - `collections.dart`: `ResponsiveTable<T>` and `TableColumn<T>` (rows as a Material 3 `DataTable` from the medium window size, scrolling sideways, and one `Card` per row built on `DescriptionList` on compact, chosen through `context.windowSize` without a `LayoutBuilder`; the caller owns the sort through `sortColumnIndex`, `sortAscending` and `onSort`, sortable headers are buttons and the sorted column is announced "Name, sorted ascending", a 48 dp sort menu serves compact; `onRowTap` makes a row, or a whole card, a button; `TableColumn.cell` builds a widget for the table's cell (compact cards show `value`); `empty` replaces the table with an `EmptyState` by default; asserts an empty `columns` and a `sortColumnIndex` out of range, an empty widget and no sort in release). New strings `collectionsSortBy`, `collectionsSortedAscending` and `collectionsSortedDescending` ("Sort by", "{column}, sorted ascending", "{column}, sorted descending" / "Trier par", "{column}, tri croissant", "{column}, tri décroissant") in both ARBs and `NxgtMaterialLocalizationsWrapper`.
 ### Fixed
 
-- `AsyncButton` and `LoadMoreButton` keep a 48 dp target on desktop platforms (all four variants, busy or not), instead of the 32 dp of desktop density.
+- `AsyncButton`, `LoadMoreButton`, `CopyButton`, `SplitButton` (the main part and the arrow), the close button of `InlineAlert`, the toggle of `PasswordField` and the menu and drawer close buttons of `AdaptiveShell` keep a 48 dp target on desktop platforms (all four `AsyncButton` variants, busy or not), instead of the 32 dp of desktop density. These buttons now force padded tap targets and standard density over an app's button theme.
 
 ## 0.1.0
 

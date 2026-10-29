@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/fields/text_field_base.dart';
 import 'package:nxgt_material/src/fields/validators.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 
 /// A text field for a password, with a button that shows or hides it.
 ///
@@ -78,6 +79,7 @@ class PasswordField extends TextFieldBase {
           icon: const Icon(Icons.visibility_outlined),
           selectedIcon: const Icon(Icons.visibility_off_outlined),
           onPressed: enabled ? toggle : null,
+          style: targetStyle,
         ),
       ),
     );
