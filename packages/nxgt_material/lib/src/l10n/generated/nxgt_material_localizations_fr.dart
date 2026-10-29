@@ -64,6 +64,9 @@ class NxgtMaterialLocalizationsFr extends NxgtMaterialLocalizations {
   String get fieldsInvalidPhone => 'Saisissez un numéro de téléphone valide';
 
   @override
+  String get fieldsInvalidUrl => 'Saisissez une adresse web valide';
+
+  @override
   String get fieldsInvalidNumber => 'Saisissez un nombre valide';
 
   @override

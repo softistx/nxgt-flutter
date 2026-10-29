@@ -59,6 +59,8 @@ import 'package:nxgt_widgetbook/fields/phone_field.usecase.dart'
     as _nxgt_widgetbook_fields_phone_field_usecase;
 import 'package:nxgt_widgetbook/fields/text_area_field.usecase.dart'
     as _nxgt_widgetbook_fields_text_area_field_usecase;
+import 'package:nxgt_widgetbook/fields/url_field.usecase.dart'
+    as _nxgt_widgetbook_fields_url_field_usecase;
 import 'package:nxgt_widgetbook/forms/form_section.usecase.dart'
     as _nxgt_widgetbook_forms_form_section_usecase;
 import 'package:nxgt_widgetbook/forms/submit_button.usecase.dart'
@@ -355,6 +357,16 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_fields_text_area_field_usecase
                 .buildTextAreaFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'UrlField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _nxgt_widgetbook_fields_url_field_usecase.buildUrlFieldDefault,
           ),
         ],
       ),

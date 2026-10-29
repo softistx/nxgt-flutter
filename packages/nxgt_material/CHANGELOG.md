@@ -1,3 +1,9 @@
+## Unreleased
+
+### Added
+
+- `fields.dart`: `UrlField` (URL keyboard, `url` autofill, no capitalization, autocorrect off, `required`, `textInputAction`; keeps the text as typed) and `UrlField.normalize` (trims, adds `https://` when there is no scheme, `null` when invalid). `Validators.url()` accepts http and https addresses with a dotted host and an optional scheme. New string `fieldsInvalidUrl` in fr and en.
+
 ## 0.2.0
 
 Adds four libraries: `display.dart`, `overlays.dart`, `selection.dart` and `collections.dart`.

@@ -32,6 +32,7 @@ Form(
 | --- | --- | --- |
 | `EmailField` | fields | Email keyboard, autofill, validation |
 | `PasswordField` | fields | Obscured text, show/hide toggle, new-password hint |
+| `UrlField` | fields | URL keyboard, autofill, validation, `normalize` |
 | `PhoneField` | fields | Phone keypad, character filter, validation |
 | `NumberField` | fields | Numeric keypad, comma or point, min and max |
 | `TextAreaField` | fields | Growing multi-line text with an optional counter |
@@ -67,6 +68,7 @@ TextFormField(
 | --- | --- |
 | `required()` | the value is null or blank |
 | `email()` | a non-empty value is not an email |
+| `url()` | a non-empty value is not an http or https web address (scheme optional, dotted host) |
 | `minLength(n)` / `maxLength(n)` | the length is below / above `n` |
 | `phone()` | a non-empty value is not a phone number (7 to 15 digits) |
 | `number(min:, max:)` | a non-empty value is not a number or is out of range |

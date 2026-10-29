@@ -34,6 +34,37 @@ void main() {
       expect(v.required()('a'), isNull);
     });
 
+    test('url', () {
+      for (final ok in [
+        'example.com',
+        'https://example.com',
+        'http://sub.example.co.uk/path?q=1#frag',
+        'https://example.com:8080/a',
+        'HTTP://Example.COM',
+        '  example.com  ',
+        '',
+        '   ',
+      ]) {
+        expect(v.url()(ok), isNull, reason: ok);
+      }
+      expect(v.url()(null), isNull);
+      for (final bad in [
+        'ftp://x.com',
+        'localhost',
+        'http://',
+        'https://localhost',
+        'not a url',
+        'example',
+        'example..com',
+        '-a.com',
+        'http://exa mple.com',
+        'mailto:a@b.co',
+      ]) {
+        expect(v.url()(bad), 'Enter a valid web address', reason: bad);
+      }
+      expect(v.compose([v.required(), v.url()])(''), 'This field is required');
+    });
+
     test('email', () {
       for (final ok in ['a@b.co', 'first.last+tag@sub.example.org']) {
         expect(v.email()(ok), isNull, reason: ok);

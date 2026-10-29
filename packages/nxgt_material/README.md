@@ -138,12 +138,13 @@ Pages: [AsyncButton](doc/components/async_button.md),
 | --- | --- |
 | `EmailField` | Email keyboard, autofill and validation |
 | `PasswordField` | Obscured text with a localized show/hide toggle |
+| `UrlField` | URL keyboard, autofill and validation; `UrlField.normalize` adds `https://` |
 | `PhoneField` | Phone keypad, character filter and validation |
 | `NumberField` | Numeric keypad, comma or point, min and max |
 | `TextAreaField` | Growing multi-line text with an optional counter |
 | `FormSection` | A heading and its fields |
 | `SubmitButton` | Validates, saves, then awaits the action |
-| `Validators` | `required`, `email`, `minLength`, `maxLength`, `phone`, `number`, `compose`, localized |
+| `Validators` | `required`, `email`, `minLength`, `maxLength`, `url`, `phone`, `number`, `compose`, localized |
 
 ```dart
 import 'package:nxgt_material/fields.dart';
@@ -190,6 +191,7 @@ Guide: [Forms](doc/guide/forms.md). Pages:
 [PhoneField](doc/components/phone_field.md),
 [NumberField](doc/components/number_field.md),
 [TextAreaField](doc/components/text_area_field.md),
+[UrlField](doc/components/url_field.md),
 [FormSection](doc/components/form_section.md),
 [SubmitButton](doc/components/submit_button.md).
 
@@ -553,6 +555,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [SwitchField](doc/components/switch_field.md),
   [TextAreaField](doc/components/text_area_field.md),
   [Toast](doc/components/toast.md),
+  [UrlField](doc/components/url_field.md),
   [UserAvatar](doc/components/user_avatar.md),
   [WindowSize](doc/components/window_size.md).
 - Live catalogue: Widgetbook, published on GitHub Pages from `develop`.
