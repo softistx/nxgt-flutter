@@ -77,7 +77,7 @@ const _closeStyle = ButtonStyle(
 /// The sheet in the route: names the route and keeps the content clear of the
 /// keyboard.
 class _SheetBody extends StatelessWidget {
-  const _SheetBody({required this.title, required this.builder});
+  const new({required this.title, required this.builder});
 
   final String title;
   final WidgetBuilder builder;
