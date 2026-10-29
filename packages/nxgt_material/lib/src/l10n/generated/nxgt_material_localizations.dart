@@ -125,6 +125,12 @@ abstract class NxgtMaterialLocalizations {
   /// **'Copy'**
   String get actionsCopy;
 
+  /// Tooltip and screen reader label of a copy button that names what it copies, such as a description list row.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy {label}'**
+  String actionsCopyItem(String label);
+
   /// Label of the copy button after the value was copied, and what a screen reader announces.
   ///
   /// In en, this message translates to:

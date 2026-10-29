@@ -8,6 +8,8 @@
   "@actionsShowMore": {"description": "Label of the button that loads the next page of a list."},
   "actionsCopy": "Copy",
   "@actionsCopy": {"description": "Label of the button that copies a value to the clipboard."},
+  "actionsCopyItem": "Copy {label}",
+  "@actionsCopyItem": {"description": "Tooltip and screen reader label of a copy button that names what it copies, such as a description list row.", "placeholders": {"label": {"type": "String"}}},
   "actionsCopied": "Copied",
   "@actionsCopied": {"description": "Label of the copy button after the value was copied, and what a screen reader announces."},
   "actionsMoreOptions": "More options",
