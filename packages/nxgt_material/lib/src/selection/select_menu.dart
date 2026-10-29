@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/selection/choice_option.dart';
 import 'package:nxgt_material/src/theme/targets.dart';
 
@@ -38,5 +39,29 @@ InputDecorationThemeData selectErrorTheme(BuildContext context) {
     enabledBorder: border(1),
     focusedBorder: border(2),
     floatingLabelStyle: TextStyle(color: color),
+  );
+}
+
+/// The trailing icons of a select: the clear button when [canClear], then the
+/// arrow, up when [open].
+Widget selectTrailing(
+  BuildContext context, {
+  required bool open,
+  required bool canClear,
+  required VoidCallback onClear,
+}) {
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      if (canClear)
+        IconButton(
+          icon: const Icon(Icons.clear),
+          tooltip: context.materialL10n.selectionClear,
+          onPressed: onClear,
+          style: targetStyle,
+        ),
+      Icon(open ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+      const SizedBox(width: 8),
+    ],
   );
 }
