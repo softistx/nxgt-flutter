@@ -73,5 +73,9 @@
   "displayPresenceBusy": "Busy",
   "@displayPresenceBusy": {"description": "Screen reader text of an avatar's presence dot: the person asked not to be disturbed."},
   "displayPresenceOffline": "Offline",
-  "@displayPresenceOffline": {"description": "Screen reader text of an avatar's presence dot: the person is not signed in."}
+  "@displayPresenceOffline": {"description": "Screen reader text of an avatar's presence dot: the person is not signed in."},
+  "actionsCancel": "Cancel",
+  "@actionsCancel": {"description": "Label of the button that dismisses a dialog without doing its action."},
+  "actionsConfirm": "Confirm",
+  "@actionsConfirm": {"description": "Default label of the button that accepts a confirmation dialog."}
 }

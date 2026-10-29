@@ -34,6 +34,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `forms.dart` | Form scaffolding: sections, validation summary, submit bar |
 | `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
+| `overlays.dart` | Dialogs: `ConfirmDialog` and `context.confirm` |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
 ## Theme
@@ -294,6 +295,28 @@ Pages: [StatusIndicator](doc/components/status_indicator.md),
 [UserAvatar](doc/components/user_avatar.md),
 [EntityHeader](doc/components/entity_header.md).
 
+## Overlays
+
+`package:nxgt_material/overlays.dart`. Built on Flutter's `AlertDialog` and `showDialog`.
+
+| Component | What it adds |
+| --- | --- |
+| `ConfirmDialog` / `context.confirm` | A confirmation dialog at every window size that answers `true` or `false`; an async `onConfirm` with a busy state, a `destructive` error-tone action, 48 dp targets |
+
+```dart
+import 'package:nxgt_material/overlays.dart';
+
+final deleted = await context.confirm(
+  title: 'Delete invoice?',
+  message: 'This cannot be undone.',
+  confirmLabel: 'Delete',
+  destructive: true,
+  onConfirm: () => repository.delete(id),
+);
+```
+
+Pages: [ConfirmDialog](doc/components/confirm_dialog.md).
+
 ## Layout
 
 `package:nxgt_material/layout.dart`. Built on Flutter's `NavigationBar`,
@@ -397,6 +420,7 @@ Guide: [Adaptive layout](doc/guide/adaptive.md). Pages:
   [AdaptiveShell](doc/components/adaptive_shell.md),
   [AsyncButton](doc/components/async_button.md),
   [AsyncView](doc/components/async_view.md),
+  [ConfirmDialog](doc/components/confirm_dialog.md),
   [CopyButton](doc/components/copy_button.md),
   [CountBadge](doc/components/count_badge.md),
   [EmailField](doc/components/email_field.md),

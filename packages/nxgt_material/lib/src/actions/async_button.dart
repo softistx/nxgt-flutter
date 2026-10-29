@@ -32,6 +32,7 @@ class AsyncButton extends StatefulWidget {
     this.icon,
     this.variant = AsyncButtonVariant.filled,
     this.loading,
+    this.autofocus = false,
     super.key,
   });
 
@@ -51,6 +52,9 @@ class AsyncButton extends StatefulWidget {
   /// Forces the busy state when not null, for a state held by the caller (a
   /// bloc, a provider). `null` lets the button track [onPressed] itself.
   final bool? loading;
+
+  /// Whether the button takes the focus when it is first built.
+  final bool autofocus;
 
   @override
   State<AsyncButton> createState() => _AsyncButtonState();
@@ -89,28 +93,56 @@ class _AsyncButtonState extends State<AsyncButton> {
     final button = switch (widget.variant) {
       AsyncButtonVariant.filled =>
         icon == null
-            ? FilledButton(onPressed: onPressed, child: label)
-            : FilledButton.icon(onPressed: onPressed, icon: icon, label: label),
+            ? FilledButton(
+                onPressed: onPressed,
+                autofocus: widget.autofocus,
+                child: label,
+              )
+            : FilledButton.icon(
+                onPressed: onPressed,
+                autofocus: widget.autofocus,
+                icon: icon,
+                label: label,
+              ),
       AsyncButtonVariant.tonal =>
         icon == null
-            ? FilledButton.tonal(onPressed: onPressed, child: label)
+            ? FilledButton.tonal(
+                onPressed: onPressed,
+                autofocus: widget.autofocus,
+                child: label,
+              )
             : FilledButton.tonalIcon(
                 onPressed: onPressed,
+                autofocus: widget.autofocus,
                 icon: icon,
                 label: label,
               ),
       AsyncButtonVariant.outlined =>
         icon == null
-            ? OutlinedButton(onPressed: onPressed, child: label)
+            ? OutlinedButton(
+                onPressed: onPressed,
+                autofocus: widget.autofocus,
+                child: label,
+              )
             : OutlinedButton.icon(
                 onPressed: onPressed,
+                autofocus: widget.autofocus,
                 icon: icon,
                 label: label,
               ),
       AsyncButtonVariant.text =>
         icon == null
-            ? TextButton(onPressed: onPressed, child: label)
-            : TextButton.icon(onPressed: onPressed, icon: icon, label: label),
+            ? TextButton(
+                onPressed: onPressed,
+                autofocus: widget.autofocus,
+                child: label,
+              )
+            : TextButton.icon(
+                onPressed: onPressed,
+                autofocus: widget.autofocus,
+                icon: icon,
+                label: label,
+              ),
     };
     return MergeSemantics(
       child: Semantics(

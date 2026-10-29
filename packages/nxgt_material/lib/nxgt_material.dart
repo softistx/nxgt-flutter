@@ -11,4 +11,5 @@ export 'fields.dart';
 export 'forms.dart';
 export 'l10n.dart';
 export 'layout.dart';
+export 'overlays.dart';
 export 'theme.dart';

@@ -322,6 +322,18 @@ abstract class NxgtMaterialLocalizations {
   /// In en, this message translates to:
   /// **'Offline'**
   String get displayPresenceOffline;
+
+  /// Label of the button that dismisses a dialog without doing its action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get actionsCancel;
+
+  /// Default label of the button that accepts a confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get actionsConfirm;
 }
 
 class _NxgtMaterialLocalizationsDelegate

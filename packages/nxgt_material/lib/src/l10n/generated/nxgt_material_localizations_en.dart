@@ -150,4 +150,10 @@ class NxgtMaterialLocalizationsEn extends NxgtMaterialLocalizations {
 
   @override
   String get displayPresenceOffline => 'Offline';
+
+  @override
+  String get actionsCancel => 'Cancel';
+
+  @override
+  String get actionsConfirm => 'Confirm';
 }
