@@ -1,9 +1,9 @@
 # Dates
 
 `package:nxgt_material/dates.dart` holds the fields that pick a date or a
-time, `DateField`, `DateRangeField` and `TimeField`: each a `FormField` that shows its value as
-read-only text, opens Material's picker on tap, Enter or Space, and follows
-the app's locale.
+time, `DateField`, `DateRangeField` and `TimeField`: each a `FormField` that
+shows its value as read-only text, opens Material's picker on tap, Enter or
+Space, and follows the app's locale.
 
 ## Setup
 
@@ -60,6 +60,7 @@ Form(
 - The picker is `showDateRangePicker`, opened on the current range with each
   end moved into the allowed range, with its built-in toggle between the
   calendar and typing the dates.
+- `firstDate` defaults to 1 January 1900 and `lastDate` to 31 December 2100.
 - A start before `firstDate` or an end after `lastDate` fails validation and
   the error names the bound.
 

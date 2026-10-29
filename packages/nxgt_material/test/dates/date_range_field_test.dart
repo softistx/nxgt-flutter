@@ -283,8 +283,26 @@ void main() {
     );
     await tester.tap(find.byType(InputDecorator));
     await tester.pumpAndSettle();
-    expect(find.byType(DateRangePickerDialog), findsOneWidget);
+    final dialog = tester.widget<DateRangePickerDialog>(
+      find.byType(DateRangePickerDialog),
+    );
+    expect(
+      dialog.initialDateRange,
+      DateTimeRange(start: DateTime(2090), end: DateTime(2090)),
+    );
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('the picker opens with no range when there is no value', (
+    tester,
+  ) async {
+    await pump(tester, const DateRangeField(label: label));
+    await tester.tap(find.byType(InputDecorator));
+    await tester.pumpAndSettle();
+    final dialog = tester.widget<DateRangePickerDialog>(
+      find.byType(DateRangePickerDialog),
+    );
+    expect(dialog.initialDateRange, isNull);
   });
 
   testWidgets('initialEntryMode input opens the typed entry', (tester) async {

@@ -654,8 +654,8 @@ ResponsiveTable<Patient>(
 ## DateField, DateRangeField or TimeField shows English text, or the picker is in English
 
 **When:** the app is in French (or another language) but a `DateField`,
-`DateRangeField` or `TimeField` shows English dates or times and the picker's buttons read
-"Cancel" and "OK".
+`DateRangeField` or `TimeField` shows English dates or times and the picker's
+buttons read "Cancel" and "OK".
 
 **Why:** the date and time text and the pickers come from Flutter's
 `MaterialLocalizations`, which the app adds with

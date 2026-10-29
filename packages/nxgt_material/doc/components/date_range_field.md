@@ -24,8 +24,8 @@ DateRangeField(
 )
 ```
 
-The text and the screen reader value read "Thu, May 14 to Sat, May 16"
-("du jeu. 14 mai au sam. 16 mai" in French): each date comes from
+The text and the screen reader value read, for example, "Thu, May 14 to
+Sat, May 16" ("du jeu. 14 mai au sam. 16 mai" in French): each date comes from
 `MaterialLocalizations.formatMediumDate`, joined by this package's
 `datesRangeValue` string. Add `GlobalMaterialLocalizations.delegate` to
 `localizationsDelegates` for a language other than English (see
