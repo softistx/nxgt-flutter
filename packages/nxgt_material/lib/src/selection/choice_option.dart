@@ -51,3 +51,22 @@ int firstEnabledOption<T>(
   List<ChoiceOption<T>> options, {
   required bool fieldEnabled,
 }) => fieldEnabled ? options.indexWhere((o) => o.enabled) : -1;
+
+/// The next value of a multiple-choice group when [toggled] becomes [chosen],
+/// in the order of [options]; values that match no option stay at the end.
+/// Unmodifiable.
+Set<T> nextChosen<T>(
+  List<ChoiceOption<T>> options,
+  Set<T> current,
+  T toggled, {
+  required bool chosen,
+}) {
+  final next = {...current}..remove(toggled);
+  if (chosen) next.add(toggled);
+  return Set<T>.unmodifiable({
+    for (final o in options)
+      if (next.contains(o.value)) o.value,
+    for (final v in next)
+      if (!options.any((o) => o.value == v)) v,
+  });
+}

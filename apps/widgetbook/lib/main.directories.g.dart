@@ -77,6 +77,8 @@ import 'package:nxgt_widgetbook/selection/checkbox_field.usecase.dart'
     as _nxgt_widgetbook_selection_checkbox_field_usecase;
 import 'package:nxgt_widgetbook/selection/checkbox_group_field.usecase.dart'
     as _nxgt_widgetbook_selection_checkbox_group_field_usecase;
+import 'package:nxgt_widgetbook/selection/choice_chips_field.usecase.dart'
+    as _nxgt_widgetbook_selection_choice_chips_field_usecase;
 import 'package:nxgt_widgetbook/selection/radio_group_field.usecase.dart'
     as _nxgt_widgetbook_selection_radio_group_field_usecase;
 import 'package:nxgt_widgetbook/theme/token_sheet.usecase.dart'
@@ -448,6 +450,26 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'Default',
             builder: _nxgt_widgetbook_selection_checkbox_group_field_usecase
                 .buildCheckboxGroupFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ChoiceChipsField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder: _nxgt_widgetbook_selection_choice_chips_field_usecase
+                .buildChoiceChipsFieldDefault,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'FilterChipsField',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Multiple',
+            builder: _nxgt_widgetbook_selection_choice_chips_field_usecase
+                .buildFilterChipsFieldMultiple,
           ),
         ],
       ),

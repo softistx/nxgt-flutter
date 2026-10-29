@@ -35,7 +35,7 @@ import 'package:nxgt_material/nxgt_material.dart';
 | `l10n.dart` | French and English strings, delegate, `context.materialL10n` (also re-exported by `nxgt_material.dart`) |
 | `layout.dart` | Adaptive shell, breakpoints, pane layouts, spacing |
 | `overlays.dart` | Dialogs and sheets: `ConfirmDialog` and `context.confirm`, `AdaptiveSheet` and `context.showAdaptiveSheet`, `FormDialog` and `context.showFormDialog` |
-| `selection.dart` | Choice fields built on `FormField`: `CheckboxField`, `RadioGroupField`, `CheckboxGroupField`, `ChoiceOption` |
+| `selection.dart` | Choice fields built on `FormField`: `CheckboxField`, `RadioGroupField`, `CheckboxGroupField`, `ChoiceChipsField`, `FilterChipsField`, `ChoiceOption` |
 | `theme.dart` | Seeded color schemes, presets, tones, radius, motifs |
 
 ## Theme
@@ -347,6 +347,7 @@ Pages: [AdaptiveSheet](doc/components/adaptive_sheet.md),
 | `CheckboxField` | A `FormField<bool>` on a full-width 48 dp tile; `required` means checked, with a localized, announced error |
 | `RadioGroupField` | A single choice among `ChoiceOption`s on Flutter's `RadioGroup`: group label, 48 dp tiles, arrow-key navigation, `required` with an announced error |
 | `CheckboxGroupField` | Several choices as a `FormField<Set<T>>`, same group semantics; reports new unmodifiable sets |
+| `ChoiceChipsField` / `FilterChipsField` | One or several choices as wrapping Material 3 chips (`ChoiceChip`, `FilterChip`), 48 dp targets, same group semantics and form behaviour |
 
 ```dart
 import 'package:nxgt_material/selection.dart';
@@ -372,7 +373,8 @@ RadioGroupField<String>(
 
 Pages: [CheckboxField](doc/components/checkbox_field.md),
 [RadioGroupField](doc/components/radio_group_field.md),
-[CheckboxGroupField](doc/components/checkbox_group_field.md).
+[CheckboxGroupField](doc/components/checkbox_group_field.md),
+[ChoiceChipsField and FilterChipsField](doc/components/choice_chips_field.md).
 
 ## Layout
 

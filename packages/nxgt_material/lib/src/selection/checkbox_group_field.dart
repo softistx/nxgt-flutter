@@ -61,13 +61,11 @@ class CheckboxGroupField<T> extends ChoiceFieldBase<Set<T>> {
                   onChanged: enabled && option.enabled
                       ? (checked) => change(
                           state,
-                          Set<T>.unmodifiable(
-                            _inOptionOrder(
-                              unique,
-                              state.value ?? <T>{},
-                              option.value,
-                              checked ?? false,
-                            ),
+                          nextChosen(
+                            unique,
+                            state.value ?? <T>{},
+                            option.value,
+                            chosen: checked ?? false,
                           ),
                         )
                       : null,
@@ -85,23 +83,5 @@ class CheckboxGroupField<T> extends ChoiceFieldBase<Set<T>> {
         );
       },
     );
-  }
-
-  // The next value, in the order of the options; values that match no option
-  // stay at the end.
-  static Set<T> _inOptionOrder<T>(
-    List<ChoiceOption<T>> unique,
-    Set<T> current,
-    T toggled,
-    bool checked,
-  ) {
-    final next = {...current}..remove(toggled);
-    if (checked) next.add(toggled);
-    return {
-      for (final o in unique)
-        if (next.contains(o.value)) o.value,
-      for (final v in next)
-        if (!unique.any((o) => o.value == v)) v,
-    };
   }
 }
