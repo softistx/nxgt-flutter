@@ -158,6 +158,8 @@ void main() {
     expect(wrapper.fieldsSelectClear, 'Clear selection');
     expect(wrapper.fieldsSelectSearch, 'Search');
     expect(wrapper.fieldsSelectNoResults, 'No results');
+    expect(wrapper.collectionsSearchHint, 'Search');
+    expect(wrapper.collectionsSearchClear, 'Clear search');
   });
 
   test('the delegate reloads only when the override changes', () {
@@ -206,4 +208,6 @@ List<String> _all(NxgtMaterialLocalizations s) => [
   s.fieldsSelectClear,
   s.fieldsSelectSearch,
   s.fieldsSelectNoResults,
+  s.collectionsSearchHint,
+  s.collectionsSearchClear,
 ];

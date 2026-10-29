@@ -89,5 +89,9 @@
   "fieldsSelectSearch": "Search",
   "@fieldsSelectSearch": {"description": "Label of the search box in the sheet of a select field."},
   "fieldsSelectNoResults": "No results",
-  "@fieldsSelectNoResults": {"description": "Message shown in the sheet of a select field when the search matches no option."}
+  "@fieldsSelectNoResults": {"description": "Message shown in the sheet of a select field when the search matches no option."},
+  "collectionsSearchHint": "Search",
+  "@collectionsSearchHint": {"description": "Placeholder and screen reader label of an empty search field."},
+  "collectionsSearchClear": "Clear search",
+  "@collectionsSearchClear": {"description": "Tooltip and screen reader label of the button that clears the text of a search field."}
 }
