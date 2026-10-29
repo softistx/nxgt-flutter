@@ -247,8 +247,8 @@ use `context.windowSize` yourself to pick the layout.
 
 **When:** in a debug build, a `CountBadge` is built with a negative `count`.
 
-**Why:** a count is a quantity. A release build does not assert and shows the
-badge hidden is not guaranteed, so the value must be fixed at the source.
+**Why:** a count is a quantity. A release build does not assert: it treats the
+negative count as 0 and hides the badge.
 
 **Fix:** clamp or compute it before the badge.
 
@@ -261,7 +261,7 @@ CountBadge(count: math.max(0, unread), child: const Icon(Icons.mail_outline))
 **When:** in a debug build, a `CountBadge` is built with `max` of 0 or less.
 
 **Why:** `max` is the largest number written out before `<max>+`; 0 would
-make every count read `0+`.
+make every count read `0+`. A release build treats `max` as 1.
 
 **Fix:** pass 1 or more, or leave the default of 99.
 

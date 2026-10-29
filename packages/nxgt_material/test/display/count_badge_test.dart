@@ -72,6 +72,30 @@ void main() {
     handle.dispose();
   });
 
+  testWidgets('CountBadge without a label keeps an interactive child', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    await tester.pumpApp(
+      themedHost(
+        CountBadge(
+          count: 0,
+          child: IconButton(
+            tooltip: 'Open inbox',
+            onPressed: () {},
+            icon: const Icon(Icons.mail_outline),
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      tester.getSemantics(find.byType(IconButton)),
+      isSemantics(isButton: true, hasTapAction: true),
+    );
+    handle.dispose();
+  });
+
   test('CountBadge asserts a negative count and a non-positive max', () {
     expect(
       () => CountBadge(count: -1, child: const SizedBox()),
