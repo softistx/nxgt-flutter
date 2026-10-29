@@ -37,7 +37,7 @@ jobs:
           esac
           gh api "repos/${GITHUB_REPOSITORY}/branches/${REF}" --silent \
             || { echo "'$REF' is not an existing remote branch" >&2; exit 1; }
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref }}
       - uses: subosito/flutter-action@v2
