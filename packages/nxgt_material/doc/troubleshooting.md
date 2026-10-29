@@ -439,3 +439,69 @@ CheckboxGroupField<String>(
 A release build shows only the label.
 
 **Fix:** pass at least one option, or do not show the field.
+
+## ChoiceChipsField.options must have unique values.
+
+**When:** in a debug build, two options of a `ChoiceChipsField` share a value.
+
+**Why:** see [RadioGroupField.options must have unique values.](#radiogroupfieldoptions-must-have-unique-values).
+A release build keeps the first option of each value.
+
+**Fix:** give each option its own value.
+
+## ChoiceChipsField.options must not be empty.
+
+**When:** in a debug build, `options` of a `ChoiceChipsField` is an empty list.
+
+**Why:** see [RadioGroupField.options must not be empty.](#radiogroupfieldoptions-must-not-be-empty).
+A release build shows only the label.
+
+**Fix:** pass at least one option, or do not show the field.
+
+## ChoiceChipsField.initialValue must be one of the options.
+
+**When:** in a debug build, `initialValue` of a `ChoiceChipsField` is not the
+value of any option.
+
+**Why:** no chip could show as chosen. A release build does not assert: no chip
+is shown as chosen, but the value is still the form's value, so `required`
+passes and `onSaved` receives it until the user chooses.
+
+**Fix:** start from a value that is in `options`, or leave it out.
+
+```dart
+ChoiceChipsField<String>(
+  label: 'Size',
+  initialValue: 'm',
+  options: const [ChoiceOption(value: 'm', label: 'Medium')],
+)
+```
+
+## FilterChipsField.options must have unique values.
+
+**When:** in a debug build, two options of a `FilterChipsField` share a value.
+
+**Why:** see [RadioGroupField.options must have unique values.](#radiogroupfieldoptions-must-have-unique-values).
+A release build keeps the first option of each value.
+
+**Fix:** give each option its own value.
+
+## FilterChipsField.options must not be empty.
+
+**When:** in a debug build, `options` of a `FilterChipsField` is an empty list.
+
+**Why:** see [RadioGroupField.options must not be empty.](#radiogroupfieldoptions-must-not-be-empty).
+A release build shows only the label.
+
+**Fix:** pass at least one option, or do not show the field.
+
+## FilterChipsField.initialValue must only hold values of the options.
+
+**When:** in a debug build, `initialValue` of a `FilterChipsField` holds a value
+that is the value of no option.
+
+**Why:** see [CheckboxGroupField.initialValue must only hold values of the options.](#checkboxgroupfieldinitialvalue-must-only-hold-values-of-the-options).
+A release build keeps that value in the form's value, reports it at the end of
+the set after the first change, and counts it for `required`.
+
+**Fix:** start from values that are in `options`.

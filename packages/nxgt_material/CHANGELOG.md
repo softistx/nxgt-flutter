@@ -32,3 +32,4 @@ First release.
 ## 0.0.1
 
 - Package skeleton: one library per category, no component yet.
+- `selection.dart`: `ChoiceChipsField<T>` (a `FormField<T?>` on Material 3 `ChoiceChip`s; radio-like semantics; tapping the chosen chip again clears it unless `required`) and `FilterChipsField<T>` (a `FormField<Set<T>>` on `FilterChip`s, reporting new unmodifiable sets in option order), two classes so each value type stays sound. Chips wrap, are padded to 48 dp on every platform, are reached by Tab and toggled by Space and Enter; `ChoiceOption.description` is the chip's tooltip. Same group semantics, `required`, disabled field and options, `focusNode` rule and directional layout as the other choice fields. Reuses `fieldsRequired`; no new string.
