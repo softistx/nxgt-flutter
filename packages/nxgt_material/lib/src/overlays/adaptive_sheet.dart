@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/layout/window_size.dart';
-
-const _minTarget = Size.square(48);
+import 'package:nxgt_material/src/theme/targets.dart';
 
 /// The width of the side sheet, in logical pixels, on a window wide enough.
 const _sideSheetWidth = 400.0;
@@ -52,7 +51,7 @@ class AdaptiveSheet extends StatelessWidget {
                 icon: const Icon(Icons.close),
                 tooltip: context.materialL10n.actionsClose,
                 onPressed: () => Navigator.of(context).maybePop(),
-                style: _closeStyle,
+                style: targetStyle,
               ),
             ],
           ),
@@ -67,12 +66,6 @@ class AdaptiveSheet extends StatelessWidget {
     );
   }
 }
-
-const _closeStyle = ButtonStyle(
-  minimumSize: WidgetStatePropertyAll(_minTarget),
-  tapTargetSize: MaterialTapTargetSize.padded,
-  visualDensity: VisualDensity.standard,
-);
 
 /// The sheet in the route: keeps the content clear of the keyboard.
 class _SheetBody extends StatelessWidget {

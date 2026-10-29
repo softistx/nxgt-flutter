@@ -6,8 +6,7 @@ import 'package:nxgt_material/src/forms/submit_button.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
 import 'package:nxgt_material/src/layout/window_size.dart';
 import 'package:nxgt_material/src/overlays/confirm_dialog.dart';
-
-const _minTarget = Size.square(48);
+import 'package:nxgt_material/src/theme/targets.dart';
 
 /// The widest the dialog grows, in logical pixels, from the medium size up.
 const _dialogWidth = 560.0;
@@ -202,7 +201,7 @@ class _FormDialogState<T> extends State<FormDialog<T>> {
                 icon: const Icon(Icons.close),
                 tooltip: l10n.actionsClose,
                 onPressed: _busy ? null : _close,
-                style: _targetStyle,
+                style: targetStyle,
               ),
             ),
             title: Semantics(
@@ -249,7 +248,7 @@ class _FormDialogState<T> extends State<FormDialog<T>> {
       actions: [
         TextButton(
           onPressed: _busy ? null : _close,
-          style: _targetStyle,
+          style: targetStyle,
           child: Text(context.materialL10n.actionsCancel),
         ),
         submit,
@@ -258,16 +257,10 @@ class _FormDialogState<T> extends State<FormDialog<T>> {
   }
 }
 
-const _targetStyle = ButtonStyle(
-  minimumSize: WidgetStatePropertyAll(_minTarget),
-  tapTargetSize: MaterialTapTargetSize.padded,
-  visualDensity: VisualDensity.standard,
-);
-
 /// [child] with the buttons below it kept at 48 dp on every platform.
 Widget _withTargets(ThemeData theme, Widget child) {
   ButtonStyle merged(ButtonStyle? base) =>
-      base?.merge(_targetStyle) ?? _targetStyle;
+      base?.merge(targetStyle) ?? targetStyle;
   return Theme(
     data: theme.copyWith(
       filledButtonTheme: FilledButtonThemeData(

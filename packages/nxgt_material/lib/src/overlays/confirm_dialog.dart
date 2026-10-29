@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nxgt_material/src/actions/async_button.dart';
 import 'package:nxgt_material/src/l10n/localizations_context.dart';
+import 'package:nxgt_material/src/theme/targets.dart';
 import 'package:nxgt_material/src/theme/theme_context.dart';
 import 'package:nxgt_material/src/theme/tone_colors.dart';
-
-const _minTarget = Size.square(48);
 
 /// A dialog that asks the user to confirm an action, such as a deletion.
 ///
@@ -97,7 +96,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
             TextButton(
               onPressed: _busy ? null : () => Navigator.of(context).pop(false),
               autofocus: widget.destructive,
-              style: _targetStyle,
+              style: targetStyle,
               child: Text(l10n.actionsCancel),
             ),
             Theme(
@@ -116,12 +115,6 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
   }
 }
 
-const _targetStyle = ButtonStyle(
-  minimumSize: WidgetStatePropertyAll(_minTarget),
-  tapTargetSize: MaterialTapTargetSize.padded,
-  visualDensity: VisualDensity.standard,
-);
-
 /// The error tone while enabled; `null` when disabled, so the theme's
 /// disabled look applies.
 WidgetStateProperty<Color?> _whenEnabled(Color color) =>
@@ -134,7 +127,7 @@ FilledButtonThemeData _confirmButtonTheme(
   ToneColors? error,
 ) {
   final style = ButtonStyle(
-    minimumSize: const WidgetStatePropertyAll(_minTarget),
+    minimumSize: const WidgetStatePropertyAll(minTarget),
     tapTargetSize: MaterialTapTargetSize.padded,
     visualDensity: VisualDensity.standard,
     backgroundColor: error == null ? null : _whenEnabled(error.color),
